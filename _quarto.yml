@@ -3,12 +3,16 @@ project:
   output-dir: docs
 
 website:
-  title: "Estadística Descriptiva Multivariada - PISA 2022"
+  title: "Estadística Descriptiva Multivariada"
   navbar:
     background: primary
     left:
       - text: "Corte 1"
         href: index.qmd
+      - text: "Corte 2"
+        href: corte2.qmd
+      - text: "Corte 3"
+        href: corte3.qmd
 
 format:
   html:
