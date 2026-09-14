@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 base_datos/
+
+/.quarto/
+**/*.quarto_ipynb

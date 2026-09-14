@@ -1,0 +1,20 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Estadística Descriptiva Multivariada - PISA 2022"
+  navbar:
+    background: primary
+    left:
+      - text: "Corte 1"
+        href: index.qmd
+
+format:
+  html:
+    theme: flatly
+    toc: true
+    toc-location: right
+    toc-title: "En esta página"
+    number-sections: true
+    code-fold: true
