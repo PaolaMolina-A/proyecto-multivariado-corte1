@@ -1,11 +1,23 @@
 ############################### ANÁLISIS DE DATOS PISA 2022 ###############################
 
 # 1. CARGA DE LIBRERÍAS
-# Si algún paquete no está instalado, ejecuta una sola vez: install.packages(c("haven", "labelled", "dplyr", "writexl"))
-library(haven)
-library(labelled)
-library(dplyr)
-library(writexl)
+paquetes <- c(
+  "haven", "labelled", "dplyr", "stringr",
+  "writexl"
+)
+# Verificamos qué paquetes faltan. La instalación se hace por fuera de la
+# compilación para evitar cambios inesperados en el entorno del estudiante.
+instalados <- rownames(installed.packages())
+pendientes <- setdiff(paquetes, instalados)
+
+if (length(pendientes) > 0) {
+  stop(
+    "Faltan paquetes: ", paste(pendientes, collapse = ", "),
+    ". Instálelos con install.packages(c(",
+    paste(sprintf('"%s"', pendientes), collapse = ", "), "))"
+  )
+}
+invisible(lapply(paquetes, library, character.only = TRUE))
 
 # 2. RUTAS Y LECTURA DE BASES DE DATOS
 ruta <- "base_datos"
