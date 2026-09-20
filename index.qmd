@@ -6,42 +6,66 @@ format: html
 editor: visual
 ---
 
-# 1. Introducción: ¿Qué son las Pruebas PISA?
+# Introducción: ¿Qué son las Pruebas PISA?
 
-## 1.1 Naturaleza y Propósito del Programa
+## Naturaleza y Propósito del Programa
 
-El Programa para la Evaluación Internacional de Estudiantes, por sus siglas en inglés (PISA), es una prueba realizada a estudiantes de 15 años a nivel global. Su objetivo consta de medir la capacidad de usar los conocimientos adquiridos en campos como la lectura, matemáticas y ciencias, para enfrentarse a la vida real. 
+El Programa para la Evaluación Internacional de Estudiantes, por sus siglas en inglés (PISA), es una prueba realizada a estudiantes de 15 años a nivel global. Su objetivo consta de medir la capacidad de usar los conocimientos adquiridos en campos como la lectura, matemáticas y ciencias, para enfrentarse a la vida real.
 
-## 1.2 Mecanismos de Recolección de Datos y Muestreo
+## Mecanismos de Recolección de Datos y Muestreo
 
-La encuesta se basa en cuestionarios de antecedentes realizados por estudiantes, directores de escuela y padres de familia. Para el año 2022 hubo un énfasis en matemáticas y una evaluación del pensamiento crítico; además, añadieron un componente nuevo llamado alfabetización financiera. 
+La encuesta se basa en cuestionarios de antecedentes realizados por estudiantes, directores de escuela y padres de familia. Para el año 2022 hubo un énfasis en matemáticas y una evaluación del pensamiento crítico; además, añadieron un componente nuevo llamado alfabetización financiera.
 
-Para este año participaron 81 países y alrededor de 690.000 estudiantes. Para la recolección de datos se hace un proceso que consta de dos fases; la primera es solicitar una lista mínima de 150 colegios escogidos al azar, de acuerdo a su proporción, para escoger posteriormente una muestra aleatoria de estudiantes de 15 años. También es importante hacer énfasis en que las pruebas están contextualizadas. 
-
-------------------------------------------------------------------------
-
-# 2. Marco Conceptual: Alfabetización y Educación Financiera
-
-## 2.1 Definición de Alfabetización Financiera (OCDE)
-
-Para nuestro proyecto del curso decidimos enfocarnos en las bases de datos que corresponden a la alfabetización financiera, y para ello es de suma utilidad saber lo que este concepto significa para la Organización para la Cooperación y el Desarrollo Económicos (OCDE).
-
-Técnicamente, evalúa la capacidad de los estudiantes para aplicar conocimientos y habilidades adquiridas en su colección para razonar, resolver e interpretar problemas con respecto a la vida financiera.
-
-
-
-## 2.2 Definición de Educación Financiera (OCDE)
-
-También se destaca la definición de educación financiera, la cual es el proceso por el cual consumidores o inversores mejoran su comprensión de conceptos y riesgos financieros a través de información o instrucción con el objetivo de tomar decisiones conscientes y mejorar su bienestar financiero.
+Para este año participaron 81 países y alrededor de 690.000 estudiantes. Para la recolección de datos se hace un proceso que consta de dos fases; la primera es solicitar una lista mínima de 150 colegios escogidos al azar, de acuerdo a su proporción, para escoger posteriormente una muestra aleatoria de estudiantes de 15 años. También es importante hacer énfasis en que las pruebas están contextualizadas.
 
 ------------------------------------------------------------------------
 
-# 3. Antecedentes del Módulo de Alfabetización Financiera en PISA
+# Marco Conceptual: Alfabetización y Educación Financiera
 
-## 3.1 Evolución Histórica de las Evaluaciones (2012 - 2022)
+## Definición de Alfabetización Financiera (OCDE)
+
+Para el desarrollo de nuestro proyecto, enfocamos el análisis en las bases de datos correspondientes al módulo de **Alfabetización Financiera** de PISA 2022. Para comprender el alcance de estas variables, resulta fundamental partir de la definición analítica de la Organización para la Cooperación y el Desarrollo Económicos:
+
+::: {.callout-note title="Definición de Alfabetización según la OCDE" icon=false}
+PISA se centra en la capacidad de los jóvenes para utilizar sus conocimientos y habilidades para afrontar retos de la vida real, en lugar de simplemente en el grado de dominio de contenidos curriculares específicos. PISA concibe la alfabetización en general como la capacidad de los alumnos para aplicar conocimientos y habilidades en áreas temáticas clave, así como para analizar, razonar y comunicarse eficazmente al plantear, resolver e interpretar problemas en diversas situaciones (OCDE, 2023).
+:::
 
 
 
-## 3.2 Hallazgos y Tendencias Clave en Ciclos Anteriores
 
+##  Definición de Educación Financiera (OCDE)
 
+En este mismo marco, cobra especial relevancia el concepto de **educación financiera**, el cual orienta el desarrollo de competencias en los estudiantes:
+
+::: {.callout-note title="Definición de Educación Financiera según la OCDE/INFE" icon=false}
+La educación financiera es el proceso mediante el cual los consumidores/inversores financieros mejoran su comprensión de los productos, conceptos y riesgos financieros y, a través de la información, la instrucción y/o el asesoramiento objetivo, desarrollan las habilidades y la confianza para ser más conscientes de los riesgos y oportunidades financieras, para tomar decisiones informadas, para saber dónde acudir en busca de ayuda y para tomar otras medidas eficaces para mejorar su bienestar financiero (OCDE/INFE, 2012).
+:::
+
+------------------------------------------------------------------------
+
+# Antecedentes del Módulo de Alfabetización Financiera en PISA
+
+Para obtener una imagen más completa y hacer contrastes correctos, es de suma importancia conocer los resultados obtenidos en los años anteriores. De los cuales tenemos los siguientes:
+
+##  Hallazgos y Tendencias Clave en Ciclos Anteriores
+
+### Ciclo PISA 2012: Punto de partida de la competencia financiera
+Fue la primera evaluación opcional de competencia financiera en PISA, contando con la participación de 18 países y economías (OCDE, 2014).
+ **Diseño e hitos:** Estableció por primera vez la escala global de desempeño estructurada en 5 niveles de competencia para medir la capacidad de aplicar conocimientos sobre dinero, presupuestos y contratos en situaciones reales.
+ **Reflexiones clave:** Reveló diferencias pronunciadas en los resultados entre y dentro de las naciones participantes, dejando en evidencia que la educación financiera debe comenzar de forma formal en la escuela antes de que los jóvenes se conviertan en consumidores activos. Asimismo, sirvió para fijar el marco conceptual de la OCDE/INFE de referencia global.
+
+### Ciclo PISA 2015: Transición digital e integración de competencias
+Participaron 15 países y economías, manteniendo la estructura conceptual de 2012 para garantizar la comparabilidad de los resultados (OCDE, 2017).
+ **Novedad metodológica:** La prueba migró hacia la administración por computadora (realizada en una sesión vespertina separada tras los exámenes núcleo).
+ **Reflexiones clave:** El cambio de formato demostró que la fluidez en entornos digitales es indispensable para desempeñarse en la sociedad moderna. Se confirmó que el rendimiento financiero está estrechamente ligado a las habilidades en lectura y matemáticas, aunque mantiene un componente analítico propio y único. Se identificó también que la discusión sobre el dinero en el hogar y la experiencia práctica desempeñan un rol determinante en la autonomía del estudiante.
+
+### Ciclo PISA 2018: Inclusión digital, equidad y análisis de tendencias
+Abarcó a 20 países y economías (13 pertenecientes a la OCDE y 7 países socios), representando a aproximadamente 117.000 estudiantes, con un puntaje promedio OCDE de 505 puntos (OCDE, 2020).
+ **Desempeño destacado:** Estonia obtuvo el rendimiento promedio más alto (547 puntos), seguida por Finlandia (537 puntos) y las provincias de Canadá (532 puntos). El 85% de los estudiantes alcanzó al menos el Nivel 2 (umbral básico de competencia) y un 10% logró el Nivel 5 (alto rendimiento).
+ **Tendencias en el rendimiento:** 
+   *Periodo 2012–2018:* Estonia registró un incremento significativo de +18 puntos, mientras que Australia sufrió un descenso de -15 puntos.
+  * *Periodo 2015–2018:* El promedio de la OCDE aumentó 20 puntos, impulsado por mejoras sustanciales en Lituania (+50 puntos), Brasil (+25 puntos) y España (+25 puntos), además de Polonia y la República Eslovaca. En países como Chile, España, Brasil y República Eslovaca, el alza se debió a la reducción de estudiantes en los niveles de bajo rendimiento.
+ **Factores socioeconómicos y entorno familiar:**
+   *El rol central de los padres:* El 94% de los estudiantes indicó que su familia es la principal fuente de información sobre dinero. Quienes consultaban con sus padres obtuvieron, en promedio, 27 puntos más tras ajustar por nivel socioeconómico.
+   *Impacto socioeconómico:* Los estudiantes de entornos favorecidos superaron a los desfavorecidos por un promedio de 78 puntos (equivalente a casi un nivel completo de competencia). No obstante, la enseñanza de contenidos financieros en escuelas desfavorecidas ayudó a mitigar estas brechas.
+ **Inclusión digital y brechas de género:** Se observó una masificación en la tenencia de tarjetas de débito/pago y compras en línea. Aunque la diferencia de puntaje entre niños y niñas fue reducida (2 puntos a favor de los niños en el promedio OCDE), los varones mostraron mayor confianza en el manejo de servicios financieros digitales y contratos.

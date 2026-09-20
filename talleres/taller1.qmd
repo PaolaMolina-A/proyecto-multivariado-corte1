@@ -1,0 +1,303 @@
+---
+title: "Taller: Caracterización de la Función de Razas de Perros"
+author: "Paola Andrea Molina Aparicio y Brayan Camilo Moreno Villalobos"
+date: today
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-title: "Contenido del Taller"
+    code-fold: false
+---
+
+## Configuración Inicial y Carga de Datos
+
+```{r setup, message=FALSE, warning=FALSE}
+
+# 1. Cargar las librerías a la memoria
+library(FactoClass)
+library(DT)
+library(knitr)
+
+# 2. Cargar los datos
+data(DogBreeds)
+
+summary(DogBreeds)
+
+
+```
+
+------------------------------------------------------------------------
+
+## Parte 1: Análisis de Asociación y Estadísticos
+
+### Pregunta 1
+
+**Las tres variables que más caracterizan a la función para la cual se utilizan las razas son:**
+
+```{r pregunta-1}
+# 1. Variables que más caracterizan la función (de mayor a menor asociación)
+kable(chisq.carac(DogBreeds[, 1:6], DogBreeds[, 7], thr = 0, decr = TRUE), digits = 3)
+
+```
+
+**Respuesta:**
+ Las tres variables que más caracterizan a la función (`FUNC`) para la cual se utilizan las razas son:
+1. **Afectividad (`AFFE`)**
+2. **Peso (`WEIG`)**
+3. **Tamaño (`SIZE`)**
+
+Al evaluar la asociación entre las cualidades de los perros y su función (compañía, caza o utilidad) con `chisq.carac()` en la base `DogBreeds`, tres variables destacan: **peso**, **afectividad** y **tamaño**. Estas presentan los valores test ($tval > 2.0$) y los índices de asociación ($\phi^2$) más altos, lo que confirma que son los factores físicos y psíquicos que con mayor fuerza definen el uso de cada raza.
+
+
+------------------------------------------------------------------------
+
+### Pregunta 2
+
+**La estadística Chi-cuadrada asociada a la tabla de contingencia Peso x Función es:**
+
+```{r pregunta-2}
+# 2. Estadística Chi-cuadrado para la tabla peso (columna 2) x función (columna 7)
+tabla_peso_func <- table(DogBreeds[, 2], DogBreeds[, 7])
+test_peso_func <- chisq.test(tabla_peso_func)
+
+# Estadística Chi-cuadrado (X-squared)
+test_peso_func$statistic
+
+```
+Al construir la tabla de contingencia peso $\times$ función y evaluarla con `chisq.test()`, se obtiene $\chi^2 = 24.40714$,lo cual indica que el peso depende estrechamente de la función de la raza.
+
+
+------------------------------------------------------------------------
+
+### Pregunta 3
+
+**Para encontrar el valor p se utiliza la distribución Chi-cuadrada con ¿cuántos grados de libertad?**
+
+```{r pregunta-3}
+# 3. Distribución y grados de libertad para encontrar el valor p
+tabla_peso_func <- table(DogBreeds[, 2], DogBreeds[, 7])
+test_peso_func <- chisq.test(tabla_peso_func)
+
+cat("Distribución: Chi-cuadrado\n")
+cat("Grados de libertad:", test_peso_func$parameter, "\n")
+cat("Valor p:", test_peso_func$p.value, "\n")
+
+```
+Según la Sección 2.3 del libro guía, la tabla Peso $\times$ Función ($3 \times 3$) se evalúa con la distribución Chi-cuadrado. Los grados de libertad son $dfr = (3 - 1)(3 - 1) = 4$. Como el $p$-valor ($p = 6.618 \times 10^{-5}$) es menor que $0.05$, se rechaza la independencia y se concluye que el peso depende de la función de la raza.
+
+
+
+------------------------------------------------------------------------
+
+### Pregunta 4
+
+**El valor test se puede obtener con el comando de R:**
+
+```{r pregunta-4}
+# 4. Obtención de los valores test usando cluster.carac
+carac_func <- cluster.carac(DogBreeds[, 1:6], DogBreeds[, 7])
+carac_func
+```
+
+La función `cluster.carac()` del paquete FactoClass calcula los valores test ($v\text{-test}$) para ordenar y seleccionar las categorías que caracterizan a cada clase de la variable respuesta. Los resultados confirman que **Compañía** se caracteriza por afectividad alta y tamaño/peso bajo ($v\text{-test} > 2$); **Caza** por peso medio y baja afectividad; y **Utilidad** por peso pesado, tamaño grande y alta agresividad.
+
+
+------------------------------------------------------------------------
+
+## Parte 2: Afirmaciones (Verdadero / Falso)
+
+*A continuación se verifica cada afirmación mediante tablas de contingencia, porcentajes o caracterización de categorías.*
+
+------------------------------------------------------------------------
+
+### Pregunta 5
+
+**De las razas utilizadas para compañía el 7.4% es de efectividad/actividad alta.**
+
+```{r pregunta-5}
+# 5. Porcentaje de afectividad alta ('hig') dentro de las razas de compañía ('com')
+# Se usan los nombres explícitos de las columnas para evitar errores de índice
+tabla_func_affe <- table(DogBreeds$FUNC, DogBreeds$AFFE)
+perf_fila_func <- prop.table(tabla_func_affe, margin = 1) * 100
+
+porcentaje_comp_afec <- perf_fila_func["com", "hig"]
+
+cat("Porcentaje observado:", round(porcentaje_comp_afec, 1), "%\n")
+cat("¿Afirmación verdadera?:", round(porcentaje_comp_afec, 1) == 71.4, "\n")
+
+```
+
+**Respuesta:**  
+**Falso**
+
+**Justificación:**  
+Al evaluar las proporciones relativas por fila con `prop.table()`, se observa que el **100%** de las razas utilizadas para compañía (`com`) presentan una efectividad/afectividad alta (`hig`), lo cual contradice la afirmación del $7.4\%$.
+
+------------------------------------------------------------------------
+
+### Pregunta 6
+
+**Todas las razas utilizadas para compañía son de efectividad/actividad alta.**
+
+```{r pregunta-6}
+# 6. Evaluación Falso/Verdadero: ¿Todas las razas de compañía son de afectividad alta?
+es_100_comp <- perf_fila_func["com", "hig"] == 100
+
+cat("Porcentaje observado:", round(perf_fila_func["com", "hig"], 1), "%\n")
+cat("¿Afirmación verdadera?:", es_100_comp, "\n")
+
+```
+
+**Respuesta:**  
+**Verdadero**
+
+**Justificación:**  
+Al calcular las proporciones por fila en la tabla de contingencia entre función (`FUNC`) y afectividad (`AFFE`), se observa que el $100\%$ de las razas de la categoría de compañía (`com`) tienen un nivel alto (`hig`). La prueba lógica `prop_func_affe["com", "hig"] == 100` evalúa a `TRUE`, confirmando que todas las razas de compañía pertenecen al grupo de alta afectividad.
+
+------------------------------------------------------------------------
+
+### Pregunta 7
+
+**Todas las razas de efectividad/actividad alta se utilizan para compañía.**
+
+```{r pregunta-7}
+# 7. Evaluación Falso/Verdadero: ¿Todas las razas de afectividad alta se utilizan para compañía? (Perfil Columna)
+perf_col_afec <- prop.table(table(DogBreeds[, 5], DogBreeds[, 7]), margin = 1) * 100
+es_100_afec <- perf_col_afec["hig", "com"] == 100
+
+cat("Porcentaje de razas de afectividad alta en compañía:", round(perf_col_afec["hig", "com"], 1), "%\n")
+cat("¿Afirmación verdadera?:", es_100_afec, "\n")
+```
+
+**Respuesta:** \[  Falso \] \* **Justificación:**Al calcular la frecuencia relativa condicional (perfil fila sobre afectividad con `margin =  ​1`), se observa que solo el $71.4\%$ de las razas con afectividad alta (hig) se usan para compañía (com). Como el $28.6\%$ restante va a otras funciones (caza y utilidad), no se puede afirmar que todas se usen solo para compañía.
+
+
+
+------------------------------------------------------------------------
+
+### Pregunta 8
+
+**Hay 14 razas utilizadas para compañía.**
+
+```{r pregunta-8}
+# 8. Evaluación Falso/Verdadero: ¿Hay catorce razas utilizadas para compañía?
+conteo_func <- table(DogBreeds[, 7])
+es_14_comp <- conteo_func["com"] == 14
+
+cat("Número de razas de compañía ('com'):", conteo_func["com"], "\n")
+cat("¿Afirmación verdadera?:", es_14_comp, "\n")
+```
+
+**Respuesta:** \[ Falso \] \* **Justificación:** Al usar la función `table()` sobre la columna 7 (func), R cuenta cuántas razas hay en cada grupo y encuentra que hay exactamente 10 razas para compañía (com). Como el resultado es 10 y no 14, la comparación devuelve FALSE, lo que confirma que la afirmación es falsa.
+
+
+------------------------------------------------------------------------
+
+### Pregunta 9
+
+**Hay 14 razas de efectividad/actividad alta.**
+
+```{r pregunta-9}
+# 9. Evaluación Falso/Verdadero: ¿Hay catorce razas de afectividad alta?
+conteo_afec <- table(DogBreeds[, 5])
+es_14_afec <- conteo_afec["hig"] == 14
+
+cat("Número de razas de afectividad alta ('hig'):", conteo_afec["hig"], "\n")
+cat("¿Afirmación verdadera?:", es_14_afec, "\n")
+
+```
+
+**Respuesta:** \[ Verdadero \] \* **Justificación:** Al calcular la frecuencia absoluta marginal de la afectividad (columna 5) con `table()`, se verifica que hay exactamente 14 razas con afectividad alta (hig). Como esa cantidad coincide con el valor del enunciado, la afirmación se confirma como verdadera.
+
+
+------------------------------------------------------------------------
+
+### Pregunta 10
+
+**En las razas utilizadas para compañía hay 14 de efectividad/actividad alta.**
+
+```{r pregunta-10}
+# 10. Evaluación Falso/Verdadero: En las razas utilizadas para compañía hay catorce de afectividad alta
+cruce_comp_afec <- table(DogBreeds[, 7], DogBreeds[, 5])["com", "hig"]
+es_14_cruce <- cruce_comp_afec == 14
+
+cat("Número de razas de compañía que tienen afectividad alta:", cruce_comp_afec, "\n")
+cat("¿Afirmación verdadera?:", es_14_cruce, "\n")
+
+```
+
+**Respuesta:** \[ Verdadero / Falso \] \* **Justificación:**
+
+------------------------------------------------------------------------
+
+### Pregunta 11
+
+**Todas las razas pesadas son de utilidad.**
+
+```{r pregunta-11}
+# 11. Evaluación Falso/Verdadero: ¿Todas las razas pesadas ('hea') son de utilidad ('uti')?
+perf_fila_peso <- prop.table(table(DogBreeds[, 2], DogBreeds[, 7]), margin = 1) * 100
+es_100_peso_uti <- perf_fila_peso["hea", "uti"] == 100
+
+cat("Porcentaje de razas pesadas utilizadas para utilidad:", round(perf_fila_peso["hea", "uti"], 1), "%\n")
+cat("¿Afirmación verdadera?:", es_100_peso_uti, "\n")
+```
+
+**Respuesta:** \[ Verdadero / Falso \] \* **Justificación:**
+
+------------------------------------------------------------------------
+
+### Pregunta 12
+
+**Todas las razas de utilidad son de tamaño grande.**
+
+```{r pregunta-12}
+# 12. Evaluación Falso/Verdadero: ¿Todas las razas de utilidad ('uti') son de tamaño grande ('lar')?
+perf_fila_tama <- prop.table(table(DogBreeds[, 7], DogBreeds[, 1]), margin = 1) * 100
+es_100_uti_tama <- perf_fila_tama["uti", "lar"] == 100
+
+cat("Porcentaje de razas de utilidad que son de tamaño grande:", round(perf_fila_tama["uti", "lar"], 1), "%\n")
+cat("¿Afirmación verdadera?:", es_100_uti_tama, "\n")
+
+```
+
+**Respuesta:** \[ Verdadero / Falso \] \* **Justificación:**
+
+------------------------------------------------------------------------
+
+### Pregunta 13
+
+**La velocidad no caracteriza a las razas de caza.**
+
+```{r pregunta-13}
+# 13. Evaluación Falso/Verdadero: Se verifica si la variable velocidad (VELO) figura con valor test significativo en caza ('hun')
+carac_todas <- cluster.carac(DogBreeds[, 1:6], DogBreeds[, 7])
+
+# Muestra la caracterización de las razas de caza
+carac_todas$hun
+
+```
+
+**Respuesta:** \[ Verdadero / Falso \] \* **Justificación:**
+
+
+
+------------------------------------------------------------------------
+
+### Pregunta 14
+
+**Hay cinto razas de utlidad.**
+
+```{r pregunta-14}
+# 14. Evaluación Falso/Verdadero: ¿Hay cinco razas de utilidad ('uti')?
+conteo_uti <- table(DogBreeds[, 7])["uti"]
+es_5_uti <- conteo_uti == 5
+
+cat("Número total de razas de utilidad ('uti'):", conteo_uti, "\n")
+cat("¿Afirmación verdadera?:", es_5_uti, "\n")
+
+```
+
+**Respuesta:** \[ Verdadero / Falso \] \* **Justificación:**
+hiii pruebaaa

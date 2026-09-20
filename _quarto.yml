@@ -4,19 +4,28 @@ project:
 
 website:
   title: "Estadística Descriptiva Multivariada"
+  page-navigation: true
   navbar:
-    background: primary
+    background: "#2C3E50"  # Azul marino grisáceo elegante (mismo tono para todo el sitio)
     left:
-      - text: "Corte 1"
-        href: index.qmd
-      - text: "Corte 2"
-        href: corte2.qmd
-      - text: "Corte 3"
-        href: corte3.qmd
+      - text: "Proyecto"
+        menu:
+          - text: "Primera Entrega"
+            href: index.qmd
+          - text: "Segunda Entrega"
+            href: corte2.qmd
+          - text: "Tercera Entrega"
+            href: corte3.qmd
+      - text: "Talleres"
+        menu:
+          - text: "Taller 1: Razas de Perros"
+            href: talleres/taller1.qmd
 
 format:
   html:
-    theme: flatly
+    theme: flatly         # Estilo limpio, moderno y minimalista
+    mainfont: "sans-serif"
+    fontsize: "1.05em"
     toc: true
     toc-location: right
     toc-title: "En esta página"
