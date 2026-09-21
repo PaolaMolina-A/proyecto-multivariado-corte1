@@ -273,58 +273,53 @@ print(diag_fl2)
 
 
 #################################Concluyendo la base########################################
-############################### PASO 4: EXPORTACIÓN FINAL DEL TOP 40 (TODAS LAS FILAS) ###############################
+############################### PASO 4 (FINAL): TOP 20 (10 + 10) Y EXPORTACIÓN ###############################
 
-# 4.1 Lista definitiva de las 40 variables (ya cerrada)
-top20_cuanti_final <- c(
-  "PV1MATH", "PV1READ", "PV1FLIT", "ESCS", "HISEI", "HOMEPOS", "BELONG",
-  "FLCONFIN", "ACCESSFP", "CURIOAGR", "GROSAGR", "MATHEFF", "DISCLIM",
-  "COGACRCO", "COGACMCO", "EXPOFA", "FCFMLRTY", "FLSCHOOL", "FLFAMILY",
-  "ST059Q01TA"
+# 4.1 Lista definitiva de las 20 variables
+top10_cuanti_final <- c(
+  "PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS",
+  "FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY"
 )
 
-top20_cuali_final <- c(
-  "ST004D01T", "ST001D01T", "OECD", "ISCEDP", "ST019AQ01T", "ST019BQ01T",
-  "ST019CQ01T", "ST022Q01TA", "ST125Q01NA", "ST226Q01JA", "ST230Q01JA",
-  "ST255Q01JA", "SKIPPING", "TARDYSD", "STUDYHMW", "ST297Q09JA",
-  "FL169Q05JA", "FL161Q01HA", "FL161Q02HA", "FL159Q04HA"
+top10_cuali_final <- c(
+  "CNT", "ST004D01T", "ST255Q01JA", "FL161Q01HA", "FL161Q02HA",
+  "FL169Q05JA", "FL159Q04HA", "FL171Q11JA", "FL171Q12JA", "ISCEDP"
 )
 
-top40_final <- c(top20_cuanti_final, top20_cuali_final)
+top20_final <- c(top10_cuanti_final, top10_cuali_final)
 
-# Verificación de que las 40 existen en la base (para evitar sorpresas antes de exportar)
-faltantes <- setdiff(top40_final, names(datos_completos))
+# Verificación de que las 20 existen en la base
+faltantes <- setdiff(top20_final, names(datos_completos))
 if (length(faltantes) > 0) {
   cat("⚠️ OJO: estas variables no se encontraron en datos_completos:\n")
   print(faltantes)
 } else {
-  cat("✅ Las 40 variables existen correctamente en datos_completos.\n")
+  cat("✅ Las 20 variables existen correctamente en datos_completos.\n")
 }
 
-# 4.2 Base de datos final: ID + las 40 variables, CON TODAS LAS FILAS (sin filtrar NA todavía)
-base_top40 <- datos_completos %>%
-  select(CNTSTUID, all_of(top40_final))
+# 4.2 Base de datos final: ID + las 20 variables, con todas las filas
+base_top20 <- datos_completos %>%
+  select(CNTSTUID, all_of(top20_final))
 
-cat("Dimensiones de la base final:", nrow(base_top40), "filas x", ncol(base_top40), "columnas.\n")
+cat("Dimensiones de la base final:", nrow(base_top20), "filas x", ncol(base_top20), "columnas.\n")
 
-# 4.3 Diccionario de las 40 variables, tomado de tu propio diccionario_unificado
-#     (agrego una columna "Grupo" para que quede claro qué es cuanti y qué es cuali)
-diccionario_top40 <- diccionario_unificado %>%
-  filter(Codigo_Variable %in% top40_final) %>%
+# 4.3 Diccionario de las 20 variables finales
+diccionario_top20 <- diccionario_unificado %>%
+  filter(Codigo_Variable %in% top20_final) %>%
   distinct(Codigo_Variable, .keep_all = TRUE) %>%
-  mutate(Grupo = if_else(Codigo_Variable %in% top20_cuanti_final, "Cuantitativa", "Cualitativa")) %>%
+  mutate(Grupo = if_else(Codigo_Variable %in% top10_cuanti_final, "Cuantitativa", "Cualitativa")) %>%
   select(Codigo_Variable, Grupo, Descripcion_Real, Tabla_Origen) %>%
-  arrange(match(Codigo_Variable, top40_final))   # mantiene el orden que definimos arriba
+  arrange(match(Codigo_Variable, top20_final))
 
-# 4.4 Exportar a un solo Excel con 2 hojas: "Datos" y "Diccionario_Variables"
+# 4.4 Exportar a Excel con 2 hojas
 write_xlsx(
   list(
-    "Datos" = base_top40,
-    "Diccionario_Variables" = diccionario_top40
+    "Datos" = base_top20,
+    "Diccionario_Variables" = diccionario_top20
   ),
-  path = "base_TOP40_PISA_alfabetizacion_financiera.xlsx"
+  path = "base_TOP20_PISA_alfabetizacion_financiera.xlsx"
 )
 
-cat("\n✅ Archivo exportado: base_TOP40_PISA_alfabetizacion_financiera.xlsx\n")
-cat("   - Hoja 'Datos':", nrow(base_top40), "filas x", ncol(base_top40), "columnas\n")
-cat("   - Hoja 'Diccionario_Variables':", nrow(diccionario_top40), "variables documentadas\n")
+cat("\n✅ Archivo exportado: base_TOP20_PISA_alfabetizacion_financiera.xlsx\n")
+cat("   - Hoja 'Datos':", nrow(base_top20), "filas x", ncol(base_top20), "columnas\n")
+cat("   - Hoja 'Diccionario_Variables':", nrow(diccionario_top20), "variables documentadas\n")
