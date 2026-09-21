@@ -2,11 +2,23 @@
 
 # 1. CARGA DE LIBRERÍAS
 # Si algún paquete no está instalado, ejecuta una sola vez: install.packages(c("haven", "labelled", "dplyr", "writexl"))
-library(haven)
-library(labelled)
-library(dplyr)
-library(writexl)
-library(haven)
+# 1. CARGA DE LIBRERÍAS
+paquetes <- c(
+  "haven", "labelled", "dplyr", "writexl"
+)
+# Verificamos qué paquetes faltan. La instalación se hace por fuera de la
+# compilación para evitar cambios inesperados en el entorno del estudiante.
+instalados <- rownames(installed.packages())
+pendientes <- setdiff(paquetes, instalados)
+
+if (length(pendientes) > 0) {
+  stop(
+    "Faltan paquetes: ", paste(pendientes, collapse = ", "),
+    ". Instálelos con install.packages(c(",
+    paste(sprintf('"%s"', pendientes), collapse = ", "), "))"
+  )
+}
+invisible(lapply(paquetes, library, character.only = TRUE))
 
 # 2. RUTAS Y LECTURA DE BASES DE DATOS
 ruta <- "base_datos"
@@ -203,7 +215,7 @@ diag_fl <- data.frame(
 cat("\n== DIAGNÓSTICO DE LAS 5 CANDIDATAS DE ALFABETIZACIÓN FINANCIERA ==\n")
 print(diag_fl)
 
-# Bonus: para las categóricas, ver la distribución de frecuencias real (útil para tu justificación de por qué se eligieron)
+# Bonus: para las categóricas, ver la distribución de frecuencias real 
 for (v in candidatas_fl_existentes) {
   if (diag_fl$n_categorias[diag_fl$variable == v] <= 12) {
     cat("\nDistribución de", v, ":\n")

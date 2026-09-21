@@ -20,92 +20,81 @@ Para este año participaron 81 países y alrededor de 690.000 estudiantes. Para 
 
 ------------------------------------------------------------------------
 
-# Marco Conceptual: Alfabetización y Educación Financiera
+## Marco Conceptual: Alfabetización y Educación Financiera
 
-## Definición de Alfabetización Financiera (OCDE)
+### Definición de Alfabetización Financiera (OCDE)
 
 Para el desarrollo de nuestro proyecto, enfocamos el análisis en las bases de datos correspondientes al módulo de **Alfabetización Financiera** de PISA 2022. Para comprender el alcance de estas variables, resulta fundamental partir de la definición analítica de la Organización para la Cooperación y el Desarrollo Económicos:
 
-::: {.callout-note title="Definición de Alfabetización según la OCDE" icon=false}
+::: {.callout-note title="Definición de Alfabetización según la OCDE" icon="false"}
 PISA se centra en la capacidad de los jóvenes para utilizar sus conocimientos y habilidades para afrontar retos de la vida real, en lugar de simplemente en el grado de dominio de contenidos curriculares específicos. PISA concibe la alfabetización en general como la capacidad de los alumnos para aplicar conocimientos y habilidades en áreas temáticas clave, así como para analizar, razonar y comunicarse eficazmente al plantear, resolver e interpretar problemas en diversas situaciones (OCDE, 2023).
 :::
 
-
-
-
-##  Definición de Educación Financiera (OCDE)
+### Definición de Educación Financiera (OCDE)
 
 En este mismo marco, cobra especial relevancia el concepto de **educación financiera**, el cual orienta el desarrollo de competencias en los estudiantes:
 
-::: {.callout-note title="Definición de Educación Financiera según la OCDE/INFE" icon=false}
+::: {.callout-note title="Definición de Educación Financiera según la OCDE/INFE" icon="false"}
 La educación financiera es el proceso mediante el cual los consumidores/inversores financieros mejoran su comprensión de los productos, conceptos y riesgos financieros y, a través de la información, la instrucción y/o el asesoramiento objetivo, desarrollan las habilidades y la confianza para ser más conscientes de los riesgos y oportunidades financieras, para tomar decisiones informadas, para saber dónde acudir en busca de ayuda y para tomar otras medidas eficaces para mejorar su bienestar financiero (OCDE/INFE, 2012).
 :::
 
 ------------------------------------------------------------------------
 
-# Antecedentes del Módulo de Alfabetización Financiera en PISA
+## Antecedentes del Módulo de Alfabetización Financiera en PISA
 
 Para obtener una imagen más completa y hacer contrastes correctos, es de suma importancia conocer los resultados obtenidos en los años anteriores. De los cuales tenemos los siguientes:
 
-##  Hallazgos y Tendencias Clave en Ciclos Anteriores
+### Hallazgos y Tendencias Clave en Ciclos Anteriores
 
-### Ciclo PISA 2012: Punto de partida
+#### Ciclo PISA 2012: Punto de partida
+
 Fue la primera evaluación opcional de competencia financiera en PISA, contando con la participación de 18 países y economías (OCDE, 2014).
 
- **Diseño:** Estableció por primera vez la escala global de desempeño estructurada en 5 niveles de competencia para medir la capacidad de aplicar conocimientos sobre dinero, presupuestos y contratos en situaciones reales.
- 
- **Reflexiones clave:** Reveló diferencias pronunciadas en los resultados entre y dentro de las naciones participantes, dejando en evidencia que la educación financiera debe comenzar de forma formal en la escuela antes de que los jóvenes se conviertan en consumidores activos. Asimismo, sirvió para fijar el marco conceptual de la OCDE/INFE de referencia global.
+**Diseño:** Estableció por primera vez la escala global de desempeño estructurada en 5 niveles de competencia para medir la capacidad de aplicar conocimientos sobre dinero, presupuestos y contratos en situaciones reales.
 
-### Ciclo PISA 2015: Transición digital e integración de competencias
+**Reflexiones clave:** Reveló diferencias pronunciadas en los resultados entre y dentro de las naciones participantes, dejando en evidencia que la educación financiera debe comenzar de forma formal en la escuela antes de que los jóvenes se conviertan en consumidores activos. Asimismo, sirvió para fijar el marco conceptual de la OCDE/INFE de referencia global.
+
+#### Ciclo PISA 2015: Transición digital e integración de competencias
+
 Participaron 15 países y economías, manteniendo la estructura conceptual de 2012 para garantizar la comparabilidad de los resultados (OCDE, 2017).
 
- **Novedad metodológica:** La prueba migró hacia la administración por computadora.
- 
- **Reflexiones clave:** El cambio de formato demostró que la fluidez en entornos digitales es indispensable para desempeñarse en la sociedad moderna. Se confirmó que el rendimiento financiero está estrechamente ligado a las habilidades en lectura y matemáticas, aunque mantiene un componente analítico propio y único. Se identificó también que la discusión sobre el dinero en el hogar y la experiencia práctica desempeñan un rol determinante en la autonomía del estudiante.
+**Novedad metodológica:** La prueba migró hacia la administración por computadora.
 
-### Ciclo PISA 2018: Inclusión digital, equidad y análisis de tendencias
+**Reflexiones clave:** El cambio de formato demostró que la fluidez en entornos digitales es indispensable para desempeñarse en la sociedad moderna. Se confirmó que el rendimiento financiero está estrechamente ligado a las habilidades en lectura y matemáticas, aunque mantiene un componente analítico propio y único. Se identificó también que la discusión sobre el dinero en el hogar y la experiencia práctica desempeñan un rol determinante en la autonomía del estudiante.
+
+#### Ciclo PISA 2018: Inclusión digital, equidad y análisis de tendencias
 
 Abarcó a 20 países y economías (13 pertenecientes a la OCDE y 7 países socios), representando a aproximadamente 117.000 estudiantes, con un puntaje promedio OCDE de 505 puntos (OCDE, 2020).
 
- **Desempeño destacado:** Estonia obtuvo el rendimiento promedio más alto (547 puntos), seguida por Finlandia (537 puntos) y las provincias de Canadá (532 puntos). El 85% de los estudiantes alcanzó al menos el Nivel 2 (umbral básico de competencia) y un 10% logró el Nivel 5 (alto rendimiento).
- 
- **Tendencias en el rendimiento:** 
- 
- 
-  *Periodo 2015–2018:* El promedio de la OCDE aumentó 20 puntos, impulsado por mejoras sustanciales en Lituania (+50 puntos), Brasil (+25 puntos) y España (+25 puntos), además de Polonia y la República Eslovaca. En países como Chile, España, Brasil y República Eslovaca, el alza se debió a la reducción de estudiantes en los niveles de bajo rendimiento.
-  
-  
- **Factores socioeconómicos y entorno familiar:**
- 
-   *El rol central de los padres:* El 94% de los estudiantes indicó que su familia es la principal fuente de información sobre dinero. Quienes consultaban con sus padres obtuvieron, en promedio, 27 puntos más tras ajustar por nivel socioeconómico.
-   
-   
-   *Impacto socioeconómico:* Los estudiantes de entornos favorecidos superaron a los desfavorecidos por un promedio de 78 puntos (equivalente a casi un nivel completo de competencia). No obstante, la enseñanza de contenidos financieros en escuelas desfavorecidas ayudó a mitigar estas brechas.
-   
-   
- **Inclusión digital y brechas de género:** Se observó un crecimiento en la tenencia de tarjetas de débito/pago y compras en línea. Aunque la diferencia de puntaje entre niños y niñas fue reducida (2 puntos a favor de los niños en el promedio OCDE), los varones mostraron mayor confianza en el manejo de servicios financieros digitales y contratos.
- 
- 
- 
- 
+**Desempeño destacado:** Estonia obtuvo el rendimiento promedio más alto (547 puntos), seguida por Finlandia (537 puntos) y las provincias de Canadá (532 puntos). El 85% de los estudiantes alcanzó al menos el Nivel 2 (umbral básico de competencia) y un 10% logró el Nivel 5 (alto rendimiento).
+
+**Tendencias en el rendimiento:**
+
+*Periodo 2015–2018:* El promedio de la OCDE aumentó 20 puntos, impulsado por mejoras sustanciales en Lituania (+50 puntos), Brasil (+25 puntos) y España (+25 puntos), además de Polonia y la República Eslovaca. En países como Chile, España, Brasil y República Eslovaca, el alza se debió a la reducción de estudiantes en los niveles de bajo rendimiento.
+
+**Factores socioeconómicos y entorno familiar:**
+
+*El rol central de los padres:* El 94% de los estudiantes indicó que su familia es la principal fuente de información sobre dinero. Quienes consultaban con sus padres obtuvieron, en promedio, 27 puntos más tras ajustar por nivel socioeconómico.
+
+*Impacto socioeconómico:* Los estudiantes de entornos favorecidos superaron a los desfavorecidos por un promedio de 78 puntos (equivalente a casi un nivel completo de competencia). No obstante, la enseñanza de contenidos financieros en escuelas desfavorecidas ayudó a mitigar estas brechas.
+
+**Inclusión digital y brechas de género:** Se observó un crecimiento en la tenencia de tarjetas de débito/pago y compras en línea. Aunque la diferencia de puntaje entre niños y niñas fue reducida (2 puntos a favor de los niños en el promedio OCDE), los varones mostraron mayor confianza en el manejo de servicios financieros digitales y contratos.
+
 # Estudios y análisis relacionados.
 
-
 ## Estudio 1: Impacto micro y macroeconómico de la alfabetización financiera temprana (ScienceDirect, 2025)
+
 Esta investigación analiza cómo la enseñanza de finanzas a niños y jóvenes genera un efecto en cadena que va desde las decisiones diarias del hogar hasta la estabilidad económica de un país:
 
- **A nivel microeconómico (Individual y Hogar):** Muestra que los jóvenes con formación financiera toman decisiones más informadas sobre inflación, tasas de interés y gestión de riesgos. Además, tienen mayor tendencia al ahorro constante, planifican mejor, evitan deudas con intereses altos y adoptan herramientas digitales de forma responsable.
- 
- 
- **A nivel macroeconómico (Nacional):** Revela que cuando la población conoce de finanzas, aumenta el flujo de recursos hacia el sistema financiero y se reduce la pobreza. Este impacto es especialmente fuerte en países en desarrollo o economías emergentes, donde la alfabetización actúa como un motor de inclusión.
+**A nivel microeconómico (Individual y Hogar):** Muestra que los jóvenes con formación financiera toman decisiones más informadas sobre inflación, tasas de interés y gestión de riesgos. Además, tienen mayor tendencia al ahorro constante, planifican mejor, evitan deudas con intereses altos y adoptan herramientas digitales de forma responsable.
 
+**A nivel macroeconómico (Nacional):** Revela que cuando la población conoce de finanzas, aumenta el flujo de recursos hacia el sistema financiero y se reduce la pobreza. Este impacto es especialmente fuerte en países en desarrollo o economías emergentes, donde la alfabetización actúa como un motor de inclusión.
 
 ## Estudio 2: Informe oficial PISA 2022 Vol. IV - El papel del nivel socioeconómico (OCDE, 2024)
 
 El informe oficial de la OCDE para el módulo de alfabetización financiera de PISA 2022 destaca que el entorno socioeconómico de la familia sigue siendo uno de los factores más fuertes del desempeño del estudiante.
 
- **Hallazgos clave:** Existe una diferencia marcada en los puntajes entre los estudiantes provenientes de hogares con mayores recursos y aquellos de entornos vulnerables. Los jóvenes con mejor nivel socioeconómico no solo obtienen puntajes más altos, sino que tienen más acceso a productos financieros formales y a discusiones sobre inversión en su entorno.
-
+**Hallazgos clave:** Existe una diferencia marcada en los puntajes entre los estudiantes provenientes de hogares con mayores recursos y aquellos de entornos vulnerables. Los jóvenes con mejor nivel socioeconómico no solo obtienen puntajes más altos, sino que tienen más acceso a productos financieros formales y a discusiones sobre inversión en su entorno.
 
 ## Estudio 3: El rol de la familia, el colegio y el género en PISA 2022 (Teacher, 2024)
 
@@ -115,55 +104,145 @@ Este análisis sobre los resultados de PISA 2022 profundiza en los canales a tra
 
 **Integración escolar y brechas:** Muestra que el aprendizaje financiero se refuerza fuertemente mediante materias tradicionales como matemáticas, lectura y sociales, así como con clases enfocadas en finanzas. Además, resalta comparaciones interesantes entre países y matices en la confianza financiera entre chicos y chicas.
 
-
 ## Estudio 4: Marco de educación financiera para estudiantes (Portal de Publicaciones OCDE, 2024)
+
 Esta publicación sintetiza las estrategias globales para fortalecer las competencias económicas en la etapa escolar antes de que los jóvenes asuman responsabilidades financieras adultas.
 
+# Justificación de la Selección de datos
 
-#Justificación de la selección de los datos: 
-
-La elección de nuestro conjunto de datos fue principalmente por la poca relevancia y exposición que se le da a este tema, el cual consideramos de gran importancia para la economía y además, con un gran impacto para la calidad de vida. 
+La elección de nuestro conjunto de datos fue principalmente por la poca relevancia y exposición que se le da a este tema, el cual consideramos de gran importancia para la economía y además, con un gran impacto para la calidad de vida.
 
 ## ¿Por qué la Alfabetización Financiera?
 
 En la actualidad, los jóvenes de 15 años se enfrentan a un entorno económico cada vez más digitalizado y complejo, caracterizado por el uso de billeteras móviles, compras en línea, tarjetas de débito y decisiones de gasto desde edades tempranas. La alfabetización financiera ya no es un conocimiento opcional o reservado para adultos, sino una competencia básica para la vida que determina la autonomía, la capacidad de ahorro y la prevención de fraudes en el futuro.
 
-
 ## ¿Por qué esta base de datos de PISA 2022?
 
 Desde el punto de vista estadístico, seleccionamos la base unificada de PISA 2022 por las siguientes razones:
 
- **Impacto internacional:** Ofrece una muestra amplia de **97.983 registros de estudiantes en 20 países y economías**, lo que proporciona un volumen de información robusto y diverso para realizar comparaciones globales.
- 
- 
- **Integración de fuentes:** Nos permitió fusionar dos instrumentos distintos de la prueba: el cuestionario de antecedentes contextuales del estudiante (`_QQQ`) y la ruta cognitiva de desempeño (`_COG`), logrando una visión integral entre lo que el estudiante vive en su entorno y lo que sabe responder.
- 
- 
- 
+**Impacto internacional:** Ofrece una muestra amplia de **97.983 registros de estudiantes en 20 países y economías**, lo que proporciona un volumen de información robusto y diverso para realizar comparaciones globales.
+
+**Integración de fuentes:** Nos permitió fusionar dos instrumentos distintos de la prueba: el cuestionario de antecedentes contextuales del estudiante (`_QQQ`) y la ruta cognitiva de desempeño (`_COG`), logrando una visión integral entre lo que el estudiante vive en su entorno y lo que sabe responder.
+
+Cada base de datos es dedominio publico para cada uno de los paises participantes, en estas tenemos un total de 97.983 unidades estadisticas para ambas, de las cuales para el cuestionario \_QQQ tenemos 1192 caracteristicas, y en \_cog 3637 caracteristicas; sin embargo al hacer un analisis superficial del cuestionario ruta cognitiva de desempeño, encontramos caracteristicas donde su obejtivo de medicion sale por completo de los objetivos de este curso, donde solo queremos encontrar caracteristicas de la poblacion sujeta al estudio.
+
+## Justificación de la selección de variables
+
+Para cumplir con los objetivos del análisis y mantener la robustez estadística, se realizó un proceso de filtrado exhaustivo sobre las más de 4,800 características originales de la base de datos conjunta. La selección de las 20 variables finales (10 cuantitativas y 10 cualitativas) se fundamentó en los siguientes criterios técnicos y conceptuales:
+
+Calidad de la información (Umbral de valores faltantes): Se descartaron todas las variables que presentaban más de un 50% de datos nulos (NA), garantizando una matriz de datos densa y representativa para los algoritmos multivariados posteriores.
+
+Criterio de alta variabilidad (Variables cuantitativas): Entre las características numéricas viables, se priorizaron aquellas con un mayor coeficiente de variación (desviación estándar relativa). Esto asegura que los datos posean suficiente dispersión para identificar agrupaciones y gradientes reales en la población. Se conservaron los puntajes plausibles de rendimiento (ej. PV1FLIT, PV1MATH) y los índices continuos de estatus socioeconómico (ESCS).
+
+Independencia y no redundancia (Variables cualitativas): Se depuraron variables categóricas con categorías redundantes o derivadas de una misma pregunta estructural en el cuestionario original, minimizando así problemas de colinealidad.
+
+Relevancia temática transversal: Se garantizó la inclusión de variables exclusivas del módulo financiero que capturan actitudes prácticas (ej. FLCONFIN, ACCESSFP), asegurando que el núcleo de la investigación gire entorno a la alfabetización financiera, sin descuidar variables sociodemográficas clave como el país (CNT) y el género (ST004D01T).
+
+# Análisis Univariado 
+
+aqui va el análisis univariado
+
+# Análisis Bivariado
+
+A continuación, se presenta el análisis bivariado tomando como variable ancla cuantitativa el puntaje de alfabetización financiera (`PV1FLIT`) y como variable cualitativa el género (`ST004D01T`).
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+
+# ==============================================================================
+# CONFIGURACIÓN INICIAL
+# ==============================================================================
+options(digits = 4, scipen = 999)
+library(FactoClass) 
+library(plotly)     
+library(knitr)      
+library(DT)
+library(readxl)
+
+# Asumiendo que tu base final está cargada como 'base_top20'
+
+# ==============================================================================
+# A. VARIABLE CONTINUA CONTRA EL RESTO (Ancla: PV1FLIT)
+# ==============================================================================
+
+# 1. Correlaciones con las demás cuantitativas
+base_top20 <- read_excel("base_TOP20_PISA_alfabetizacion_financiera.xlsx")
+cuanti_vars <- base_top20[, c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS")]
+kable(cor(cuanti_vars, use = "complete.obs"), digits = 2)
+
+# Varianza
+kable(var(cuanti_vars, na.rm = TRUE), digits = 2)
+
+# 2. Continua vs Cualitativa (Ej: PV1FLIT vs Género ST004D01T)
+# Diagramas de caja
+par(bty="n")
+sorted_genero <- with(base_top20, reorder(ST004D01T, PV1FLIT, median, na.rm = TRUE))
+boxplot(base_top20$PV1FLIT ~ sorted_genero, las = 1, col = 4, horizontal = TRUE)
+
+# Gráfico de violín interactivo (Razón de correlación)
+fig <- base_top20 %>%
+  plot_ly(x = ~PV1FLIT, split = ~ST004D01T, type = 'violin',
+          box = list(visible = TRUE),
+          meanline = list(visible = TRUE, color = "black")) %>%
+  layout(xaxis = list(title = "Alfabetización Financiera (PV1FLIT)"), 
+         yaxis = list(title = "Género"))
+fig
+
+# Valores Test para variables continuas (Caracterización)
+cluster.carac(cuanti_vars, base_top20$ST004D01T, tipo.v = "co", v.lim = 2, dn = 2, neg = TRUE)
+
+# ==============================================================================
+# B. VARIABLE CUALITATIVA CONTRA EL RESTO (Ancla: ST004D01T)
+# ==============================================================================
+
+# 1. Cualitativa vs Cualitativa (Ej: Género vs Acceso a cuenta FL161Q01HA)
+tc <- table(base_top20$ST004D01T, base_top20$FL161Q01HA)
+tabtc <- cbind(tc, totF = rowSums(tc))
+tabtc <- rbind(tabtc, totC = colSums(tabtc))
+kable(tabtc, digits = 1) # Tabla de contingencia
+
+# Perfiles fila
+PF <- prop.table(tc, 1)
+kable(addmargins(PF, margin = 2) * 100, digits = 1)
+
+# ------------------------------------------------------------------------------
+# CONVERSIÓN OBLIGATORIA PARA FACTOCLASS
+# ------------------------------------------------------------------------------
+cuali_vars_subset <- base_top20[, c("FL161Q01HA", "FL169Q05JA", "FL171Q11JA")]
+cuali_vars_subset_factor <- as.data.frame(lapply(cuali_vars_subset, as.factor))
+genero_factor <- as.factor(base_top20$ST004D01T)
+
+# 2. Valores indicativos de asociación (Chi-cuadrado)
+kable(chisq.carac(cuali_vars_subset_factor, genero_factor), digits = 3)
+
+# 3. Valores Test para caracterización por variables cualitativas
+cluster.carac(cuali_vars_subset_factor, genero_factor)
+```
+
 # Referencias Bibliográficas
 
-* Australian Council for Educational Research. (2024, 3 de julio). *PISA 2022: Students' financial literacy*. Teacher Magazine. https://www.teachermagazine.com/au_en/articles/pisa-2022-students-financial-literacy
+- Australian Council for Educational Research. (2024, 3 de julio). *PISA 2022: Students' financial literacy*. Teacher Magazine. https://www.teachermagazine.com/au_en/articles/pisa-2022-students-financial-literacy
 
-* National Center for Education Statistics. (2023). *Program for International Student Assessment (PISA) 2022: Technical Notes*. U.S. Department of Education, Institute of Education Sciences. https://nces.ed.gov/surveys/pisa/pisa2022/technical-notes/index.asp
+- National Center for Education Statistics. (2023). *Program for International Student Assessment (PISA) 2022: Technical Notes*. U.S. Department of Education, Institute of Education Sciences. https://nces.ed.gov/surveys/pisa/pisa2022/technical-notes/index.asp
 
-* Organización para la Cooperación y el Desarrollo Económicos. (s. f.). *PISA data and methodology*. https://www.oecd.org/en/about/programmes/pisa/pisa-data.html
+- Organización para la Cooperación y el Desarrollo Económicos. (s. f.). *PISA data and methodology*. https://www.oecd.org/en/about/programmes/pisa/pisa-data.html
 
-* Organización para la Cooperación y el Desarrollo Económicos. (s. f.). *Programme for International Student Assessment (PISA)*. https://www.oecd.org/en/about/programmes/pisa.html
+- Organización para la Cooperación y el Desarrollo Económicos. (s. f.). *Programme for International Student Assessment (PISA)*. https://www.oecd.org/en/about/programmes/pisa.html
 
-* Organización para la Cooperación y el Desarrollo Económicos. (s. f.). *Student Financial Literacy Portal*. https://www.oecd.org/en/topics/student-financial-literacy.html
+- Organización para la Cooperación y el Desarrollo Económicos. (s. f.). *Student Financial Literacy Portal*. https://www.oecd.org/en/topics/student-financial-literacy.html
 
-* Organización para la Cooperación y el Desarrollo Económicos. (2009). *PISA Data Analysis Manual: SAS* (2.ª ed.). OECD Publishing. https://doi.org/10.1787/9789264056251-en
+- Organización para la Cooperación y el Desarrollo Económicos. (2009). *PISA Data Analysis Manual: SAS* (2.ª ed.). OECD Publishing. https://doi.org/10.1787/9789264056251-en
 
-* Organización para la Cooperación y el Desarrollo Económicos. (2014). *PISA 2012 Results: What Students Know and Can Do – Student Performance in Mathematics, Reading and Science (Volume I, Revised edition)*. OECD Publishing. https://doi.org/10.1787/9789264208780-en
+- Organización para la Cooperación y el Desarrollo Económicos. (2014). *PISA 2012 Results: What Students Know and Can Do – Student Performance in Mathematics, Reading and Science (Volume I, Revised edition)*. OECD Publishing. https://doi.org/10.1787/9789264208780-en
 
-* Organización para la Cooperación y el Desarrollo Económicos. (2023a). *Marco analítico y de evaluación PISA 2022*. Publicaciones de la OCDE. https://doi.org/10.1787/dfe0bf9c-en
+- Organización para la Cooperación y el Desarrollo Económicos. (2023a). *Marco analítico y de evaluación PISA 2022*. Publicaciones de la OCDE. https://doi.org/10.1787/dfe0bf9c-en
 
-* Organización para la Cooperación y el Desarrollo Económicos. (2023b). *PISA 2022 Financial Literacy Analytical Framework*. En *PISA 2022 Assessment and Analytical Framework*. OECD Publishing. https://www.oecd.org/en/publications/pisa-2022-assessment-and-analytical-framework_dfe0bf9c-en/full-report/component-4.html#section-d1e6094-c65b4c3d7c
+- Organización para la Cooperación y el Desarrollo Económicos. (2023b). *PISA 2022 Financial Literacy Analytical Framework*. En *PISA 2022 Assessment and Analytical Framework*. OECD Publishing. https://www.oecd.org/en/publications/pisa-2022-assessment-and-analytical-framework_dfe0bf9c-en/full-report/component-4.html#section-d1e6094-c65b4c3d7c
 
-* Organización para la Cooperación y el Desarrollo Económicos. (2023c). *PISA 2022 Results (Volume II): Learning During – and Thinking About – School*. OECD Publishing. https://fne.pt/uploads/rte/internacional/OCDE_PISA_2022_Volume_2_%205%20dez%202023.pdf
+- Organización para la Cooperación y el Desarrollo Económicos. (2023c). *PISA 2022 Results (Volume II): Learning During – and Thinking About – School*. OECD Publishing. https://fne.pt/uploads/rte/internacional/OCDE_PISA_2022_Volume_2\_%205%20dez%202023.pdf
 
-* Organización para la Cooperación y el Desarrollo Económicos. (2024). *PISA 2022 Results (Volume IV): A Check on Financial Literacy*. OECD Publishing. https://doi.org/10.1787/5a849c2a-en
+- Organización para la Cooperación y el Desarrollo Económicos. (2024). *PISA 2022 Results (Volume IV): A Check on Financial Literacy*. OECD Publishing. https://doi.org/10.1787/5a849c2a-en
 
-* Yurtkur, A. K., Kılıç, Y., Buğan, M. F., Dibooglu, S., & Çevik, E. İ. (2025). The impact of financial literacy on financial development: A cross-country analysis. *Borsa Istanbul Review*, 25(S2), 177–191. https://doi.org/10.1016/j.bir.2025.10.017
- 
-
+- Yurtkur, A. K., Kılıç, Y., Buğan, M. F., Dibooglu, S., & Çevik, E. İ. (2025). The impact of financial literacy on financial development: A cross-country analysis. *Borsa Istanbul Review*, 25(S2), 177–191. https://doi.org/10.1016/j.bir.2025.10.017
