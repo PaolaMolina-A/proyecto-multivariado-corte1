@@ -20,9 +20,9 @@ Para este año participaron 81 países y alrededor de 690.000 estudiantes. Para 
 
 ------------------------------------------------------------------------
 
-## Marco Conceptual: Alfabetización y Educación Financiera
+# Marco Conceptual: Alfabetización y Educación Financiera
 
-### Definición de Alfabetización Financiera (OCDE)
+## Definición de Alfabetización Financiera (OCDE)
 
 Para el desarrollo de nuestro proyecto, enfocamos el análisis en las bases de datos correspondientes al módulo de **Alfabetización Financiera** de PISA 2022. Para comprender el alcance de estas variables, resulta fundamental partir de la definición analítica de la Organización para la Cooperación y el Desarrollo Económicos:
 
@@ -30,7 +30,7 @@ Para el desarrollo de nuestro proyecto, enfocamos el análisis en las bases de d
 PISA se centra en la capacidad de los jóvenes para utilizar sus conocimientos y habilidades para afrontar retos de la vida real, en lugar de simplemente en el grado de dominio de contenidos curriculares específicos. PISA concibe la alfabetización en general como la capacidad de los alumnos para aplicar conocimientos y habilidades en áreas temáticas clave, así como para analizar, razonar y comunicarse eficazmente al plantear, resolver e interpretar problemas en diversas situaciones (OCDE, 2023).
 :::
 
-### Definición de Educación Financiera (OCDE)
+## Definición de Educación Financiera (OCDE)
 
 En este mismo marco, cobra especial relevancia el concepto de **educación financiera**, el cual orienta el desarrollo de competencias en los estudiantes:
 
@@ -40,13 +40,13 @@ La educación financiera es el proceso mediante el cual los consumidores/inverso
 
 ------------------------------------------------------------------------
 
-## Antecedentes del Módulo de Alfabetización Financiera en PISA
+# Antecedentes del Módulo de Alfabetización Financiera en PISA
 
 Para obtener una imagen más completa y hacer contrastes correctos, es de suma importancia conocer los resultados obtenidos en los años anteriores. De los cuales tenemos los siguientes:
 
-### Hallazgos y Tendencias Clave en Ciclos Anteriores
+## Hallazgos y Tendencias Clave en Ciclos Anteriores
 
-#### Ciclo PISA 2012: Punto de partida
+### Ciclo PISA 2012: Punto de partida
 
 Fue la primera evaluación opcional de competencia financiera en PISA, contando con la participación de 18 países y economías (OCDE, 2014).
 
@@ -54,7 +54,7 @@ Fue la primera evaluación opcional de competencia financiera en PISA, contando 
 
 **Reflexiones clave:** Reveló diferencias pronunciadas en los resultados entre y dentro de las naciones participantes, dejando en evidencia que la educación financiera debe comenzar de forma formal en la escuela antes de que los jóvenes se conviertan en consumidores activos. Asimismo, sirvió para fijar el marco conceptual de la OCDE/INFE de referencia global.
 
-#### Ciclo PISA 2015: Transición digital e integración de competencias
+### Ciclo PISA 2015: Transición digital e integración de competencias
 
 Participaron 15 países y economías, manteniendo la estructura conceptual de 2012 para garantizar la comparabilidad de los resultados (OCDE, 2017).
 
@@ -62,7 +62,7 @@ Participaron 15 países y economías, manteniendo la estructura conceptual de 20
 
 **Reflexiones clave:** El cambio de formato demostró que la fluidez en entornos digitales es indispensable para desempeñarse en la sociedad moderna. Se confirmó que el rendimiento financiero está estrechamente ligado a las habilidades en lectura y matemáticas, aunque mantiene un componente analítico propio y único. Se identificó también que la discusión sobre el dinero en el hogar y la experiencia práctica desempeñan un rol determinante en la autonomía del estudiante.
 
-#### Ciclo PISA 2018: Inclusión digital, equidad y análisis de tendencias
+### Ciclo PISA 2018: Inclusión digital, equidad y análisis de tendencias
 
 Abarcó a 20 países y economías (13 pertenecientes a la OCDE y 7 países socios), representando a aproximadamente 117.000 estudiantes, con un puntaje promedio OCDE de 505 puntos (OCDE, 2020).
 
@@ -108,7 +108,7 @@ Este análisis sobre los resultados de PISA 2022 profundiza en los canales a tra
 
 Esta publicación sintetiza las estrategias globales para fortalecer las competencias económicas en la etapa escolar antes de que los jóvenes asuman responsabilidades financieras adultas.
 
-# Justificación de la Selección de datos
+#Justificación de la selección de los datos:
 
 La elección de nuestro conjunto de datos fue principalmente por la poca relevancia y exposición que se le da a este tema, el cual consideramos de gran importancia para la economía y además, con un gran impacto para la calidad de vida.
 
@@ -124,23 +124,590 @@ Desde el punto de vista estadístico, seleccionamos la base unificada de PISA 20
 
 **Integración de fuentes:** Nos permitió fusionar dos instrumentos distintos de la prueba: el cuestionario de antecedentes contextuales del estudiante (`_QQQ`) y la ruta cognitiva de desempeño (`_COG`), logrando una visión integral entre lo que el estudiante vive en su entorno y lo que sabe responder.
 
-Cada base de datos es dedominio publico para cada uno de los paises participantes, en estas tenemos un total de 97.983 unidades estadisticas para ambas, de las cuales para el cuestionario \_QQQ tenemos 1192 caracteristicas, y en \_cog 3637 caracteristicas; sin embargo al hacer un analisis superficial del cuestionario ruta cognitiva de desempeño, encontramos caracteristicas donde su obejtivo de medicion sale por completo de los objetivos de este curso, donde solo queremos encontrar caracteristicas de la poblacion sujeta al estudio.
+# Preprocesamiento de los datos.
 
-## Justificación de la selección de variables
+Nuestra base de datos cuenta con 97.983 individuos y unas casi 5000 variables, de las cuales muchas eran preguntas específicas con ponderaciones establecidas y modelos complejos para usarlas de manera correcta. Por esa razón fue de vital importancia hacerle un preprocesamiento para encontrar las 20 variables que usaremos para este proyecto. Los pasos que seguimos fueron los siguientes:
 
-Para cumplir con los objetivos del análisis y mantener la robustez estadística, se realizó un proceso de filtrado exhaustivo sobre las más de 4,800 características originales de la base de datos conjunta. La selección de las 20 variables finales (10 cuantitativas y 10 cualitativas) se fundamentó en los siguientes criterios técnicos y conceptuales:
+## Carga de librerías y lectura de las bases de datos originales
 
-Calidad de la información (Umbral de valores faltantes): Se descartaron todas las variables que presentaban más de un 50% de datos nulos (NA), garantizando una matriz de datos densa y representativa para los algoritmos multivariados posteriores.
+Se cargaron las librerías necesarias para leer archivos en formato SAS conservando sus etiquetas de variable (`haven`, `labelled`), manipular datos (`dplyr`) y exportar resultados a Excel (`writexl`). Luego se leyeron los dos archivos originales del estudio PISA 2022: el Cuestionario de contexto del estudiante (`_QQQ`) y las Notas del examen cognitivo (`_COG`).
 
-Criterio de alta variabilidad (Variables cuantitativas): Entre las características numéricas viables, se priorizaron aquellas con un mayor coeficiente de variación (desviación estándar relativa). Esto asegura que los datos posean suficiente dispersión para identificar agrupaciones y gradientes reales en la población. Se conservaron los puntajes plausibles de rendimiento (ej. PV1FLIT, PV1MATH) y los índices continuos de estatus socioeconómico (ESCS).
+```{r}
+#| label: carga-librerias-datos
+#| message: false
+#| warning: false
 
-Independencia y no redundancia (Variables cualitativas): Se depuraron variables categóricas con categorías redundantes o derivadas de una misma pregunta estructural en el cuestionario original, minimizando así problemas de colinealidad.
+library(haven)     # leer archivos SAS con sus etiquetas originales
+library(labelled)  # trabajar con esas etiquetas
+library(dplyr)     # manipulación de datos
+library(writexl)   # exportar resultados a Excel
 
-Relevancia temática transversal: Se garantizó la inclusión de variables exclusivas del módulo financiero que capturan actitudes prácticas (ej. FLCONFIN, ACCESSFP), asegurando que el núcleo de la investigación gire entorno a la alfabetización financiera, sin descuidar variables sociodemográficas clave como el país (CNT) y el género (ST004D01T).
+# Lectura de las dos bases originales del estudio PISA 2022
+ruta <- "base_datos"
+datos_cuestionario <- read_sas(file.path(ruta, "CY08MSP_FLT_QQQ.SAS7BDAT"))
+datos_cognitivos   <- read_sas(file.path(ruta, "CY08MSP_FLT_COG.SAS7BDAT"))
 
-# Análisis Univariado
+cat("Cuestionario:", nrow(datos_cuestionario), "filas x", ncol(datos_cuestionario), "columnas\n")
+cat("Cognitivo:   ", nrow(datos_cognitivos), "filas x", ncol(datos_cognitivos), "columnas\n")
+```
 
-aqui va el análisis univariado
+## Generación del diccionario unificado de variables
+
+Antes de decidir qué variables usar, se construyó un diccionario de referencia con las 4.829 variables disponibles entre ambas bases, extrayendo de cada una su código, la etiqueta descriptiva original del archivo SAS y una clasificación preliminar de tipo. Este diccionario es la base sobre la que se tomaron todas las decisiones posteriores de selección de variables.
+
+```{r}
+#| label: diccionario-unificado
+#| warning: false
+
+extraer_diccionario <- function(df, nombre_tabla) {
+  df_factor <- as_factor(df)
+  
+  tibble(
+    Tabla_Origen = nombre_tabla,
+    Codigo_Variable = names(df),
+    Descripcion_Real = sapply(df, function(x) {
+      lbl <- attr(x, "label")
+      if (is.null(lbl) || length(lbl) == 0) "Sin descripción textual" else as.character(lbl)
+    }),
+    Tipo_Variable = sapply(df_factor, function(x) {
+      if (is.factor(x) || is.character(x)) "Cualitativa (Texto)" else "Cuantitativa / Código Numérico"
+    })
+  )
+}
+
+dicc_qqq <- extraer_diccionario(datos_cuestionario, "Cuestionario (PDF)")
+dicc_cog <- extraer_diccionario(datos_cognitivos, "Notas Cognitivas (Examen)")
+diccionario_unificado <- bind_rows(dicc_qqq, dicc_cog)
+
+cat("Total de variables documentadas en el diccionario:", nrow(diccionario_unificado), "\n")
+cat(" - Cuestionario:", nrow(dicc_qqq), "\n")
+cat(" - Cognitivo:   ", nrow(dicc_cog), "\n")
+```
+
+## Unificación de las bases Cuestionario y Cognitivo
+
+Las dos bases se unieron a través del identificador único de estudiante (CNTSTUID). Antes de unir, se redujo la base Cognitiva a solo el identificador y un pequeño grupo de variables de diseño/ruta de aplicación del examen, descartando toda variable dificil de usar (respuestas crudas, tiempos, clics) y las columnas duplicadas.
+
+```{r}
+#| label: union-bases
+#| warning: false
+
+rescate_cog <- c("MS1_TEST","MS2_TEST","MS1_LEV","MS2_LEV","MS1_ItemSet","MS2_ItemSet",
+                  "RCORE_TEST","RCORE_PERF","RS1_TEST","RS1_LEV","RS2_TEST","RS2_LEV",
+                  "RCO1S_PERF","ISCEDP","RDESIGN","MPATH")
+rescate_cog <- intersect(rescate_cog, names(datos_cognitivos))
+
+datos_cog_reducido <- datos_cognitivos %>% select(CNTSTUID, all_of(rescate_cog))
+
+datos_completos <- inner_join(datos_cuestionario, datos_cog_reducido, by = "CNTSTUID")
+
+cat("Dimensiones de la base unificada:", nrow(datos_completos), "filas x", ncol(datos_completos), "columnas\n")
+```
+
+## Exclusión de ruido técnico
+
+No todas las columnas de una base de datos sirven para hacer estadística descriptiva. Algunas existen solo por razones técnicas internas del estudio PISA, no porque describan algo interesante del estudiante. Se identificaron y quitaron 4 tipos de estas columnas "no útiles":
+
+*Pesos estadísticos:* son números que usan los investigadores de PISA para que, al sacar promedios generales de un país, la muestra de estudiantes represente bien a toda la población real (por ejemplo, si en la muestra hay menos estudiantes de colegios rurales de los que hay en la realidad, el peso "corrige" eso matemáticamente). No describen nada del estudiante en sí, solo sirven para ese ajuste, así que no aportan al análisis descriptivo.
+
+*Códigos de identificación:* son como el "número de cédula" de cada estudiante, colegio o región — sirven para que el sistema identifique cada caso, pero el número en sí no tiene ningún significado que se pueda interpretar (por ejemplo, que un colegio tenga el código "40023" no dice nada sobre ese colegio). Datos técnicos de cómo se aplicó la prueba: cosas como en qué idioma se aplicó el examen, en qué fecha exacta, o qué versión del cuestionario se usó. Es información de logística de la aplicación, no información sobre el estudiante.
+
+*Columnas de configuración del cuestionario:* variables internas que indican qué módulos opcionales se activaron para cada país, pero que no representan una respuesta ni una característica real del estudiante.
+
+```{r}
+#| label: exclusion-variables-no-utiles
+#| warning: false
+
+pesos_estadisticos    <- grep("^W_FSTU|^UNIT$|^WVARSTRR$|^SENWT$", names(datos_completos), value = TRUE)
+codigos_identificacion <- c("CNTSTUID","CNTSCHID","NatCen","STRATUM","SUBNATIO","CNTRYID","LANGN")
+datos_aplicacion_prueba <- c("CYC","LANGTEST_QQQ","LANGTEST_COG","LANGTEST_PAQ","BOOKID","VER_DAT")
+config_cuestionario    <- grep("^Option_", names(datos_completos), value = TRUE)
+puntajes_repetidos     <- grep("^PV[2-9]|^PV10", names(datos_completos), value = TRUE)
+
+variables_a_descartar <- unique(c(pesos_estadisticos, codigos_identificacion, 
+                                   datos_aplicacion_prueba, config_cuestionario, 
+                                   puntajes_repetidos))
+
+cat("Total de variables excluidas:", length(variables_a_descartar), "\n")
+cat(" - Pesos estadísticos:            ", length(pesos_estadisticos), "\n")
+cat(" - Códigos de identificación:     ", length(codigos_identificacion), "\n")
+cat(" - Datos técnicos de aplicación:  ", length(datos_aplicacion_prueba), "\n")
+cat(" - Configuración del cuestionario:", length(config_cuestionario), "\n")
+cat(" - Puntajes repetidos (PV2 a PV10):", length(puntajes_repetidos), "\n")
+```
+
+## Clasificación de variables en cuantitativas y cualitativas
+
+Aquí tocó resolver un problema técnico importante: cuando R lee un archivo SAS, muchas preguntas de encuesta (por ejemplo, escalas tipo "muy de acuerdo / de acuerdo / en desacuerdo") quedan guardadas internamente como números (1, 2, 3, 4), aunque en realidad representan categorías, no cantidades. Si uno clasifica "cuantitativa vs. cualitativa" solo mirando si la columna es numérica, prácticamente todo el cuestionario terminaría mal clasificado como cuantitativo.
+
+La solución fue distinguir dos cosas: primero, cuántos valores distintos tiene cada variable (si tiene pocos valores distintos, como 1 a 4, probablemente es una categoría; si tiene muchos valores distintos, probablemente es una medición continua real). Con eso se separaron las variables realmente cuantitativas (mediciones o puntajes) de las que, aunque estén guardadas como números, en realidad son categorías (por ejemplo, respuestas de encuesta).
+
+```{r}
+#| label: clasificacion-tipo-variable
+#| warning: false
+
+# Variables numéricas que quedan disponibles después de quitar el "ruido" del Paso 4
+candidatas_numericas <- names(datos_completos)[sapply(datos_completos, is.numeric)]
+candidatas_numericas <- setdiff(candidatas_numericas, c(variables_a_descartar, rescate_cog))
+
+# Cantidad de valores distintos que tiene cada una
+n_valores_distintos <- sapply(datos_completos[candidatas_numericas], 
+                               function(x) length(unique(na.omit(x))))
+
+# Si tiene más de 15 valores distintos (o es un puntaje/índice ya conocido), se considera cuantitativa real
+es_cuantitativa_real <- (n_valores_distintos > 15) | grepl("^PV1|^ESCS", candidatas_numericas)
+
+variables_cuantitativas <- candidatas_numericas[es_cuantitativa_real]
+categorias_disfrazadas  <- candidatas_numericas[!es_cuantitativa_real]
+
+# El resto de columnas (texto, o categorías con pocas opciones) se suman como cualitativas
+variables_cualitativas_texto <- setdiff(names(datos_completos), 
+                                         c(candidatas_numericas, variables_a_descartar, rescate_cog))
+variables_cualitativas <- unique(c(variables_cualitativas_texto, categorias_disfrazadas))
+
+cat("Variables cuantitativas identificadas:", length(variables_cuantitativas), "\n")
+cat("Variables cualitativas identificadas: ", length(variables_cualitativas), "\n")
+```
+
+## Diagnóstico y ranking inicial de las variables candidatas
+
+Con las variables separadas por tipo, se calcularon indicadores de calidad para ordenarlas de mejor a peor y seleccionar preliminarmente las 20 más prometedoras de cada tipo. Para las cuantitativas se usó el porcentaje de datos faltantes y el coeficiente de variación (una medida de variabilidad comparable entre escalas distintas). Para las cualitativas se usó el porcentaje de datos faltantes, el número de categorías (descartando las que tienen menos de 2 o más de 12) y el porcentaje de estudiantes que cae en la respuesta más común. En este paso también se excluyó una variable de código administrativo que aparecía como estadísticamente "buena" sin serlo en contenido, y se agruparon 5 preguntas que correspondían a una misma pregunta original con distintas opciones de respuesta.
+
+```{r}
+#| label: ranking-inicial-variables
+
+# Ajuste 1: se quita un código de región administrativa (no es una medida real)
+variables_cuantitativas <- setdiff(variables_cuantitativas, "REGION")
+
+# Ajuste 2: se agrupan 5 preguntas de una misma batería en solo 1 representante
+bateria_repetida <- grep("^ST297", variables_cualitativas, value = TRUE)
+variables_cualitativas <- setdiff(variables_cualitativas, setdiff(bateria_repetida, "ST297Q09JA"))
+
+# Diagnóstico de las cuantitativas
+diagnostico_cuanti <- data.frame(
+  variable   = variables_cuantitativas,
+  pct_na     = sapply(datos_completos[variables_cuantitativas], function(x) mean(is.na(x)) * 100),
+  media      = sapply(datos_completos[variables_cuantitativas], function(x) mean(x, na.rm = TRUE)),
+  desviacion = sapply(datos_completos[variables_cuantitativas], function(x) sd(x, na.rm = TRUE))
+) %>%
+  mutate(coef_variacion = abs(desviacion / media)) %>%
+  filter(pct_na < 50) %>%
+  arrange(pct_na, desc(coef_variacion))
+
+# Diagnóstico de las cualitativas
+diagnostico_cuali <- data.frame(
+  variable     = variables_cualitativas,
+  pct_na       = sapply(datos_completos[variables_cualitativas], function(x) mean(is.na(x)) * 100),
+  n_categorias = sapply(datos_completos[variables_cualitativas], function(x) length(unique(na.omit(x)))),
+  pct_moda     = sapply(datos_completos[variables_cualitativas], function(x) {
+    tab <- table(x); if (length(tab) == 0) return(NA); max(tab) / sum(tab) * 100
+  })
+) %>%
+  filter(pct_na < 50, n_categorias >= 2, n_categorias <= 12) %>%
+  arrange(pct_na, pct_moda)
+
+top20_cuanti_inicial <- head(diagnostico_cuanti, 20)
+top20_cuali_inicial  <- head(diagnostico_cuali, 20)
+
+cat("Top 20 cuantitativas (vista previa de las primeras 5):\n")
+print(head(top20_cuanti_inicial[, c("variable","pct_na","coef_variacion")], 5))
+
+cat("\nTop 20 cualitativas (vista previa de las primeras 5):\n")
+print(head(top20_cuali_inicial[, c("variable","pct_na","n_categorias","pct_moda")], 5))
+```
+
+## Refinamiento temático
+
+El ranking del Paso 6 priorizó variables únicamente por criterios estadísticos, sin considerar su pertinencia temática. Al revisarlo, se detectaron variables sin relación con alfabetización financiera (acoso escolar, ejercicio físico) que habían entrado solo por tener buenos indicadores estadísticos. Con base en literatura sobre alfabetización financiera en adolescentes —que señala como factores clave el país, el género, el contexto familiar y escolar, el nivel socioeconómico y el comportamiento de ahorro— se hicieron tres ajustes: se retiraron las variables sin relación temática (incluyendo una de año de nacimiento con variación casi nula), se incorporaron variables del módulo específico de Alfabetización Financiera no capturadas por el ranking automático, y se recuperó la variable de país real en lugar del indicador binario de pertenencia a la OCDE. Cada incorporación se validó con el mismo tipo de diagnóstico de calidad usado en el paso anterior.
+
+```{r}
+#| label: verificacion-variables-financieras
+
+# Ejemplo: verificación de calidad de las variables del módulo financiero antes de incorporarlas
+candidatas_financieras <- c("FLCONFIN", "ACCESSFP", "FL161Q01HA", "FL161Q02HA", 
+                             "FL169Q05JA", "FL159Q04HA", "FL171Q11JA", "FL171Q12JA")
+
+diagnostico_financieras <- data.frame(
+  variable = candidatas_financieras,
+  pct_na   = sapply(datos_completos[candidatas_financieras], function(x) mean(is.na(x)) * 100)
+) %>% arrange(pct_na)
+
+print(diagnostico_financieras)
+
+# Verificación de la variable de país recuperada
+cat("\nPaís (CNT): ", length(unique(na.omit(datos_completos$CNT))), "categorías,",
+    round(mean(is.na(datos_completos$CNT)) * 100, 1), "% de datos faltantes\n")
+```
+
+## Selección final de las 20 variables
+
+Aplicando los criterios de calidad estadística y pertinencia temática definidos en los pasos anteriores, se definió la lista final de 20 variables de trabajo: 10 cuantitativas, centradas en desempeño académico, contexto socioeconómico y actitudes financieras; y 10 cualitativas, centradas en demografía, país, e inclusión y comportamiento financiero.
+
+```{r}
+#| label: seleccion-final-20-variables
+
+variables_cuantitativas_final <- c(
+  "PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS",
+  "FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY"
+)
+
+variables_cualitativas_final <- c(
+  "CNT", "ST004D01T", "ST255Q01JA", "FL161Q01HA", "FL161Q02HA",
+  "FL169Q05JA", "FL159Q04HA", "FL171Q11JA", "FL171Q12JA", "ISCEDP"
+)
+
+variables_finales <- c(variables_cuantitativas_final, variables_cualitativas_final)
+
+cat("Total de variables seleccionadas:", length(variables_finales), "\n")
+cat(" - Cuantitativas:", length(variables_cuantitativas_final), "\n")
+cat(" - Cualitativas: ", length(variables_cualitativas_final), "\n")
+```
+
+## Verificación y exportación de la base final
+
+Como último paso, se verificó que las 20 variables seleccionadas existieran en la base unificada, se construyó la base final (identificador del estudiante + las 20 variables) y se exportó a un archivo Excel con dos hojas: los datos y su diccionario de variables correspondiente.
+
+```{r}
+#| label: exportacion-base-final
+
+# Verificación de que las 20 variables existen en la base
+variables_faltantes <- setdiff(variables_finales, names(datos_completos))
+if (length(variables_faltantes) > 0) {
+  cat("Atención, no se encontraron:", paste(variables_faltantes, collapse = ", "), "\n")
+} else {
+  cat("Las 20 variables se encontraron correctamente en la base.\n")
+}
+
+# Construcción de la base final
+base_final <- datos_completos %>%
+  select(CNTSTUID, all_of(variables_finales))
+
+cat("Dimensiones de la base final:", nrow(base_final), "filas x", ncol(base_final), "columnas\n")
+
+# Diccionario de las 20 variables, extraído del diccionario unificado del Paso 2
+diccionario_final <- diccionario_unificado %>%
+  filter(Codigo_Variable %in% variables_finales) %>%
+  distinct(Codigo_Variable, .keep_all = TRUE) %>%
+  mutate(Grupo = if_else(Codigo_Variable %in% variables_cuantitativas_final, 
+                          "Cuantitativa", "Cualitativa")) %>%
+  select(Codigo_Variable, Grupo, Descripcion_Real, Tabla_Origen) %>%
+  arrange(match(Codigo_Variable, variables_finales))
+
+# Exportación a Excel con dos hojas
+write_xlsx(
+  list("Datos" = base_final, "Diccionario_Variables" = diccionario_final),
+  path = "base_TOP20_PISA_alfabetizacion_financiera.xlsx"
+)
+
+cat("Archivo exportado correctamente:", "base_TOP20_PISA_alfabetizacion_financiera.xlsx\n")
+```
+
+# Presentación de las variables.
+
+El análisis se realiza sobre un conjunto curado de **20 variables** pertenecientes al estudio PISA 2022 (módulo de Alfabetización Financiera), correspondiente a una muestra de 97,983 estudiantes de 15 años. Estas variables se dividen equitativamente en 10 cuantitativas y 10 cualitativas.
+
+## Variables Cuantitativas (10 Continuas)
+
+Representan mediciones numéricas continuas compuestas por las calificaciones en las tres áreas principales de PISA y por índices estandarizados de estimación de máxima verosimilitud ponderada (WLE, por sus siglas en inglés).
+
+| Código | Descripción y Contexto | Tipo de Escala |
+|:---------------------|:---------------------|:--------------------------:|
+| **`PV1FLIT`** | **Alfabetización Financiera:** Puntaje de desempeño del estudiante en la evaluación de competencias financieras (variable de interés principal). | Continua |
+| **`PV1MATH`** | **Competencia Matemática:** Puntaje obtenido en la evaluación de matemáticas. | Continua |
+| **`PV1READ`** | **Competencia Lectora:** Puntaje obtenido en la evaluación de lectura y comprensión de textos. | Continua |
+| **`ESCS`** | **Estatus Socioeconómico:** Índice del nivel socioeconómico, social y cultural general del estudiante y su familia. | Continua (Índice WLE) |
+| **`HOMEPOS`** | **Posesiones en el Hogar:** Índice que mide la disponibilidad de bienes materiales, infraestructura y recursos en la vivienda. | Continua (Índice WLE) |
+| **`FLCONFIN`** | **Confianza Financiera:** Índice de confianza percibida del estudiante al enfrentarse a decisiones o trámites monetarios. | Continua (Índice WLE) |
+| **`ACCESSFP`** | **Acceso a Productos:** Índice de acceso directo a fuentes de dinero y productos financieros básicos. | Continua (Índice WLE) |
+| **`FCFMLRTY`** | **Familiaridad Financiera:** Índice de conocimiento y reconocimiento previo de términos y conceptos económicos cotidianos. | Continua (Índice WLE) |
+| **`FLSCHOOL`** | **Educación en el Colegio:** Índice de exposición a contenidos, tareas e instrucción sobre temas financieros dentro de las clases escolares. | Continua (Índice WLE) |
+| **`FLFAMILY`** | **Involucramiento Familiar:** Índice que mide la frecuencia con la que los padres discuten y enseñan asuntos de dinero en el hogar. | Continua (Índice WLE) |
+
+------------------------------------------------------------------------
+
+## Variables Cualitativas (10 Categóricas)
+
+Representan atributos, estados o atributos del entorno del estudiante, dividiéndose en escalas nominales (sin jerarquía) y ordinales (con un orden de gradación implícito).
+
+| Código | Descripción y Contexto | Tipo de Escala |
+|:---------------------|:---------------------|:--------------------------:|
+| **`CNT`** | **País de Origen:** Identificador de la nación o economía participante a la que pertenece el estudiante. | Categórica Nominal |
+| **`ST004D01T`** | **Género:** Género reportado por el estudiante. | Categórica Nominal |
+| **`ST255Q01JA`** | **Libros en el Hogar:** Estimación del volumen de libros impresos disponibles en la vivienda (proxy de capital cultural). | Categórica Ordinal |
+| **`FL161Q01HA`** | **Cuenta Bancaria:** Tenencia personal de una cuenta en una entidad bancaria o financiera. | Categórica Nominal |
+| **`FL161Q02HA`** | **Tarjeta de Débito:** Tenencia personal de una tarjeta de débito o de pago. | Categórica Nominal |
+| **`FL169Q05JA`** | **Manejo del Dinero:** Autopercepción del estudiante sobre su propia habilidad para administrar sus recursos económicos. | Categórica Ordinal |
+| **`FL159Q04HA`** | **Responsabilidad Financiera:** Grado de acuerdo sobre el sentido de responsabilidad propia respecto al cuidado y uso del dinero. | Categórica Ordinal |
+| **`FL171Q11JA`** | **Ahorro Formal:** Frecuencia habitual con la que el estudiante guarda dinero en una cuenta bancaria o institución formal. | Categórica Ordinal |
+| **`FL171Q12JA`** | **Ahorro Informal:** Frecuencia habitual con la que el estudiante ahorra dinero guardándolo en casa. | Categórica Ordinal |
+| **`ISCEDP`** | **Nivel Educativo:** Clasificación del programa escolar según la estructura internacional ISCED 2011 (nivel y orientación del bachillerato). | Categórica Ordinal |
+
+# Análisis Univariado.
+
+## Preparación de Datos y Recodificación
+
+En esta primera parte cargamos las librerías necesarias, ajustamos las opciones de visualización en R y leemos la base de datos de PISA 2022 junto con su diccionario. Esta preparación inicial aplica para las 20 variables del estudio (10 cualitativas y 10 cuantitativas).
+
+```{r}
+#| label: carga-datos
+#| message: false
+#| warning: false
+
+# Opciones para evitar notación científica y fijar decimales
+options(digits = 4, scipen = 999)
+
+# Librerías
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(patchwork)
+
+# Carga de la base de datos (20 variables) y diccionario
+datos <- read_excel("base_TOP20_PISA_alfabetizacion_financiera.xlsx", sheet = "Datos")
+diccionario <- read_excel("base_TOP20_PISA_alfabetizacion_financiera.xlsx", sheet = "Diccionario_Variables")
+
+# Confirmación de la carga
+cat("Base cargada exitosamente para el Corte 1:", nrow(datos), "estudiantes y", ncol(datos), "columnas.\n")
+
+```
+
+Hacemos un summary para ver un resumen de las variables y una tabla que nos permite visualizar solos los primeros 6 individuos de las 8 primeras columnas
+
+```{r}
+summary(datos)
+
+# Muestra de los primeros estudiantes (primeras 8 columnas)
+kable(head(datos[, 1:8]), digits = 2, caption = "Primeros 6 estudiantes de la muestra PISA 2022 (Primeras 8 columnas)")
+
+```
+
+## Variables cualitativas
+
+Las 10 variables cualitativas de la base vienen originalmente codificadas con números (por ejemplo `1, 2, 3` o códigos internacionales como `244, 344`). Para que las tablas y gráficos se expliquen por sí solos en español, convertimos estas columnas en factores y les asignamos sus etiquetas descriptivas oficiales.
+
+### Recodificación de Variables Categóricas
+
+Mantenemos los nombres técnicos originales de PISA (`ST004D01T`, `FL161Q01HA`, etc.) en el dataframe `datos_pisa` y reemplazamos los códigos numéricos por su significado en español:
+
+```{r}
+#| label: recodificacion-cualitativas
+#| message: false
+#| warning: false
+
+# Recodificación a factores etiquetados manteniendo los nombres de columna originales
+datos_pisa <- datos %>%
+  mutate(
+    # Género del estudiante
+    ST004D01T = factor(ST004D01T, levels = c(1, 2), labels = c("Femenino", "Masculino")),
+    
+    # Inclusión financiera formal
+    FL161Q01HA = factor(FL161Q01HA, levels = c(1, 2, 3), labels = c("Sí", "No", "No sabe/No resp.")),
+    FL161Q02HA = factor(FL161Q02HA, levels = c(1, 2, 3), labels = c("Sí", "No", "No sabe/No resp.")),
+    
+    # Autopercepción y Responsabilidad (Escala Likert de 4 niveles)
+    FL169Q05JA = factor(FL169Q05JA, levels = c(1, 2, 3, 4), 
+                        labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")),
+    FL159Q04HA = factor(FL159Q04HA, levels = c(1, 2, 3, 4), 
+                        labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")),
+    
+    # Frecuencia de ahorro (5 niveles)
+    FL171Q11JA = factor(FL171Q11JA, levels = c(1, 2, 3, 4, 5), 
+                        labels = c("Nunca/Casi nunca", "1 vez al año", "Varias veces/año", "1 vez al mes", "1+ vez/semana")),
+    FL171Q12JA = factor(FL171Q12JA, levels = c(1, 2, 3, 4, 5), 
+                        labels = c("Nunca/Casi nunca", "1 vez al año", "Varias veces/año", "1 vez al mes", "1+ vez/semana")),
+    
+    # Cantidad de libros en el hogar
+    ST255Q01JA = factor(ST255Q01JA, levels = c(1, 2, 3, 4, 5, 6), 
+                        labels = c("0-10", "11-25", "26-100", "101-200", "201-500", ">500")),
+    
+    # Nivel educativo (Clasificación ISCED 2011)
+    ISCEDP = factor(ISCEDP, levels = c(244, 254, 344, 354), 
+                    labels = c("Sec. Baja Gen. (244)", "Sec. Baja Voc. (254)", 
+                               "Sec. Alta Gen. (344)", "Sec. Alta Voc. (354)"))
+  )
+
+```
+
+Para evitar que los gráficos muestren los nombres técnicos de la OCDE en sus encabezados, creamos un vector de asociación que traduce automáticamente cada código a un título descriptivo en español.
+
+```{r}
+#| label: diccionario-titulos-cualitativas
+
+# Diccionario de títulos para las gráficas
+titulos_cualitativos <- c(
+  "CNT"        = "País del Estudiante",
+  "ST004D01T"  = "Género del Estudiante",
+  "ST255Q01JA" = "Cantidad de Libros en el Hogar",
+  "FL161Q01HA" = "Posee Cuenta Bancaria",
+  "FL161Q02HA" = "Posee Tarjeta de Débito/Pago",
+  "FL169Q05JA" = "Autopercepción: Manejo del Dinero",
+  "FL159Q04HA" = "Responsabilidad Financiera",
+  "FL171Q11JA" = "Frecuencia de Ahorro Formal (Banco)",
+  "FL171Q12JA" = "Frecuencia de Ahorro Informal (Casa)",
+  "ISCEDP"     = "Nivel Educativo (ISCED 2011)"
+)
+
+```
+
+### Distribución por País de Origen (`CNT`)
+
+Como la variable de país incluye 20 economías participantes, la analizamos en una gráfica independiente a pantalla completa. Esto nos permite visualizar claramente los códigos de cada país y sus respectivos porcentajes muestrales.
+
+```{r}
+#| label: grafico-paises
+#| message: false
+#| warning: false
+#| fig-cap: "Distribución Porcentual de Estudiantes según País de Origen (CNT - 20 Países)"
+#| fig-width: 9
+#| fig-height: 7
+
+# Preparación de datos para la gráfica de países
+df_cnt <- datos_pisa %>%
+  filter(!is.na(CNT)) %>%
+  count(CNT) %>%
+  mutate(Porcentaje = (n / sum(n)) * 100)
+
+# Gráfica de barras horizontales con ggplot2
+g_paises <- ggplot(df_cnt, aes(x = reorder(CNT, Porcentaje), y = Porcentaje)) +
+  geom_col(fill = "#023047", color = "white", width = 0.7) +
+  geom_text(aes(label = sprintf("%.1f%%", Porcentaje)), 
+            hjust = -0.15, size = 3.3, fontface = "bold", color = "#023047") +
+  coord_flip(ylim = c(0, max(df_cnt$Porcentaje) + 2)) +
+  labs(
+    title = "Distribución de Estudiantes por País de Origen (CNT)",
+    subtitle = "Muestra PISA 2022 - Alfabetización Financiera (20 Países)",
+    x = "Código País",
+    y = "Porcentaje Muestral (%)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14, color = "#023047"),
+    axis.text.y = element_text(face = "bold", color = "black", size = 9.5),
+    panel.grid.major.y = element_blank()
+  )
+
+print(g_paises)
+
+```
+
+La distribución de la muestra según país de origen muestra una participación desigual entre los 20 países evaluados: Emiratos Árabes Unidos (ARE) concentra la mayor proporción de estudiantes (14.9%), seguido de Canadá (9.7%) y Brasil (6.6%), mientras que el resto de los países se reparte de forma más homogénea entre el 2.8% y el 6.4%. Esta variable describe únicamente la **composición de la muestra por país**, no el desempeño de los estudiantes en la prueba de alfabetización financiera.
+
+Las 9 variables cualitativas restantes se presentan agrupadas en dos paneles de gráficos de barras horizontales.
+
+```{r}
+#| label: panel-cualitativas-1
+#| message: false
+#| warning: false
+#| fig-cap: "Distribución porcentual de 5 variables cualitativas (género, libros en el hogar, cuenta bancaria, tarjeta débito y autopercepción de manejo del dinero)"
+#| fig-width: 10
+#| fig-height: 7
+
+vars_panel_1 <- c("ST004D01T", "ST255Q01JA", "FL161Q01HA", "FL161Q02HA", "FL169Q05JA")
+
+# Variables que se mostrarán como diagrama de torta (pocas categorías, sin orden natural relevante)
+vars_torta <- c("ST004D01T", "FL161Q01HA", "FL161Q02HA")
+
+par(las = 1, mfrow = c(2, 3), mai = c(0.5, 1.2, 0.5, 0.3))
+
+for (v in vars_panel_1) {
+  if (v %in% names(datos_pisa)) {
+    tab <- table(datos_pisa[[v]], useNA = "no")
+    per <- prop.table(tab) * 100
+    
+    colores <- obtener_colores_custom(length(tab))
+    titulo  <- titulos_cualitativos[v]
+    
+    if (v %in% vars_torta) {
+      # --- Diagrama de torta, sin texto encima (evita superposición) ---
+      etiquetas_leyenda <- paste0(names(tab), " (", round(per, 1), "%)")
+      
+      pie(per,
+          labels = NA,
+          col = colores,
+          border = "white",
+          main = titulo,
+          cex.main = 0.9,
+          radius = 0.75)          # un poco más pequeño para dejar espacio a la leyenda
+      
+      legend("bottom",
+             legend = etiquetas_leyenda,
+             fill = colores,
+             border = "white",
+             bty = "n",
+             cex = 0.65,           # letra más chica para que quepan las 3 categorías
+             ncol = 1)             # apiladas en vertical, en vez de horiz = TRUE
+      
+    } else {
+      # --- Diagrama de barras (igual que antes) ---
+      pl <- barplot(per, horiz = TRUE, 
+                    col = colores,
+                    border = "white",
+                    main = titulo, 
+                    cex.main = 0.9,
+                    cex.names = 0.8,
+                    xlab = "%", xlim = c(0, max(per) + 25))
+      
+      text(per + 2, pl, round(per, 1), cex = 0.8, pos = 4)
+    }
+  }
+}
+
+par(mfrow = c(1, 1))
+```
+
+En la primer gráfica,la que corresponde a género, la distribución está prácticamente equilibrada (50.2% masculino, 49.8% femenino), lo que nos permite hacer comparaciones posteriores. Respecto al número de libros del hogar, la mayoría de los estudiantes se concentra en niveles medios de libros disponibles (28.8% reporta entre 101 y 200 libros), siendo poco frecuentes los casos extremos.
+
+En el plano financiero formal, algo más de la mitad de los estudiantes reporta tener cuenta bancaria (52.4%) y tarjeta débito (50.1%), cifras muy similares entre sí. Llama la atención que un porcentaje de estudiantes (7.9% para cuenta bancaria y 4.9% para tarjeta débito) respondió "no sabe/no responde", lo que podría reflejar desconocimiento sobre su propia situación financiera. Finalmente, en cuanto a la autopercepción de manejo del dinero, un 77.2% de los estudiantes se declara "de acuerdo" o "muy de acuerdo" con saber manejar su dinero, una cifra notablemente más alta que el nivel real de inclusión financiera observado, lo que abre la pregunta de si esta confianza está respaldada por un conocimiento financiero objetivo.
+
+```{r}
+#| label: panel-cualitativas-2
+#| message: false
+#| warning: false
+#| fig-cap: "Distribución porcentual de 4 variables cualitativas (responsabilidad financiera, ahorro bancario, ahorro en casa y nivel del programa educativo)"
+#| fig-width: 8
+#| fig-height: 6
+
+vars_panel_2 <- c("FL159Q04HA", "FL171Q11JA", "FL171Q12JA", "ISCEDP")
+
+par(las = 1, mfrow = c(2, 2), mai = c(0.5, 1.2, 0.5, 0.3))
+
+for (v in vars_panel_2) {
+  if (v %in% names(datos_pisa)) {
+    tab <- table(datos_pisa[[v]], useNA = "no")
+    per <- prop.table(tab) * 100
+    
+    colores <- obtener_colores_custom(length(tab))
+    titulo  <- titulos_cualitativos[v]
+    
+    pl <- barplot(per, horiz = TRUE, 
+                  col = colores,
+                  border = "white",
+                  main = titulo, 
+                  cex.main = 0.9,
+                  cex.names = 0.8,
+                  xlab = "%", xlim = c(0, max(per) + 25))
+    
+    text(per + 2, pl, round(per, 1), cex = 0.8, pos = 4)
+  }
+}
+
+par(mfrow = c(1, 1))
+```
+
+Este panel complementa el perfil financiero de los estudiantes con información sobre responsabilidad y hábitos de ahorro. En cuanto a responsabilidad financiera, un 77.4% de los estudiantes se declara "de acuerdo" o "muy de acuerdo" en ser responsables de sus propios asuntos de dinero (por ejemplo, evitar robos o pérdidas), lo que es coherente con la autopercepción positiva de manejo del dinero observada anteriormente.
+
+El contraste más relevante de este panel se da entre los dos hábitos de ahorro. En el ahorro formal (en una cuenta bancaria), un 37.5% de los estudiantes indica que "nunca o casi nunca" ahorra de esta manera, la categoría más frecuente de la variable; mientras que en el ahorro informal (en casa), la categoría más común es justo la opuesta: un 29.3% ahorra "una o más veces por semana", y solo un 11.9% dice no hacerlo nunca. Esto sugiere que, aunque cerca de la mitad de los estudiantes tiene acceso a productos financieros formales (cuenta bancaria/tarjeta débito), el hábito de ahorro predominante entre los adolescentes de la muestra sigue siendo informal, guardando el dinero en casa en vez de en una entidad financiera.
+
+Finalmente, respecto al nivel educativo (clasificación ISCED 2011), la mayoría de los estudiantes se concentra en secundaria alta de tipo general (64.7%), seguida de secundaria baja general (20.3%) y secundaria alta vocacional (15%); no se registran casos en secundaria baja vocacional (0%). Esto indica que la muestra está compuesta mayoritariamente por estudiantes en trayectorias educativas de tipo general, con una presencia mucho menor de modalidades técnicas o vocacionales.
+
+# Variables cuantitativas
+
+
+
+
+
+
 
 # Análisis Bivariado
 
@@ -252,7 +819,13 @@ cluster.carac(cuali_vars_subset_factor, genero_factor)
 
 - Los valores test de la caracterización multivariada demuestran que las categorías 1 y 2 del género construyen perfiles inversos, evidenciando asociaciones fuertemente positivas o negativas hacia respuestas específicas dentro de los módulos de acceso a productos financieros y actitudes frente al ahorro.
 
-# Referencias Bibliográficas
+
+
+
+
+
+
+## Referencias Bibliográficas
 
 - Australian Council for Educational Research. (2024, 3 de julio). *PISA 2022: Students' financial literacy*. Teacher Magazine. https://www.teachermagazine.com/au_en/articles/pisa-2022-students-financial-literacy
 
