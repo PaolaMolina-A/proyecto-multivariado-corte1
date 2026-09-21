@@ -138,7 +138,7 @@ Independencia y no redundancia (Variables cualitativas): Se depuraron variables 
 
 Relevancia temática transversal: Se garantizó la inclusión de variables exclusivas del módulo financiero que capturan actitudes prácticas (ej. FLCONFIN, ACCESSFP), asegurando que el núcleo de la investigación gire entorno a la alfabetización financiera, sin descuidar variables sociodemográficas clave como el país (CNT) y el género (ST004D01T).
 
-# Análisis Univariado 
+# Análisis Univariado
 
 aqui va el análisis univariado
 
@@ -161,7 +161,7 @@ library(knitr)
 library(DT)
 library(readxl)
 
-# Asumiendo que tu base final está cargada como 'base_top20'
+
 
 # ==============================================================================
 # A. VARIABLE CONTINUA CONTRA EL RESTO (Ancla: PV1FLIT)
@@ -170,18 +170,23 @@ library(readxl)
 # 1. Correlaciones con las demás cuantitativas
 base_top20 <- read_excel("base_TOP20_PISA_alfabetizacion_financiera.xlsx")
 cuanti_vars <- base_top20[, c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS")]
-kable(cor(cuanti_vars, use = "complete.obs"), digits = 2)
 
-# Varianza
+# --- CONVERSIÓN OBLIGATORIA A NUMÉRICO PURO ---
+cuanti_vars <- as.data.frame(lapply(cuanti_vars, as.numeric))
+
+kable(cor(cuanti_vars, use = "complete.obs"), digits = 2)
 kable(var(cuanti_vars, na.rm = TRUE), digits = 2)
 
-# 2. Continua vs Cualitativa (Ej: PV1FLIT vs Género ST004D01T)
+# 2. Diagramas de dispersión y densidades kernel 
+plotpairs(na.omit(cuanti_vars))
+
+# 3. Continua vs Cualitativa (PV1FLIT vs Género ST004D01T)
 # Diagramas de caja
 par(bty="n")
 sorted_genero <- with(base_top20, reorder(ST004D01T, PV1FLIT, median, na.rm = TRUE))
 boxplot(base_top20$PV1FLIT ~ sorted_genero, las = 1, col = 4, horizontal = TRUE)
 
-# Gráfico de violín interactivo (Razón de correlación)
+# Gráfico de violín interactivo
 fig <- base_top20 %>%
   plot_ly(x = ~PV1FLIT, split = ~ST004D01T, type = 'violin',
           box = list(visible = TRUE),
@@ -190,36 +195,62 @@ fig <- base_top20 %>%
          yaxis = list(title = "Género"))
 fig
 
-# Valores Test para variables continuas (Caracterización)
+# 4. Razones de correlación (porcentajes) a través de centroides
+# Se calcula qué porcentaje de la varianza de las continuas es explicada por el género
+kable(centroids(cuanti_vars, as.factor(base_top20$ST004D01T))$cr*100, digits = 2)
+
+# 5. Valores Test para variables continuas (Caracterización)
 cluster.carac(cuanti_vars, base_top20$ST004D01T, tipo.v = "co", v.lim = 2, dn = 2, neg = TRUE)
+
 
 # ==============================================================================
 # B. VARIABLE CUALITATIVA CONTRA EL RESTO (Ancla: ST004D01T)
 # ==============================================================================
 
-# 1. Cualitativa vs Cualitativa (Ej: Género vs Acceso a cuenta FL161Q01HA)
+# 1. Cualitativa vs Cualitativa (Género vs Acceso a cuenta FL161Q01HA)
 tc <- table(base_top20$ST004D01T, base_top20$FL161Q01HA)
 tabtc <- cbind(tc, totF = rowSums(tc))
 tabtc <- rbind(tabtc, totC = colSums(tabtc))
-kable(tabtc, digits = 1) # Tabla de contingencia
+kable(tabtc, digits = 1) 
 
-# Perfiles fila
+# Perfiles fila y columna
 PF <- prop.table(tc, 1)
+PC <- prop.table(tc, 2)
 kable(addmargins(PF, margin = 2) * 100, digits = 1)
+kable(addmargins(PC, margin = 1) * 100, digits = 1)
+
+# 2. Gráficos de los perfiles fila y perfiles columna
+par(mfrow=c(2,1), mai=c(0.4, 1, 0.3, 0.1))
+plotct(t(tc), "row", col=2:3) # Perfil columna transpuesto
+plotct(tc, "row", col=2:3)    # Perfil fila
 
 # ------------------------------------------------------------------------------
-# CONVERSIÓN OBLIGATORIA PARA FACTOCLASS
+# CONVERSIÓN PARA PRUEBAS ESTADÍSTICAS FACTOCLASS
 # ------------------------------------------------------------------------------
 cuali_vars_subset <- base_top20[, c("FL161Q01HA", "FL169Q05JA", "FL171Q11JA")]
 cuali_vars_subset_factor <- as.data.frame(lapply(cuali_vars_subset, as.factor))
 genero_factor <- as.factor(base_top20$ST004D01T)
 
-# 2. Valores indicativos de asociación (Chi-cuadrado)
+# 3. Valores indicativos de asociación (Chi-cuadrado)
 kable(chisq.carac(cuali_vars_subset_factor, genero_factor), digits = 3)
 
-# 3. Valores Test para caracterización por variables cualitativas
+# 4. Valores Test para caracterización por variables cualitativas
 cluster.carac(cuali_vars_subset_factor, genero_factor)
 ```
+
+## Conclusiones del análisis
+
+- Existe una correlación positiva muy alta entre el puntaje de alfabetización financiera (PV1FLIT) y el desempeño en competencias fundamentales como matemáticas (r = 0.88) y lectura (r = 0.86).
+
+<!-- -->
+
+- El estatus socioeconómico (ESCS) y las posesiones en el hogar (HOMEPOS) presentan una correlación positiva moderada con la alfabetización financiera, reportando coeficientes de 0.37 y 0.39 respectivamente.
+
+- La distribución de los datos visualizada en los diagramas de caja refleja que las medianas y la dispersión general del puntaje en alfabetización financiera (PV1FLIT) son altamente similares sin importar el grupo de género (ST004D01T).
+
+- Las pruebas de Chi-cuadrado confirman asociaciones estadísticamente significativas (p-valor = 0) entre el género y las variables cualitativas de comportamiento financiero (FL171Q11JA con Chi2 = 803.8; FL169Q05JA con Chi2 = 418.1; FL161Q01HA con Chi2 = 105.1).
+
+- Los valores test de la caracterización multivariada demuestran que las categorías 1 y 2 del género construyen perfiles inversos, evidenciando asociaciones fuertemente positivas o negativas hacia respuestas específicas dentro de los módulos de acceso a productos financieros y actitudes frente al ahorro.
 
 # Referencias Bibliográficas
 
