@@ -242,11 +242,153 @@ par(mfrow = c(1, 1)) # Restaurar ventana gráfica
 
 
 
+##################Para los datos cuantitativos univariados##############################
+
+titulos_cuantitativos <- c(
+  PV1FLIT  = "Puntaje en Alfabetización Financiera",
+  PV1MATH  = "Puntaje en Matemática",
+  PV1READ  = "Puntaje en Lectura",
+  ESCS     = "Estatus Económico, Social y Cultural",
+  HOMEPOS  = "Posesiones en el Hogar",
+  FLCONFIN = "Confianza en Asuntos Financieros",
+  ACCESSFP = "Acceso a Productos Financieros",
+  FCFMLRTY = "Familiaridad con Conceptos Financieros",
+  FLSCHOOL = "Educación Financiera en el Colegio",
+  FLFAMILY = "Involucramiento Familiar en Finanzas"
+)
+
+vars_hist_1 <- c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS")
+
+par(mfrow = c(2, 3), mai = c(0.6, 0.6, 0.5, 0.2))
+
+colores_hist_1 <- obtener_colores_custom(length(vars_hist_1))
+
+for (i in seq_along(vars_hist_1)) {
+  v <- vars_hist_1[i]
+  if (v %in% names(datos_pisa)) {
+    x <- na.omit(datos_pisa[[v]])
+    
+    hist(x,
+         col = colores_hist_1[i],
+         border = "white",
+         main = titulos_cuantitativos[v],
+         cex.main = 0.9,
+         xlab = "Valor",
+         ylab = "Frecuencia")
+  }
+}
+
+par(mfrow = c(1, 1))
 
 
 
+vars_hist_2 <- c("FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY")
+
+par(mfrow = c(2, 3), mai = c(0.6, 0.6, 0.5, 0.2))
+
+colores_hist_2 <- obtener_colores_custom(length(vars_hist_2))
+
+for (i in seq_along(vars_hist_2)) {
+  v <- vars_hist_2[i]
+  if (v %in% names(datos_pisa)) {
+    x <- na.omit(datos_pisa[[v]])
+    
+    hist(x,
+         col = colores_hist_2[i],
+         border = "white",
+         main = titulos_cuantitativos[v],
+         cex.main = 0.9,
+         xlab = "Valor",
+         ylab = "Frecuencia")
+  }
+}
+
+par(mfrow = c(1, 1))
+
+#box plots#
+
+paleta_pastel <- c("#809BCE", "#B8E0D2", "#EDE7B1")
+
+obtener_colores_pastel <- function(n) {
+  if (n <= 3) {
+    return(paleta_pastel[1:n])
+  } else {
+    return(colorRampPalette(paleta_pastel)(n))
+  }
+}
 
 
+vars_box_1 <- c("PV1FLIT", "PV1MATH", "PV1READ")
+
+par(mfrow = c(1, 3), mai = c(0.6, 0.7, 0.6, 0.2))
+
+colores_box_1 <- obtener_colores_pastel(length(vars_box_1))
+
+for (i in seq_along(vars_box_1)) {
+  v <- vars_box_1[i]
+  if (v %in% names(datos_pisa)) {
+    x <- na.omit(datos_pisa[[v]])
+    
+    boxplot(x,
+            col = colores_box_1[i],
+            border = "black",
+            boxwex = 0.5,
+            main = titulos_cuantitativos[v],
+            cex.main = 0.95,
+            ylab = "Valor")
+  }
+}
+
+par(mfrow = c(1, 1))
+
+
+
+vars_box_2 <- c("ESCS", "HOMEPOS", "FLCONFIN")
+
+par(mfrow = c(1, 3), mai = c(0.6, 0.7, 0.6, 0.2))
+
+colores_box_2 <- obtener_colores_pastel(length(vars_box_2))
+
+for (i in seq_along(vars_box_2)) {
+  v <- vars_box_2[i]
+  if (v %in% names(datos_pisa)) {
+    x <- na.omit(datos_pisa[[v]])
+    
+    boxplot(x,
+            col = colores_box_2[i],
+            border = "black",
+            boxwex = 0.5,
+            main = titulos_cuantitativos[v],
+            cex.main = 0.95,
+            ylab = "Valor")
+  }
+}
+
+par(mfrow = c(1, 1))
+
+
+vars_box_3 <- c("ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY")
+
+par(mfrow = c(1, 4), mai = c(0.6, 0.6, 0.6, 0.2))
+
+colores_box_3 <- obtener_colores_pastel(length(vars_box_3))
+
+for (i in seq_along(vars_box_3)) {
+  v <- vars_box_3[i]
+  if (v %in% names(datos_pisa)) {
+    x <- na.omit(datos_pisa[[v]])
+    
+    boxplot(x,
+            col = colores_box_3[i],
+            border = "black",
+            boxwex = 0.5,
+            main = titulos_cuantitativos[v],
+            cex.main = 0.95,
+            ylab = "Valor")
+  }
+}
+
+par(mfrow = c(1, 1))
 
 ##########################################Análisis Bivariado###############################################
 
