@@ -12,10 +12,10 @@ website:
         menu:
           - text: "Primera Entrega"
             href: index.qmd
-          - text: "Segunda Entrega"
-            href: corte2.qmd
-          - text: "Tercera Entrega"
-            href: corte3.qmd
+          #- text: "Segunda Entrega"
+            #href: corte2.qmd
+         # - text: "Tercera Entrega"
+           # href: corte3.qmd
       - text: "Talleres"
         menu:
           - text: "Taller 1: Razas de Perros"

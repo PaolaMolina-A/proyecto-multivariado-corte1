@@ -1043,7 +1043,7 @@ cluster.carac(cuali_vars_subset_factor, genero_factor)
 
 - Los valores test de la caracterización multivariada demuestran que las categorías 1 y 2 del género construyen perfiles inversos, evidenciando asociaciones fuertemente positivas o negativas hacia respuestas específicas dentro de los módulos de acceso a productos financieros y actitudes frente al ahorro.
 
-## Referencias Bibliográficas
+# Referencias Bibliográficas
 
 - Australian Council for Educational Research. (2024, 3 de julio). *PISA 2022: Students' financial literacy*. Teacher Magazine. https://www.teachermagazine.com/au_en/articles/pisa-2022-students-financial-literacy
 
