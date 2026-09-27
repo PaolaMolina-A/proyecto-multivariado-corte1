@@ -1,30 +1,16 @@
 ############################### ANÁLISIS DE DATOS PISA 2022 ###############################
 
-# 1. CARGA DE LIBRERÍAS
-# Si algún paquete no está instalado, ejecuta una sola vez: install.packages(c("haven", "labelled", "dplyr", "writexl"))
-# 1. CARGA DE LIBRERÍAS
-paquetes <- c(
-  "haven", "labelled", "dplyr", "writexl"
-)
-# Verificamos qué paquetes faltan. La instalación se hace por fuera de la
-# compilación para evitar cambios inesperados en el entorno del estudiante.
-instalados <- rownames(installed.packages())
-pendientes <- setdiff(paquetes, instalados)
-
-if (length(pendientes) > 0) {
-  stop(
-    "Faltan paquetes: ", paste(pendientes, collapse = ", "),
-    ". Instálelos con install.packages(c(",
-    paste(sprintf('"%s"', pendientes), collapse = ", "), "))"
-  )
-}
-invisible(lapply(paquetes, library, character.only = TRUE))
+# 1. CARGA EXPLÍCITA DE LIBRERÍAS
+library(haven)
+library(labelled)
+library(dplyr)
+library(writexl)
 
 # 2. RUTAS Y LECTURA DE BASES DE DATOS
 ruta <- "base_datos"
 
-datos_cuestionario <- read_sas(file.path(ruta, "CY08MSP_FLT_QQQ.SAS7BDAT"))
-
+# Usamos haven::read_sas para asegurar que R encuentre la función sin fallar
+datos_cuestionario <- haven::read_sas(file.path(ruta, "CY08MSP_FLT_QQQ.SAS7BDAT"))
 
 # 3. DIMENSIONES Y CLASIFICACIÓN TÉCNICA DE VARIABLES
 n_qqq <- ncol(datos_cuestionario)
@@ -39,39 +25,20 @@ total_cuantitativas <- datos_reales %>%
   select(where(is.numeric)) %>% 
   ncol()
 
-#  GENERACIÓN DEL DICCIONARIO UNIFICADO, para conocer las etiquetas de cada variable
-if (!file.exists("diccionario_UNIFICADO_PISA.xlsx")) {
-  extraer_diccionario <- function(df, nombre_tabla) {
-    df_factor <- as_factor(df)
+# GENERACIÓN DEL DICCIONARIO UNIFICADO
+extraer_diccionario <- function(df, nombre_tabla) {
+  tibble(
+    Codigo_Variable = names(df),
+    Descripcion_Real = sapply(df, function(x) {
+      lbl <- attr(x, "label")
+      if (is.null(lbl) || length(lbl) == 0) return("Sin descripción textual") else return(as.character(lbl))
+    })
+  )
+}
 
-    tibble(
-      Codigo_Variable = names(df),
-      Descripcion_Real = sapply(df, function(x) {
-        lbl <- attr(x, "label")
-        if (is.null(lbl) || length(lbl) == 0) return("Sin descripción textual") else return(as.character(lbl))
-      }),
-      Tipo_Variable = sapply(df, function(x) {
-        # Si el formato base es texto o factor, es cualitativa directa
-        if (is.character(x) || is.factor(x)) {
-          return("Cualitativa (Texto)")
-        }
-        # Si es numérica, analizamos su comportamiento estadístico real
-        if (is.numeric(x)) {
-          n_unicos <- length(unique(na.omit(x)))
-          # Umbral de control: 15 valores o menos representan categorías disfrazadas
-          if (n_unicos <= 15) {
-            return("Cualitativa (Numérica Discreta/Ordinal)")
-          } else {
-            return("Cuantitativa (Continua)")
-          }
-        }
-        return("Desconocido")
-      })
-    )
-  }
+dicc_qqq <- extraer_diccionario(datos_cuestionario, "Cuestionario (PDF)")
 
-  dicc_qqq <- extraer_diccionario(datos_cuestionario, "Cuestionario (PDF)")
-
+if (!file.exists("diccionario_PISA.xlsx")) {
   write_xlsx(dicc_qqq, "diccionario_PISA.xlsx")
 }
 
@@ -83,10 +50,7 @@ cat("\n==============================================",
     "\n   - Códigos numéricos en el SAS:", total_cuantitativas,
     "\n==============================================\n")
 
-
-
-#______________________________________________________________________________________________________________
-# ############################### construimos la base de datos final###############################
+# 4. DEFINICIÓN DE LAS 30 VARIABLES DEFINITIVAS (15 CUANTITATIVAS + 15 CUALITATIVAS)
 variables_cuantitativas_final <- c(
   "PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS",
   "FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY",
@@ -101,24 +65,27 @@ variables_cualitativas_final <- c(
 
 variables_finales <- c(variables_cuantitativas_final, variables_cualitativas_final)
 
-# Construcción de la base de trabajo definitiva
+# Construcción de la base de trabajo definitiva (ID + 30 variables)
 base_final <- datos_cuestionario %>%
   select(CNTSTUID, all_of(variables_finales))
 
 cat("Base final estructurada con éxito:", nrow(base_final), "estudiantes y", ncol(base_final) - 1, "variables analíticas.\n")
 
-
-# 4.3 Diccionario de las 20 variables finales
+# 5. CONSTRUCCIÓN DEL DICCIONARIO DE LAS 30 VARIABLES FINALES
 diccionario_final <- dicc_qqq %>%
-  filter(Codigo_Variable %in% variables) %>%
-  relocate(Tipo_Variable, .after = Codigo_Variable)
-# 4.4 Exportar a Excel con 2 hojas
+  filter(Codigo_Variable %in% variables_finales) %>%
+  distinct(Codigo_Variable, .keep_all = TRUE) %>%
+  mutate(Grupo = if_else(Codigo_Variable %in% variables_cuantitativas_final, "Cuantitativa", "Cualitativa")) %>%
+  select(Codigo_Variable, Grupo, Descripcion_Real) %>%
+  arrange(match(Codigo_Variable, variables_finales))
+
+# 6. EXPORTAR A EXCEL CON 2 HOJAS (DATOS Y DICCIONARIO)
 write_xlsx(
   list(
-    "Datos" = datos_final,
+    "Datos" = base_final,
     "Diccionario_Variables" = diccionario_final
   ),
-  path = "base_TOP20_PISA_alfabetizacion_financiera.xlsx"
+  path = "base_TOP30_PISA_alfabetizacion_financiera.xlsx"
 )
 
-
+cat("\n✅ Archivo exportado exitosamente: base_TOP30_PISA_alfabetizacion_financiera.xlsx\n")

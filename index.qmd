@@ -403,28 +403,19 @@ obtener_colores_custom <- function(n) {
   }
 }
 
-# Carga de la base de datos (20 variables) y diccionario
-datos <- read_excel("base_TOP20_PISA_alfabetizacion_financiera.xlsx", sheet = "Datos")
-diccionario <- read_excel("base_TOP20_PISA_alfabetizacion_financiera.xlsx", sheet = "Diccionario_Variables")
+# Carga de la base de datos (30 variables) y diccionario
+datos <- read_excel("base_TOP30_PISA_alfabetizacion_financiera.xlsx", sheet = "Datos")
+diccionario <- read_excel("base_TOP30_PISA_alfabetizacion_financiera.xlsx", sheet = "Diccionario_Variables")
 
 # Confirmación de la carga
 cat("Base cargada exitosamente para el Corte 1:", nrow(datos), "estudiantes y", ncol(datos), "columnas.\n")
 
 ```
 
-Hacemos un summary para ver un resumen de las variables y una tabla que nos permite visualizar solos los primeros 6 individuos de las 8 primeras columnas
-
-```{r}
-summary(datos)
-
-# Muestra de los primeros estudiantes (primeras 8 columnas)
-kable(head(datos[, 1:8]), digits = 2, caption = "Primeros 6 estudiantes de la muestra PISA 2022 (Primeras 8 columnas)")
-
-```
 
 ## Variables cualitativas
 
-Las 10 variables cualitativas de la base vienen originalmente codificadas con números (por ejemplo `1, 2, 3` o códigos internacionales como `244, 344`). Para que las tablas y gráficos se expliquen por sí solos en español, convertimos estas columnas en factores y les asignamos sus etiquetas descriptivas oficiales.
+Las 15 variables cualitativas de la base vienen originalmente codificadas con números (por ejemplo `1, 2, 3` o códigos internacionales como `244, 344`). Para que las tablas y gráficos se expliquen por sí solos en español, convertimos estas columnas en factores y les asignamos sus etiquetas descriptivas oficiales.
 
 ### Recodificación de Variables Categóricas
 
@@ -435,36 +426,117 @@ Mantenemos los nombres técnicos originales de PISA (`ST004D01T`, `FL161Q01HA`, 
 #| message: false
 #| warning: false
 
-# Recodificación a factores etiquetados manteniendo los nombres de columna originales
+# Recodificación a factores etiquetados para las 15 variables cualitativas
 datos_pisa <- datos %>%
   mutate(
+    # País participante (reemplazo de códigos ISO de 3 letras a nombres en español)
+    CNT = factor(
+      CNT,
+      levels = c("ARE", "CAN", "BRA", "ITA", "CZE", "NOR", "AUT", "MYS", "SAU", 
+                 "PER", "PRT", "ESP", "HUN", "DNK", "BGR", "POL", "CRI", "USA", "NLD", "BEL"),
+      labels = c("Emiratos Árabes Unidos", "Canadá", "Brasil", "Italia", "República Checa", 
+                 "Noruega", "Austria", "Malasia", "Arabia Saudita", "Perú", 
+                 "Portugal", "España", "Hungría", "Dinamarca", "Bulgaria", 
+                 "Polonia", "Costa Rica", "Estados Unidos", "Países Bajos", "Bélgica")
+    ),
+    
     # Género del estudiante
-    ST004D01T = factor(ST004D01T, levels = c(1, 2), labels = c("Femenino", "Masculino")),
-    
-    # Inclusión financiera formal
-    FL161Q01HA = factor(FL161Q01HA, levels = c(1, 2, 3), labels = c("Sí", "No", "No sabe/No resp.")),
-    FL161Q02HA = factor(FL161Q02HA, levels = c(1, 2, 3), labels = c("Sí", "No", "No sabe/No resp.")),
-    
-    # Autopercepción y Responsabilidad (Escala Likert de 4 niveles)
-    FL169Q05JA = factor(FL169Q05JA, levels = c(1, 2, 3, 4), 
-                        labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")),
-    FL159Q04HA = factor(FL159Q04HA, levels = c(1, 2, 3, 4), 
-                        labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")),
-    
-    # Frecuencia de ahorro (5 niveles)
-    FL171Q11JA = factor(FL171Q11JA, levels = c(1, 2, 3, 4, 5), 
-                        labels = c("Nunca/Casi nunca", "1 vez al año", "Varias veces/año", "1 vez al mes", "1+ vez/semana")),
-    FL171Q12JA = factor(FL171Q12JA, levels = c(1, 2, 3, 4, 5), 
-                        labels = c("Nunca/Casi nunca", "1 vez al año", "Varias veces/año", "1 vez al mes", "1+ vez/semana")),
+    ST004D01T = factor(
+      ST004D01T, 
+      levels = c(1, 2), 
+      labels = c("Femenino", "Masculino")
+    ),
     
     # Cantidad de libros en el hogar
-    ST255Q01JA = factor(ST255Q01JA, levels = c(1, 2, 3, 4, 5, 6), 
-                        labels = c("0-10", "11-25", "26-100", "101-200", "201-500", ">500")),
+    ST255Q01JA = factor(
+      ST255Q01JA, 
+      levels = c(1, 2, 3, 4, 5, 6), 
+      labels = c("No hay libros", "1-10", "11-25", "26-100", "101-200", "201-500")
+    ),
     
-    # Nivel educativo (Clasificación ISCED 2011)
-    ISCEDP = factor(ISCEDP, levels = c(244, 254, 344, 354), 
-                    labels = c("Sec. Baja Gen. (244)", "Sec. Baja Voc. (254)", 
-                               "Sec. Alta Gen. (344)", "Sec. Alta Voc. (354)"))
+    # Inclusión financiera formal: Tarjeta de débito
+    FL161Q01HA = factor(
+      FL161Q01HA, 
+      levels = c(1, 2, 3), 
+      labels = c("Sí", "No", "No sabe/No resp.")
+    ),
+    
+    # Inclusión financiera formal: Tarjeta de crédito / Cuenta de pago
+    FL161Q02HA = factor(
+      FL161Q02HA, 
+      levels = c(1, 2, 3), 
+      labels = c("Sí", "No", "No sabe/No resp.")
+    ),
+    
+    # Actitud hacia el ahorro ("Ahorro solo si me sobra dinero")
+    FL169Q05JA = factor(
+      FL169Q05JA, 
+      levels = c(1, 2, 3, 4), 
+      labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")
+    ),
+    
+    # Autopercepción de responsabilidad sobre su propio dinero
+    FL159Q04HA = factor(
+      FL159Q04HA, 
+      levels = c(1, 2, 3, 4), 
+      labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")
+    ),
+    
+    # Frecuencia de ahorro en cuenta bancaria o en línea
+    FL171Q11JA = factor(
+      FL171Q11JA, 
+      levels = c(1, 2, 3, 4, 5), 
+      labels = c("Nunca o casi nunca", "1-2 veces al año", "1-2 veces al mes", "1-2 veces por semana", "Todos o casi todos los días")
+    ),
+    
+    # Frecuencia de ahorro en efectivo (en casa)
+    FL171Q12JA = factor(
+      FL171Q12JA, 
+      levels = c(1, 2, 3, 4, 5), 
+      labels = c("Nunca o casi nunca", "1-2 veces al año", "1-2 veces al mes", "1-2 veces por semana", "Todos o casi todos los días")
+    ),
+    
+    # Nivel educativo del programa (Clasificación ISCED 2011)
+    ISCEDP = factor(
+      ISCEDP, 
+      levels = c(244, 254, 344, 354), 
+      labels = c("Secundaria baja general", "Secundaria baja vocacional", "Secundaria alta general", "Secundaria alta vocacional")
+    ),
+    
+    # Recibe dinero / mesada por realizar tareas en el hogar
+    FL170Q01JA = factor(
+      FL170Q01JA, 
+      levels = c(1, 2, 3, 4, 5), 
+      labels = c("Nunca o casi nunca", "1-2 veces al año", "1-2 veces al mes", "1-2 veces por semana", "Todos o casi todos los días")
+    ),
+    
+    # Nivel de seguridad percibido
+    FL163Q02HA = factor(
+      FL163Q02HA, 
+      levels = c(1, 2, 3, 4), 
+      labels = c("Nada seguro", "No muy seguro", "Seguro", "Muy seguro")
+    ),
+    
+    # Percepción del entorno escolar
+    ST268Q04JA = factor(
+      ST268Q04JA, 
+      levels = c(1, 2, 3, 4), 
+      labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")
+    ),
+    
+    # Uso e integración de recursos TIC (Escala 1)
+    IC172Q05JA = factor(
+      IC172Q05JA, 
+      levels = c(1, 2, 3, 4), 
+      labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")
+    ),
+    
+    # Uso e integración de recursos TIC (Escala 2)
+    IC172Q07JA = factor(
+      IC172Q07JA, 
+      levels = c(1, 2, 3, 4), 
+      labels = c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")
+    )
   )
 
 ```
@@ -474,7 +546,7 @@ Para evitar que los gráficos muestren los nombres técnicos de la OCDE en sus e
 ```{r}
 #| label: diccionario-titulos-cualitativas
 
-# Diccionario de títulos para las gráficas
+# Diccionario de títulos para las gráficas de las 15 variables cualitativas
 titulos_cualitativos <- c(
   "CNT"        = "País del Estudiante",
   "ST004D01T"  = "Género del Estudiante",
@@ -485,7 +557,12 @@ titulos_cualitativos <- c(
   "FL159Q04HA" = "Responsabilidad Financiera",
   "FL171Q11JA" = "Frecuencia de Ahorro Formal (Banco)",
   "FL171Q12JA" = "Frecuencia de Ahorro Informal (Casa)",
-  "ISCEDP"     = "Nivel Educativo (ISCED 2011)"
+  "ISCEDP"     = "Nivel Educativo (ISCED 2011)",
+  "FL170Q01JA" = "Frecuencia de Mesada por Tareas Domésticas",
+  "FL163Q02HA" = "Confianza: Consulta de Saldo Digital",
+  "ST268Q04JA" = "Percepción: Facilidad para las Matemáticas",
+  "IC172Q05JA" = "Acceso a Recursos Digitales en el Aula",
+  "IC172Q07JA" = "Soporte Técnico de TIC en el Colegio"
 )
 
 ```
@@ -517,7 +594,7 @@ g_paises <- ggplot(df_cnt, aes(x = reorder(CNT, Porcentaje), y = Porcentaje)) +
   labs(
     title = "Distribución de Estudiantes por País de Origen (CNT)",
     subtitle = "Muestra PISA 2022 - Alfabetización Financiera (20 Países)",
-    x = "Código País",
+    x = "País",
     y = "Porcentaje Muestral (%)"
   ) +
   theme_minimal(base_size = 12) +
@@ -531,24 +608,22 @@ print(g_paises)
 
 ```
 
-La distribución de la muestra según país de origen muestra una participación desigual entre los 20 países evaluados: Emiratos Árabes Unidos (ARE) concentra la mayor proporción de estudiantes (14.9%), seguido de Canadá (9.7%) y Brasil (6.6%), mientras que el resto de los países se reparte de forma más homogénea entre el 2.8% y el 6.4%. Esta variable describe únicamente la **composición de la muestra por país**, no el desempeño de los estudiantes en la prueba de alfabetización financiera.
+La distribución de la muestra según país de origen muestra una participación desigual entre los 20 países evaluados: Emiratos Árabes Unidos concentra la mayor proporción de estudiantes (14.9%), seguido de Canadá (9.7%) y Brasil (6.6%), mientras que el resto de los países se reparte de forma más homogénea entre el 2.8% y el 6.4%. Esta variable describe únicamente la **composición de la muestra por país**, no el desempeño de los estudiantes en la prueba de alfabetización financiera.
 
-Las 9 variables cualitativas restantes se presentan agrupadas en dos paneles de gráficos de barras horizontales.
+Las 14 variables cualitativas restantes se presentan agrupadas en 4 paneles de gráficos de barras horizontales.
 
 ```{r}
 #| label: panel-cualitativas-1
 #| message: false
 #| warning: false
-#| fig-cap: "Distribución porcentual de 5 variables cualitativas (género, libros en el hogar, cuenta bancaria, tarjeta débito y autopercepción de manejo del dinero)"
-#| fig-width: 10
+#| fig-cap: "Distribución porcentual de variables cualitativas - Panel 1 (Género, Libros en el hogar, Cuenta bancaria y Tarjeta débito)"
+#| fig-width: 9
 #| fig-height: 7
 
-vars_panel_1 <- c("ST004D01T", "ST255Q01JA", "FL161Q01HA", "FL161Q02HA", "FL169Q05JA")
+vars_panel_1 <- c("ST004D01T", "ST255Q01JA", "FL161Q01HA", "FL161Q02HA")
+vars_torta   <- c("ST004D01T", "FL161Q01HA", "FL161Q02HA")
 
-# Variables que se mostrarán como diagrama de torta (pocas categorías, sin orden natural relevante)
-vars_torta <- c("ST004D01T", "FL161Q01HA", "FL161Q02HA")
-
-par(las = 1, mfrow = c(2, 3), mai = c(0.5, 1.2, 0.5, 0.3))
+par(las = 1, mfrow = c(2, 2), mai = c(0.5, 1.2, 0.5, 0.3))
 
 for (v in vars_panel_1) {
   if (v %in% names(datos_pisa)) {
@@ -559,7 +634,6 @@ for (v in vars_panel_1) {
     titulo  <- titulos_cualitativos[v]
     
     if (v %in% vars_torta) {
-      # --- Diagrama de torta, sin texto encima (evita superposición) ---
       etiquetas_leyenda <- paste0(names(tab), " (", round(per, 1), "%)")
       
       pie(per,
@@ -568,18 +642,17 @@ for (v in vars_panel_1) {
           border = "white",
           main = titulo,
           cex.main = 0.9,
-          radius = 0.75)          # un poco más pequeño para dejar espacio a la leyenda
+          radius = 0.75)
       
       legend("bottom",
              legend = etiquetas_leyenda,
              fill = colores,
              border = "white",
              bty = "n",
-             cex = 0.65,           # letra más chica para que quepan las 3 categorías
-             ncol = 1)             # apiladas en vertical, en vez de horiz = TRUE
+             cex = 0.65,
+             ncol = 1)
       
     } else {
-      # --- Diagrama de barras (igual que antes) ---
       pl <- barplot(per, horiz = TRUE, 
                     col = colores,
                     border = "white",
@@ -598,17 +671,17 @@ par(mfrow = c(1, 1))
 
 En la primer gráfica,la que corresponde a género, la distribución está prácticamente equilibrada (50.2% masculino, 49.8% femenino), lo que nos permite hacer comparaciones posteriores. Respecto al número de libros del hogar, la mayoría de los estudiantes se concentra en niveles medios de libros disponibles (28.8% reporta entre 101 y 200 libros), siendo poco frecuentes los casos extremos.
 
-En el plano financiero formal, algo más de la mitad de los estudiantes reporta tener cuenta bancaria (52.4%) y tarjeta débito (50.1%), cifras muy similares entre sí. Llama la atención que un porcentaje de estudiantes (7.9% para cuenta bancaria y 4.9% para tarjeta débito) respondió "no sabe/no responde", lo que podría reflejar desconocimiento sobre su propia situación financiera. Finalmente, en cuanto a la autopercepción de manejo del dinero, un 77.2% de los estudiantes se declara "de acuerdo" o "muy de acuerdo" con saber manejar su dinero, una cifra notablemente más alta que el nivel real de inclusión financiera observado, lo que abre la pregunta de si esta confianza está respaldada por un conocimiento financiero objetivo.
+En el plano financiero formal, algo más de la mitad de los estudiantes reporta tener cuenta bancaria (52.4%) y tarjeta débito (50.1%), cifras muy similares entre sí. Llama la atención que un porcentaje de estudiantes (7.9% para cuenta bancaria y 4.9% para tarjeta débito) respondió "no sabe/no responde", lo que podría reflejar desconocimiento sobre su propia situación financiera. 
 
 ```{r}
 #| label: panel-cualitativas-2
 #| message: false
 #| warning: false
-#| fig-cap: "Distribución porcentual de 4 variables cualitativas (responsabilidad financiera, ahorro bancario, ahorro en casa y nivel del programa educativo)"
-#| fig-width: 8
-#| fig-height: 6
+#| fig-cap: "Distribución porcentual de variables cualitativas - Panel 2 (Autopercepción, Responsabilidad y Hábitos de ahorro formal e informal)"
+#| fig-width: 9
+#| fig-height: 7
 
-vars_panel_2 <- c("FL159Q04HA", "FL171Q11JA", "FL171Q12JA", "ISCEDP")
+vars_panel_2 <- c("FL169Q05JA", "FL159Q04HA", "FL171Q11JA", "FL171Q12JA")
 
 par(las = 1, mfrow = c(2, 2), mai = c(0.5, 1.2, 0.5, 0.3))
 
@@ -625,7 +698,7 @@ for (v in vars_panel_2) {
                   border = "white",
                   main = titulo, 
                   cex.main = 0.9,
-                  cex.names = 0.8,
+                  cex.names = 0.75,
                   xlab = "%", xlim = c(0, max(per) + 25))
     
     text(per + 2, pl, round(per, 1), cex = 0.8, pos = 4)
@@ -635,11 +708,129 @@ for (v in vars_panel_2) {
 par(mfrow = c(1, 1))
 ```
 
-Este panel complementa el perfil financiero de los estudiantes con información sobre responsabilidad y hábitos de ahorro. En cuanto a responsabilidad financiera, un 77.4% de los estudiantes se declara "de acuerdo" o "muy de acuerdo" en ser responsables de sus propios asuntos de dinero (por ejemplo, evitar robos o pérdidas), lo que es coherente con la autopercepción positiva de manejo del dinero observada anteriormente.
+En cuanto a la autopercepción de manejo del dinero, un 77.2% de los estudiantes se declara "de acuerdo" o "muy de acuerdo" con saber manejar su dinero, lo cuál permite preguntar que respalda esa percepción. 
 
-El contraste más relevante de este panel se da entre los dos hábitos de ahorro. En el ahorro formal (en una cuenta bancaria), un 37.5% de los estudiantes indica que "nunca o casi nunca" ahorra de esta manera, la categoría más frecuente de la variable; mientras que en el ahorro informal (en casa), la categoría más común es justo la opuesta: un 29.3% ahorra "una o más veces por semana", y solo un 11.9% dice no hacerlo nunca. Esto sugiere que, aunque cerca de la mitad de los estudiantes tiene acceso a productos financieros formales (cuenta bancaria/tarjeta débito), el hábito de ahorro predominante entre los adolescentes de la muestra sigue siendo informal, guardando el dinero en casa en vez de en una entidad financiera.
+En cuanto a responsabilidad financiera, un 77.4% de los estudiantes se declara "de acuerdo" o "muy de acuerdo" en ser responsables de sus propios asuntos de dinero (por ejemplo, evitar robos o pérdidas), lo que es coherente con la autopercepción positiva de manejo del dinero observada anteriormente.
 
-Finalmente, respecto al nivel educativo (clasificación ISCED 2011), la mayoría de los estudiantes se concentra en secundaria alta de tipo general (64.7%), seguida de secundaria baja general (20.3%) y secundaria alta vocacional (15%); no se registran casos en secundaria baja vocacional (0%). Esto indica que la muestra está compuesta mayoritariamente por estudiantes en trayectorias educativas de tipo general, con una presencia mucho menor de modalidades técnicas o vocacionales.
+El contraste más relevante de este panel se da entre los dos hábitos de ahorro. En el ahorro formal (en una cuenta bancaria), un 37.5% de los estudiantes indica que "nunca o casi nunca" ahorra de esta manera; mientras que en el ahorro informal (en casa), la categoría más común es justo la opuesta: un 29.3% ahorra "una o más veces por semana", y solo un 11.9% dice no hacerlo nunca. Esto sugiere que, aunque cerca de la mitad de los estudiantes tiene acceso a productos financieros formales, el hábito de ahorro predominante entre los adolescentes de la muestra sigue siendo guardar el dinero en casa en vez de en una entidad financiera.
+
+
+```{r}
+#| label: panel-cualitativas-3
+#| message: false
+#| warning: false
+#| fig-cap: "Distribución porcentual de variables cualitativas - Panel 3 (Nivel educativo, Mesada, Saldo digital y Facilidad matemática)"
+#| fig-width: 9
+#| fig-height: 7
+
+vars_panel_3 <- c("ISCEDP", "FL170Q01JA", "FL163Q02HA", "ST268Q04JA")
+
+par(las = 1, mfrow = c(2, 2), mai = c(0.5, 1.2, 0.5, 0.3))
+
+for (v in vars_panel_3) {
+  if (v %in% names(datos_pisa)) {
+    tab <- table(datos_pisa[[v]], useNA = "no")
+    per <- prop.table(tab) * 100
+    titulo <- titulos_cualitativos[v]
+    
+    # Gráfica de torta especial para ST268Q04JA (Facilidad para las Matemáticas)
+    if (v == "ST268Q04JA") {
+      # Paleta de contraste: naranjas (desacuerdo) vs azules (acuerdo)
+      colores <- c("#FB8500", "#FFB703", "#BDE0FE", "#8ECAE6")
+      
+      # Texto del porcentaje directamente sobre/al lado de cada tajada
+      etiquetas_tajadas <- paste0(round(per, 1), "%")
+      
+      # Leyenda explicativa con categoría y porcentaje
+      etiquetas_leyenda <- paste0(names(tab), " (", round(per, 1), "%)")
+      
+      pie(per,
+          labels = etiquetas_tajadas,
+          col = colores,
+          border = "white",
+          main = titulo,
+          cex.main = 0.9,
+          cex = 0.8,
+          radius = 0.7)
+      
+      legend("bottom",
+             legend = etiquetas_leyenda,
+             fill = colores,
+             border = "white",
+             bty = "n",
+             cex = 0.65,
+             ncol = 2) # Organizado en 2 columnas abajo para aprovechar el espacio
+             
+    } else {
+      # Gráficas de barras habituales para las demás variables del panel
+      colores <- obtener_colores_custom(length(tab))
+      
+      pl <- barplot(per, horiz = TRUE, 
+                    col = colores,
+                    border = "white",
+                    main = titulo, 
+                    cex.main = 0.9,
+                    cex.names = 0.75,
+                    xlab = "%", xlim = c(0, max(per) + 25))
+      
+      text(per + 2, pl, round(per, 1), cex = 0.8, pos = 4)
+    }
+  }
+}
+
+par(mfrow = c(1, 1))
+
+```
+
+Para el nivel educativo (clasificación ISCED 2011), la mayoría de los estudiantes se concentra en secundaria alta de tipo general (64.7%), seguida de secundaria baja general (20.3%) y secundaria alta vocacional (15%); no se registran casos en secundaria baja vocacional (0%). Esto indica que la muestra está compuesta mayoritariamente por estudiantes en trayectorias educativas de tipo general, con una presencia mucho menor de modalidades técnicas o vocacionales.
+
+
+Con respecto a la frecuencia de recibir mesada,cerca de la mitad de los estudiantes (49.4%) reporta que nunca o casi nunca recibe dinero o mesada por realizar labores dentro del hogar. Entre quienes sí reciben algún tipo de incentivo económico, la opción más común es de forma mensual, con un 20.2% que lo recibe una o dos veces al mes, seguido por un 16.7% que lo obtiene con frecuencia semanal  y un 13.6% que lo percibe de forma muy ocasional. Finalmente, es muy poco frecuente que esto ocurra como una costumbre diaria, alcanzando apenas un 5.1% de estudiantes que afirman recibir este pago todos o casi todos los días.
+
+
+Por otro lado, el manejo de herramientas financieras digitales,brinda cierta seguridad a los jovenes.Más de un 64% cuenta con la confianza suficiente para usar este tipo de aplicaciones o plataformas. En contraste, un 22.0% señala no sentirse muy seguro y solo un 13.6% expresa sentirse nada seguro.
+
+En lo que concierne a la matemáticas,existe división de opiniones. Un 46.6% percibe la materia como fácil (34.1% de acuerdo y 12.5% muy de acuerdo), mientras que un 53.5% expresa dificultad (32.8% en desacuerdo y 20.7% muy en desacuerdo).
+
+
+```{r}
+#| label: panel-cualitativas-4
+#| message: false
+#| warning: false
+#| fig-cap: "Distribución porcentual de variables cualitativas - Panel 4 (Recursos digitales en el aula y Soporte técnico TIC)"
+#| fig-width: 9
+#| fig-height: 4.5
+
+vars_panel_4 <- c("IC172Q05JA", "IC172Q07JA")
+
+par(las = 1, mfrow = c(1, 2), mai = c(0.5, 1.2, 0.5, 0.3))
+
+for (v in vars_panel_4) {
+  if (v %in% names(datos_pisa)) {
+    tab <- table(datos_pisa[[v]], useNA = "no")
+    per <- prop.table(tab) * 100
+    
+    colores <- obtener_colores_custom(length(tab))
+    titulo  <- titulos_cualitativos[v]
+    
+    pl <- barplot(per, horiz = TRUE, 
+                  col = colores,
+                  border = "white",
+                  main = titulo, 
+                  cex.main = 0.9,
+                  cex.names = 0.75,
+                  xlab = "%", xlim = c(0, max(per) + 25))
+    
+    text(per + 2, pl, round(per, 1), cex = 0.8, pos = 4)
+  }
+}
+
+par(mfrow = c(1, 1))
+
+```
+
+Para el acceso a recursos digitales en el aula, predomina una valoración favorable, donde el 63.4% reporta estar de acuerdo. Por otro lado, un 36.7% señala desacuerdo.Y para Soporte técnico de TIC en el colegio, la percepción general también es positiva, sumando un 66.5% a favor (56.2% de acuerdo y 10.3% muy de acuerdo). En contraste, un 33.5% percibe deficiencias en este aspecto.
+
 
 ## Variables cuantitativas
 
@@ -648,85 +839,231 @@ Finalmente, respecto al nivel educativo (clasificación ISCED 2011), la mayoría
 ```{r}
 #| label: titulos-cuantitativos
 
+# Diccionario de títulos para las gráficas de las 15 variables cuantitativas
 titulos_cuantitativos <- c(
-  PV1FLIT  = "Puntaje en Alfabetización Financiera",
-  PV1MATH  = "Puntaje en Matemática",
-  PV1READ  = "Puntaje en Lectura",
-  ESCS     = "Estatus Económico, Social y Cultural",
-  HOMEPOS  = "Posesiones en el Hogar",
-  FLCONFIN = "Confianza en Asuntos Financieros",
-  ACCESSFP = "Acceso a Productos Financieros",
-  FCFMLRTY = "Familiaridad con Conceptos Financieros",
-  FLSCHOOL = "Educación Financiera en el Colegio",
-  FLFAMILY = "Involucramiento Familiar en Finanzas"
+  "PV1FLIT"  = "Puntaje en Alfabetización Financiera",
+  "PV1MATH"  = "Puntaje en Matemática",
+  "PV1READ"  = "Puntaje en Lectura",
+  "ESCS"     = "Estatus Económico, Social y Cultural",
+  "HOMEPOS"  = "Posesiones en el Hogar",
+  "FLCONFIN" = "Confianza en Asuntos Financieros",
+  "ACCESSFP" = "Acceso a Productos Financieros",
+  "FCFMLRTY" = "Familiaridad con Conceptos Financieros",
+  "FLSCHOOL" = "Educación Financiera en el Colegio",
+  "FLFAMILY" = "Involucramiento Familiar en Finanzas",
+  "HISEI"    = "Estatus Ocupacional Máximo de los Padres",
+  "PAREDINT" = "Años Escolares de los Padres (Escala Int.)",
+  "FRINFLFM" = "Influencia de Amigos en Asuntos Financieros",
+  "CREATSCH" = "Ambiente Escolar y de Clase Creativo",
+  "FAMSUPSL" = "Apoyo Familiar para el Aprendizaje Autónomo"
 )
+
 ```
 
-Para las 10 variables cuantitativas se realizó primero un análisis mediante histogramas, con el fin de observar la forma de la distribución de cada una. Posteriormente, se construyeron diagramas de caja (boxplots) para resumir de forma más precisa la dispersión de los datos y confirmar la presencia de valores atípicos. Las variables se presentan en dos grupos de 5 para facilitar la lectura de cada gráfico.
+Para las 15 variables cuantitativas se realizó primero un análisis mediante histogramas, con el fin de observar la forma de la distribución de cada una. Posteriormente, se construyeron diagramas de caja (boxplots) para resumir de forma más precisa la dispersión de los datos y confirmar la presencia de valores atípicos. Las variables se presentan en tres grupos de 5 para facilitar la lectura de cada gráfico.
 
 ```{r}
-#| label: histogramas-cuanti-1
+#| label: histogramas-cuanti-1-ggplot
 #| message: false
 #| warning: false
-#| fig-cap: "Distribución de las variables de desempeño académico y contexto socioeconómico"
+#| fig-cap: "Distribución de las variables de desempeño académico y contexto socioeconómico (ggplot2)"
 #| fig-width: 10
 #| fig-height: 6
 
+library(ggplot2)
+library(patchwork)
+
 vars_hist_1 <- c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS")
-
-par(mfrow = c(2, 3), mai = c(0.6, 0.6, 0.5, 0.2))
-
 colores_hist_1 <- obtener_colores_custom(length(vars_hist_1))
+
+lista_graficos <- list()
 
 for (i in seq_along(vars_hist_1)) {
   v <- vars_hist_1[i]
   if (v %in% names(datos_pisa)) {
-    x <- na.omit(datos_pisa[[v]])
     
-    hist(x,
-         col = colores_hist_1[i],
-         border = "white",
-         main = titulos_cuantitativos[v],
-         cex.main = 0.9,
-         xlab = "Valor",
-         ylab = "Frecuencia")
+    p <- ggplot(datos_pisa, aes(x = .data[[v]])) +
+      geom_histogram(aes(y = ..density..), bins = 30, 
+                     fill = colores_hist_1[i], color = colores_hist_1[i], alpha = 0.7) +
+      geom_density(color = "black", size = 0.8) +
+      labs(title = titulos_cuantitativos[v], x = "Valor", y = "Densidad") +
+      theme_minimal() +
+      theme(plot.title = element_text(size = 10, face = "bold", hjust = 0.5))
+    
+    lista_graficos[[v]] <- p
   }
 }
 
-par(mfrow = c(1, 1))
+# Organiza los gráficos en un panel de 2 filas x 3 columnas
+wrap_plots(lista_graficos, ncol = 3)
+
 ```
 
+
+**Puntajes de Desempeño Académico:** Las tres competencias evaluadas exhiben una distribución simétrica (con forma de campana de Gauss o distribución normal).
+
+
+**Estatus Económico, Social y Cultural:** Muestra una asimetría a la izquierda. Aunque la mayoría de los estudiantes se ubica en niveles medios y medios-altos, la cola se extiende hacia valores negativos (hasta -6), evidenciando un grupo de estudiantes en situación de alta vulnerabilidad socioeconómica.
+
+**Posesiones en el Hogar:** Presenta una distribución muy concentrada y centrada alrededor del valor 0. Esto refleja una alta homogeneidad en la disponibilidad de bienes y recursos materiales en los hogares de la muestra, registrando muy pocos casos en las colas extremas.
+
+
 ```{r}
+
 #| label: histogramas-cuanti-2
 #| message: false
 #| warning: false
 #| fig-cap: "Distribución de las variables de actitud financiera y contexto de educación financiera"
 #| fig-width: 10
-#| fig-height: 6
+#| fig-height: 7
+
+library(ggplot2)
+library(patchwork)
+library(dplyr)
+library(stringr)
 
 vars_hist_2 <- c("FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY")
-
-par(mfrow = c(2, 3), mai = c(0.6, 0.6, 0.5, 0.2))
-
 colores_hist_2 <- obtener_colores_custom(length(vars_hist_2))
+
+lista_graficos_2 <- list()
 
 for (i in seq_along(vars_hist_2)) {
   v <- vars_hist_2[i]
   if (v %in% names(datos_pisa)) {
-    x <- na.omit(datos_pisa[[v]])
     
-    hist(x,
-         col = colores_hist_2[i],
-         border = "white",
-         main = titulos_cuantitativos[v],
-         cex.main = 0.9,
-         xlab = "Valor",
-         ylab = "Frecuencia")
+    # 1. Filtrar NAs explícitamente para evitar advertencias en consola
+    df_sub <- datos_pisa %>% 
+      select(all_of(v)) %>% 
+      filter(!is.na(.data[[v]]))
+    
+    # 2. Ajustar títulos largos en 2 líneas
+    titulo_wrapped <- str_wrap(titulos_cuantitativos[v], width = 22)
+    
+    # 3. Configuración para variables discontinuas/discretas de conteo como FCFMLRTY
+    if (v == "FCFMLRTY") {
+      capa_histograma <- geom_histogram(aes(y = after_stat(density)), 
+                                        binwidth = 1, 
+                                        center = 0,
+                                        fill = colores_hist_2[i], 
+                                        color = colores_hist_2[i], 
+                                        alpha = 0.7)
+    } else {
+      capa_histograma <- geom_histogram(aes(y = after_stat(density)), 
+                                        bins = 30, 
+                                        fill = colores_hist_2[i], 
+                                        color = colores_hist_2[i], 
+                                        alpha = 0.7)
+    }
+    
+    p <- ggplot(df_sub, aes(x = .data[[v]])) +
+      capa_histograma +
+      geom_density(color = "black", linewidth = 0.8) +
+      labs(title = titulo_wrapped, x = "Valor", y = "Densidad") +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(size = 9, face = "bold", hjust = 0.5, lineheight = 1.1),
+        axis.title = element_text(size = 8),
+        axis.text  = element_text(size = 7.5),
+        plot.margin = margin(t = 5, r = 10, b = 5, l = 10)
+      )
+    
+    lista_graficos_2[[v]] <- p
   }
 }
 
-par(mfrow = c(1, 1))
+# Organizar en 3 columnas
+wrap_plots(lista_graficos_2, ncol = 3)
+
 ```
+
+
+**Confianza en Asuntos Financieros:** Muestra una distribución repartida a lo largo de la escala, con concentración de estudiantes alrededor del promedio y presencia de valores en los extremos.
+
+**Acceso a Productos Financieros:** La gran mayoría de los estudiantes se agrupa en torno al nivel medio (valor 0), mientras que una proporción menor presenta niveles más altos de acceso.
+
+**Familiaridad con Conceptos Financieros:** Presenta una acumulación inicial en el valor 0 (estudiantes que no reconocen conceptos).
+
+**Educación Financiera en el Colegio e Involucramiento Familiar:** Ambas variables están centradas cerca del valor 0, indicando una exposición o involucramiento promedio en temas financieros, tanto en la escuela como en el hogar.
+
+
+```{r}
+#| label: histogramas-cuanti-3
+#| message: false
+#| warning: false
+#| fig-cap: "Distribución de las 5 nuevas variables cuantitativas (estatus ocupacional, educación parental, influencia de amigos, ambiente creativo y apoyo familiar)"
+#| fig-width: 10
+#| fig-height: 7
+
+library(ggplot2)
+library(patchwork)
+library(dplyr)
+library(stringr)
+
+# Panel 3: Las 5 nuevas variables cuantitativas
+vars_hist_3 <- c("HISEI", "PAREDINT", "FRINFLFM", "CREATSCH", "FAMSUPSL")
+colores_hist_3 <- obtener_colores_custom(length(vars_hist_3))
+
+lista_graficos_3 <- list()
+
+for (i in seq_along(vars_hist_3)) {
+  v <- vars_hist_3[i]
+  if (v %in% names(datos_pisa)) {
+    
+    # 1. Filtrar NAs explícitamente para evitar advertencias de ggplot
+    df_sub <- datos_pisa %>% 
+      select(all_of(v)) %>% 
+      filter(!is.na(.data[[v]]))
+    
+    # 2. Envolver títulos largos en 2 líneas
+    titulo_wrapped <- str_wrap(titulos_cuantitativos[v], width = 22)
+    
+    # 3. Control de binwidth para PAREDINT (años de escolaridad enteros)
+    if (v == "PAREDINT") {
+      capa_histograma <- geom_histogram(aes(y = after_stat(density)), 
+                                        binwidth = 1, 
+                                        center = 0,
+                                        fill = colores_hist_3[i], 
+                                        color = colores_hist_3[i], 
+                                        alpha = 0.7)
+    } else {
+      capa_histograma <- geom_histogram(aes(y = after_stat(density)), 
+                                        bins = 30, 
+                                        fill = colores_hist_3[i], 
+                                        color = colores_hist_3[i], 
+                                        alpha = 0.7)
+    }
+    
+    p <- ggplot(df_sub, aes(x = .data[[v]])) +
+      capa_histograma +
+      geom_density(color = "black", linewidth = 0.8) +
+      labs(title = titulo_wrapped, x = "Valor", y = "Densidad") +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(size = 9, face = "bold", hjust = 0.5, lineheight = 1.1),
+        axis.title = element_text(size = 8),
+        axis.text  = element_text(size = 7.5),
+        plot.margin = margin(t = 5, r = 10, b = 5, l = 10)
+      )
+    
+    lista_graficos_3[[v]] <- p
+  }
+}
+
+# Organizar los 5 gráficos en 3 columnas
+wrap_plots(lista_graficos_3, ncol = 3)
+
+```
+
+
+**Estatus Ocupacional Máximo de los Padres:** Muestra una distribución que abarca casi toda la escala, con concentraciones destacadas tanto en niveles ocupacionales medios-bajos como en niveles altos.
+
+**Años Escolares de los Padres:** Presenta una fuerte concentración en los tramos superiores de la escala, destacando la prevalencia de padres con secundaria completa (12 años) y educación superior/universitaria (16 años).
+
+**Influencia de Amigos en Asuntos Financieros:** Se distribuye mayoritariamente en torno al valor central (0), con una acumulación adicional en el extremo negativo que refleja a estudiantes sin influencia percibida.
+
+**Ambiente Escolar Creativo:** Indica una percepción predominantemente favorable de la creatividad en el aula.
+
+**Apoyo Familiar al Aprendizaje:** Presenta una distribución agrupada principalmente entre los valores centrales y medios-altos, sugiriendo que la mayoría de los estudiantes percibe un acompañamiento familiar intermedio o alto en su aprendizaje.
 
 ```{r}
 #| label: paleta-pastel
@@ -745,100 +1082,249 @@ obtener_colores_pastel <- function(n) {
 ```
 
 ```{r}
-#| label: boxplot-cuanti-desempeno
+
+#| label: boxplot-panel-1
 #| message: false
 #| warning: false
-#| fig-cap: "Diagramas de caja: puntajes de desempeño académico"
-#| fig-width: 10
-#| fig-height: 7
+#| fig-cap: "Diagramas de caja con valor de mediana impreso - Panel 1"
+#| fig-width: 11
+#| fig-height: 5
 
-vars_box_1 <- c("PV1FLIT", "PV1MATH", "PV1READ")
+library(ggplot2)
+library(patchwork)
+library(dplyr)
+library(stringr)
+library(knitr)
 
-par(mfrow = c(1, 3), mai = c(0.6, 0.7, 0.6, 0.2))
-
+vars_box_1 <- c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS")
 colores_box_1 <- obtener_colores_pastel(length(vars_box_1))
+
+lista_box_1 <- list()
 
 for (i in seq_along(vars_box_1)) {
   v <- vars_box_1[i]
   if (v %in% names(datos_pisa)) {
-    x <- na.omit(datos_pisa[[v]])
     
-    boxplot(x,
-            col = colores_box_1[i],
-            border = "black",
-            boxwex = 0.5,
-            main = titulos_cuantitativos[v],
-            cex.main = 0.95,
-            ylab = "Valor")
+    df_sub <- datos_pisa %>% 
+      select(all_of(v)) %>% 
+      filter(!is.na(.data[[v]]))
+    
+    titulo_limpio <- unname(titulos_cuantitativos[v])
+    titulo_wrapped <- str_wrap(titulo_limpio, width = 18)
+    
+    p <- ggplot(df_sub, aes(x = "", y = .data[[v]])) +
+      geom_boxplot(
+        fill = colores_box_1[i], 
+        color = "#2B2D42", 
+        alpha = 0.85,
+        outlier.colour = "#E63946",
+        outlier.size = 0.6,
+        outlier.alpha = 0.2,
+        width = 0.45
+      ) +
+      # Impresión del valor numérico exacto de la Mediana sobre la caja
+      stat_summary(
+        fun = median, 
+        geom = "text", 
+        aes(label = sprintf("%.2f", after_stat(y))),
+        vjust = -0.8, 
+        size = 3, 
+        fontface = "bold",
+        color = "#1D3557"
+      ) +
+      scale_y_continuous(expand = expansion(mult = c(0.1, 0.22))) +
+      labs(title = titulo_wrapped, y = "Valor", x = "") +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(size = 8.5, face = "bold", hjust = 0.5, lineheight = 1.1),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        plot.margin = margin(t = 5, r = 3, b = 5, l = 3)
+      )
+    
+    lista_box_1[[v]] <- p
   }
 }
 
-par(mfrow = c(1, 1))
+# 1. Renderizar gráficos
+wrap_plots(lista_box_1, ncol = 5)
+
+```
+```{r}
+#| label: summary-cuanti-panel-1-base
+
+summary(datos_pisa[, c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS")])
 ```
 
+
+
+**Desempeño Académico (`PV1FLIT`, `PV1MATH`, `PV1READ`):** Las tres competencias exhiben una elevada simetría en sus distribuciones, observándose una coincidencia casi exacta entre la media y la mediana. El 50% central de los estudiantes se concentra en un rango intercuartílico de entre 140 y 155 puntos, mientras que los valores atípicos se distribuyen en ambos extremos (con mayor densidad hacia la cola inferior) sin alterar la estructura acampanada de los datos.
+
+**Contexto Socioeconómico (`ESCS` y `HOMEPOS`):** En ambas variables, la mediana se ubica muy cerca del cero (0.12 en `ESCS` y -0.07 en `HOMEPOS`). Hay una gran presencia de valores atípicos en ambas colas (alcanzando mínimos de -6.02 y -7.64, y máximos de 5.11 y 9.11), lo que pone en evidencia brechas socioeconómicas marcadas en la muestra.
+
+
+
 ```{r}
-#| label: boxplot-cuanti-socioeconomico
+#| label: boxplot-panel-2
 #| message: false
 #| warning: false
-#| fig-cap: "Diagramas de caja: contexto socioeconómico y confianza financiera"
-#| fig-width: 10
-#| fig-height: 7
+#| fig-cap: "Diagramas de caja con valor de mediana impreso - Panel 2"
+#| fig-width: 11
+#| fig-height: 5
 
-vars_box_2 <- c("ESCS", "HOMEPOS", "FLCONFIN")
-
-par(mfrow = c(1, 3), mai = c(0.6, 0.7, 0.6, 0.2))
-
+vars_box_2 <- c("FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY")
 colores_box_2 <- obtener_colores_pastel(length(vars_box_2))
+
+lista_box_2 <- list()
 
 for (i in seq_along(vars_box_2)) {
   v <- vars_box_2[i]
   if (v %in% names(datos_pisa)) {
-    x <- na.omit(datos_pisa[[v]])
     
-    boxplot(x,
-            col = colores_box_2[i],
-            border = "black",
-            boxwex = 0.5,
-            main = titulos_cuantitativos[v],
-            cex.main = 0.95,
-            ylab = "Valor")
+    df_sub <- datos_pisa %>% 
+      select(all_of(v)) %>% 
+      filter(!is.na(.data[[v]]))
+    
+    titulo_limpio <- unname(titulos_cuantitativos[v])
+    titulo_wrapped <- str_wrap(titulo_limpio, width = 18)
+    
+    p <- ggplot(df_sub, aes(x = "", y = .data[[v]])) +
+      geom_boxplot(
+        fill = colores_box_2[i], 
+        color = "#2B2D42", 
+        alpha = 0.85,
+        outlier.colour = "#E63946",
+        outlier.size = 0.6,
+        outlier.alpha = 0.2,
+        width = 0.45
+      ) +
+      stat_summary(
+        fun = median, 
+        geom = "text", 
+        aes(label = sprintf("%.2f", after_stat(y))),
+        vjust = -0.8, 
+        size = 3, 
+        fontface = "bold",
+        color = "#1D3557"
+      ) +
+      scale_y_continuous(expand = expansion(mult = c(0.1, 0.22))) +
+      labs(title = titulo_wrapped, y = "Valor", x = "") +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(size = 8.5, face = "bold", hjust = 0.5, lineheight = 1.1),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        plot.margin = margin(t = 5, r = 3, b = 5, l = 3)
+      )
+    
+    lista_box_2[[v]] <- p
   }
 }
 
-par(mfrow = c(1, 1))
+wrap_plots(lista_box_2, ncol = 5)
+
+
+```
+```{r}
+#| label: summary-cuanti-panel-1-base
+
+summary(datos_pisa[, c("FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY")])
 ```
 
+**Confianza en Asuntos Financieros (`FLCONFIN`):** Muestra una distribución bastante simétrica y equilibrada en torno a su mediana (-0.10) y media (-0.14). El 50% central de las respuestas se agrupa de forma estrecha entre -0.63 y 0.53, registrando una presencia casi nula de valores atípicos en los extremos, lo que refleja un nivel de confianza homogéneo entre la mayoría de los estudiantes.
+
+**Acceso a Productos Financieros (`ACCESSFP`):** El cuerpo principal de los datos se halla fuertemente concentrado alrededor del promedio (mediana de 0.10 y rango intercuartílico de -0.46 a 0.55). Sin embargo, resalta una acumulación importante de valores atípicos hacia la cola superior (alcanzando un máximo de 5.85), lo que evidencia la existencia de un subgrupo específico de estudiantes con un acceso a productos financieros considerablemente más alto que el resto.
+
+**Familiaridad con Conceptos Financieros (`FCFMLRTY`):** Corresponde a una escala de conteo (0 a 16) y presenta la mayor dispersión del bloque. Su mediana se ubica en 6.00 con un rango intercuartílico amplio que va desde 1.00 hasta 11.00. No genera valores atípicos debido a que las observaciones se distribuyen a lo largo de casi toda la escala teórica disponible.
+
+**Educación Financiera Escolar e Involucramiento Familiar (`FLSCHOOL` y `FLFAMILY`):** Ambos índices están centrados muy cerca del valor cero, con medianas de 0.16 en la escuela y -0.02 en el entorno familiar, mostrando tramos centrales simétricos entre aproximadamente -0.7 y 0.7. En todo este bloque destaca un número elevado de datos faltantes (entre 8,655 y 15,941 NAs), derivado de los módulos optativos del cuestionario de contexto PISA.
+
+
+
+
 ```{r}
-#| label: boxplot-cuanti-contexto-financiero
+
+#| label: boxplot-panel-3
 #| message: false
 #| warning: false
-#| fig-cap: "Diagramas de caja: contexto de educación financiera (escolar y familiar)"
+#| fig-cap: "Diagramas de caja con valor de mediana impreso - Panel 3"
 #| fig-width: 11
-#| fig-height: 7
+#| fig-height: 5
 
-vars_box_3 <- c("ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY")
-
-par(mfrow = c(1, 4), mai = c(0.6, 0.6, 0.6, 0.2))
-
+vars_box_3 <- c("HISEI", "PAREDINT", "FRINFLFM", "CREATSCH", "FAMSUPSL")
 colores_box_3 <- obtener_colores_pastel(length(vars_box_3))
+
+lista_box_3 <- list()
 
 for (i in seq_along(vars_box_3)) {
   v <- vars_box_3[i]
   if (v %in% names(datos_pisa)) {
-    x <- na.omit(datos_pisa[[v]])
     
-    boxplot(x,
-            col = colores_box_3[i],
-            border = "black",
-            boxwex = 0.5,
-            main = titulos_cuantitativos[v],
-            cex.main = 0.95,
-            ylab = "Valor")
+    df_sub <- datos_pisa %>% 
+      select(all_of(v)) %>% 
+      filter(!is.na(.data[[v]]))
+    
+    titulo_limpio <- unname(titulos_cuantitativos[v])
+    titulo_wrapped <- str_wrap(titulo_limpio, width = 18)
+    
+    p <- ggplot(df_sub, aes(x = "", y = .data[[v]])) +
+      geom_boxplot(
+        fill = colores_box_3[i], 
+        color = "#2B2D42", 
+        alpha = 0.85,
+        outlier.colour = "#E63946",
+        outlier.size = 0.6,
+        outlier.alpha = 0.2,
+        width = 0.45
+      ) +
+      stat_summary(
+        fun = median, 
+        geom = "text", 
+        aes(label = sprintf("%.2f", after_stat(y))),
+        vjust = -0.8, 
+        size = 3, 
+        fontface = "bold",
+        color = "#1D3557"
+      ) +
+      scale_y_continuous(expand = expansion(mult = c(0.1, 0.22))) +
+      labs(title = titulo_wrapped, y = "Valor", x = "") +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(size = 8.5, face = "bold", hjust = 0.5, lineheight = 1.1),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        plot.margin = margin(t = 5, r = 3, b = 5, l = 3)
+      )
+    
+    lista_box_3[[v]] <- p
   }
 }
 
-par(mfrow = c(1, 1))
+wrap_plots(lista_box_3, ncol = 5)
+
 ```
+
+```{r}
+#| label: summary-cuanti-panel-1-base
+
+summary(datos_pisa[, c("HISEI", "PAREDINT", "FRINFLFM", "CREATSCH", "FAMSUPSL")])
+```
+
+
+**Estatus Ocupacional Máximo de los Padres (`HISEI`):** Presenta una amplia dispersión sin valores atípicos visibles, cubriendo prácticamente toda la escala teórica (de 11 a 89 puntos). Su mediana se ubica en 57.99 y el 50% central de los estudiantes abarca un rango intercuartílico amplio de entre 30.30 y 75.50 puntos, reflejando la diversidad del nivel ocupacional familiar.
+
+**Años Escolares de los Padres (`PAREDINT`):** Muestra una marcada asimetría negativa con una fuerte concentración de datos en los niveles educativos superiores. Tanto la mediana como el tercer cuartil se ubican en el tope máximo de la escala (16 años), mientras que el 50% central se agrupa entre 12 y 16 años de escolaridad, registrando un valor atípico aislado en el extremo inferior (3 años).
+
+**Influencia de Amigos en Asuntos Financieros (`FRINFLFM`):** Se distribuye de forma simétrica alrededor del valor central, con una mediana de 0.21 y un rango intercuartílico que se extiende desde -0.48 hasta 0.73. Presenta una ligera presencia de valores atípicos hacia la cola superior (valores superiores a 2.5), correspondientes a estudiantes que perciben una alta influencia de sus pares.
+
+**Ambiente Escolar Creativo y Apoyo Familiar (`CREATSCH` y `FAMSUPSL`):** Ambos índices exhiben distribuciones simétricas centradas muy cerca del cero (medianas de 0.00 y 0.09, respectivamente), con la mitad central de los datos delimitada entre -0.57 y 0.76. Ambas variables muestran valores atípicos sutiles en sus extremos y destacan por una presencia relevante de datos faltantes (especialmente `FAMSUPSL` con 43,271 NAs), asociada a los módulos opcionales del cuestionario.
+
 
 # Análisis Bivariado
 
