@@ -1156,6 +1156,7 @@ wrap_plots(lista_box_1, ncol = 5)
 #| label: summary-cuanti-panel-1-base
 
 summary(datos_pisa[, c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS")])
+
 ```
 
 
@@ -1230,7 +1231,7 @@ wrap_plots(lista_box_2, ncol = 5)
 
 ```
 ```{r}
-#| label: summary-cuanti-panel-1-base
+#| label: summary-cuanti-panel-2-base
 
 summary(datos_pisa[, c("FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY")])
 ```
@@ -1311,7 +1312,7 @@ wrap_plots(lista_box_3, ncol = 5)
 ```
 
 ```{r}
-#| label: summary-cuanti-panel-1-base
+#| label: summary-cuanti-panel-3-base
 
 summary(datos_pisa[, c("HISEI", "PAREDINT", "FRINFLFM", "CREATSCH", "FAMSUPSL")])
 ```
@@ -1324,6 +1325,7 @@ summary(datos_pisa[, c("HISEI", "PAREDINT", "FRINFLFM", "CREATSCH", "FAMSUPSL")]
 **Influencia de Amigos en Asuntos Financieros (`FRINFLFM`):** Se distribuye de forma simétrica alrededor del valor central, con una mediana de 0.21 y un rango intercuartílico que se extiende desde -0.48 hasta 0.73. Presenta una ligera presencia de valores atípicos hacia la cola superior (valores superiores a 2.5), correspondientes a estudiantes que perciben una alta influencia de sus pares.
 
 **Ambiente Escolar Creativo y Apoyo Familiar (`CREATSCH` y `FAMSUPSL`):** Ambos índices exhiben distribuciones simétricas centradas muy cerca del cero (medianas de 0.00 y 0.09, respectivamente), con la mitad central de los datos delimitada entre -0.57 y 0.76. Ambas variables muestran valores atípicos sutiles en sus extremos y destacan por una presencia relevante de datos faltantes (especialmente `FAMSUPSL` con 43,271 NAs), asociada a los módulos opcionales del cuestionario.
+
 
 
 # Análisis Bivariado
