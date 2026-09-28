@@ -723,58 +723,65 @@ El contraste más relevante de este panel se da entre los dos hábitos de ahorro
 #| label: panel-cualitativas-3
 #| message: false
 #| warning: false
-#| fig-cap: "Distribución porcentual de variables cualitativas - Panel 3 (Nivel educativo, Mesada, Saldo digital y Facilidad matemática)"
-#| fig-width: 9
-#| fig-height: 7
+#| fig-cap: "Distribución porcentual de variables cualitativas - Panel 3"
+#| fig-width: 10.5
+#| fig-height: 8.5
 
 vars_panel_3 <- c("ISCEDP", "FL170Q01JA", "FL163Q02HA", "ST268Q04JA")
 
-par(las = 1, mfrow = c(2, 2), mai = c(0.5, 1.2, 0.5, 0.3))
+# Grilla 2x2
+par(mfrow = c(2, 2), las = 1)
 
 for (v in vars_panel_3) {
   if (v %in% names(datos_pisa)) {
+    
     tab <- table(datos_pisa[[v]], useNA = "no")
+    
+    # Ordenar Likert si es la variable de matemáticas
+    if (v == "ST268Q04JA") {
+      orden_likert <- c("Muy en desacuerdo", "En desacuerdo", "De acuerdo", "Muy de acuerdo")
+      tab <- tab[intersect(orden_likert, names(tab))]
+    }
+    
     per <- prop.table(tab) * 100
     titulo <- titulos_cualitativos[v]
     
-    # Gráfica de torta especial para ST268Q04JA (Facilidad para las Matemáticas)
     if (v == "ST268Q04JA") {
-      # Paleta de contraste: naranjas (desacuerdo) vs azules (acuerdo)
+      
+      # Margen derecho amplio para la leyenda; el resto mínimo para agrandar la torta
+      par(mai = c(0.3, 0.15, 0.5, 1.7))
+      
       colores <- c("#FB8500", "#FFB703", "#BDE0FE", "#8ECAE6")
+      radio   <- 0.95
       
-      # Texto del porcentaje directamente sobre/al lado de cada tajada
-      etiquetas_tajadas <- paste0(round(per, 1), "%")
+      pie(per, labels = NA, col = colores, border = "white",
+          main = titulo, cex.main = 0.95, radius = radio)
       
-      # Leyenda explicativa con categoría y porcentaje
-      etiquetas_leyenda <- paste0(names(tab), " (", round(per, 1), "%)")
+      # Porcentajes pequeños dentro de cada tajada
+      acumulado    <- cumsum(per) / 100
+      angulo_medio <- (acumulado - (per / 100) / 2) * 2 * pi
+      text(0.68 * radio * cos(angulo_medio),
+           0.68 * radio * sin(angulo_medio),
+           labels = paste0(round(per, 1), "%"),
+           cex = 0.75, font = 2, col = "#023047")
       
-      pie(per,
-          labels = etiquetas_tajadas,
-          col = colores,
-          border = "white",
-          main = titulo,
-          cex.main = 0.9,
-          cex = 0.8,
-          radius = 0.7)
+      # Leyenda a la derecha, fuera del círculo, centrada verticalmente
+      legend(x = par("usr")[2], y = 0,
+             xjust = 0, yjust = 0.5,
+             legend = names(tab),
+             fill = colores, border = "white",
+             bty = "n", cex = 0.75, ncol = 1, xpd = TRUE)
       
-      legend("bottom",
-             legend = etiquetas_leyenda,
-             fill = colores,
-             border = "white",
-             bty = "n",
-             cex = 0.65,
-             ncol = 2) # Organizado en 2 columnas abajo para aprovechar el espacio
-             
     } else {
-      # Gráficas de barras habituales para las demás variables del panel
+      
+      # Margen izquierdo calculado según el ancho de las etiquetas (evita que se corten)
+      ancho_etiquetas <- max(strwidth(names(per), units = "inches", cex = 0.75))
+      par(mai = c(0.5, ancho_etiquetas + 0.5, 0.5, 0.3))
+      
       colores <- obtener_colores_custom(length(tab))
       
-      pl <- barplot(per, horiz = TRUE, 
-                    col = colores,
-                    border = "white",
-                    main = titulo, 
-                    cex.main = 0.9,
-                    cex.names = 0.75,
+      pl <- barplot(per, horiz = TRUE, col = colores, border = "white",
+                    main = titulo, cex.main = 0.9, cex.names = 0.75,
                     xlab = "%", xlim = c(0, max(per) + 25))
       
       text(per + 2, pl, round(per, 1), cex = 0.8, pos = 4)
