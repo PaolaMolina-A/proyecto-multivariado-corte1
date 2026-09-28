@@ -6,7 +6,9 @@ format: html
 editor: visual
 ---
 
-[Proyecto Multivariado - Corte 1](https://paolamolina-a.github.io/proyecto-multivariado-corte1/){target="_blank"}
+Link a la página web:
+
+<a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/" target="_blank">Proyecto Multivariado - Corte 1</a>
 
 # Introducción: ¿Qué son las Pruebas PISA?
 
