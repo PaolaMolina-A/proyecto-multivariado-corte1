@@ -6,6 +6,8 @@ format: html
 editor: visual
 ---
 
+[Proyecto Multivariado - Corte 1](https://paolamolina-a.github.io/proyecto-multivariado-corte1/){target="_blank"}
+
 # Introducción: ¿Qué son las Pruebas PISA?
 
 ## Naturaleza y Propósito del Programa
