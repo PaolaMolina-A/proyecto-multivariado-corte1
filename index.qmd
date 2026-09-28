@@ -1240,9 +1240,9 @@ summary(datos_pisa[, c("FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY
 
 **Acceso a Productos Financieros (`ACCESSFP`):** El cuerpo principal de los datos se halla fuertemente concentrado alrededor del promedio (mediana de 0.10 y rango intercuartílico de -0.46 a 0.55). Sin embargo, resalta una acumulación importante de valores atípicos hacia la cola superior (alcanzando un máximo de 5.85), lo que evidencia la existencia de un subgrupo específico de estudiantes con un acceso a productos financieros considerablemente más alto que el resto.
 
-**Familiaridad con Conceptos Financieros (`FCFMLRTY`):** Corresponde a una escala de conteo (0 a 16) y presenta la mayor dispersión del bloque. Su mediana se ubica en 6.00 con un rango intercuartílico amplio que va desde 1.00 hasta 11.00. No genera valores atípicos debido a que las observaciones se distribuyen a lo largo de casi toda la escala teórica disponible.
+**Familiaridad con Conceptos Financieros (`FCFMLRTY`):** Corresponde a una escala de conteo (0 a 16) y presenta la mayor dispersión del bloque. Su mediana se ubica en 6.00 con un rango intercuartílico amplio que va desde 1.00 hasta 11.00. No genera valores atípicos.
 
-**Educación Financiera Escolar e Involucramiento Familiar (`FLSCHOOL` y `FLFAMILY`):** Ambos índices están centrados muy cerca del valor cero, con medianas de 0.16 en la escuela y -0.02 en el entorno familiar, mostrando tramos centrales simétricos entre aproximadamente -0.7 y 0.7. En todo este bloque destaca un número elevado de datos faltantes (entre 8,655 y 15,941 NAs), derivado de los módulos optativos del cuestionario de contexto PISA.
+**Educación Financiera Escolar e Involucramiento Familiar (`FLSCHOOL` y `FLFAMILY`):** Ambos índices están centrados muy cerca del valor cero, con medianas de 0.16 en la escuela y -0.02 en el entorno familiar, mostrando tramos centrales simétricos entre aproximadamente -0.7 y 0.7.
 
 
 
