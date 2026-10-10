@@ -903,7 +903,7 @@ wrap_plots(lista_graficos, ncol = 3)
 
 ```
 
-**Puntajes de Desempeño Académico:** Las tres competencias evaluadas exhiben una distribución simétrica (con forma de campana de Gauss o distribución normal).
+**Puntajes de Desempeño Académico:** Las tres competencias evaluadas exhiben una distribución aparentemente simétrica con forma de campana, se podría pensar que se distribuyen como una normal .
 
 **Estatus Económico, Social y Cultural:** Muestra una asimetría a la izquierda. Aunque la mayoría de los estudiantes se ubica en niveles medios y medios-altos, la cola se extiende hacia valores negativos (hasta -6), evidenciando un grupo de estudiantes en situación de alta vulnerabilidad socioeconómica.
 
