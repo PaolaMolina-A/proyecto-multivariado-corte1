@@ -10,6 +10,10 @@ Link a la página web:
 
 <a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/" target="_blank">Proyecto Multivariado - Corte 1</a>
 
+Link al video de youtube: 
+
+<a href="https://youtu.be/d-wC_SglBOA">Video Presentación - Primera Entrega</a>
+
 # Introducción: ¿Qué son las Pruebas PISA?
 
 ## Naturaleza y Propósito del Programa
@@ -317,7 +321,7 @@ write_xlsx(
     "Datos" = base_final,
     "Diccionario_Variables" = diccionario_final
   ),
-  path = "base_TOP20_PISA_alfabetizacion_financiera.xlsx"
+  path = "base_TOP30_PISA_alfabetizacion_financiera.xlsx"
 )
 
 ```
@@ -1409,6 +1413,7 @@ for(v in grupo1){
           las = 1,          
           col = "#619CFF", 
           xlab = "Puntaje PV1FLIT", 
+          ylab = " ",
           main = titulos_cualitativos[v])
 }
 ```
@@ -1435,6 +1440,7 @@ for(v in grupo2){
           las = 1,          
           col = "#00BFC4", 
           xlab = "Puntaje PV1FLIT", 
+          ylab = " ",
           main = titulos_cualitativos[v])
 }
 ```
@@ -1461,6 +1467,7 @@ for(v in grupo3){
           las = 1,          
           col = "#F8766D", 
           xlab = "Puntaje PV1FLIT", 
+          ylab = " ",
           main = titulos_cualitativos[v])
 }
 ```
@@ -1487,6 +1494,7 @@ for(v in grupo4){
           las = 1,          
           col = "#E69F00", 
           xlab = "Puntaje PV1FLIT", 
+          ylab = " ",
           main = titulos_cualitativos[v])
 }
 ```
@@ -1544,7 +1552,7 @@ for(v in grupo1){
 }
 ```
 
-**Análisis del Grupo 1:** LLos gráficos muestran una distribución muy pareja. Las proporciones entre hombres y mujeres que tienen cuentas o productos financieros son casi idénticas al promedio general (marg). Esto sugiere que, a los 15 años, el acceso al sistema financiero es prácticamente igual para ambos géneros.
+**Análisis del Grupo 1:** Los gráficos muestran una distribución muy pareja. Las proporciones entre hombres y mujeres que tienen cuentas o productos financieros son casi idénticas al promedio general (marg). Esto sugiere que, a los 15 años, el acceso al sistema financiero es prácticamente igual para ambos géneros.
 
 **Grupo 2: Actitudes, Responsabilidad y Auto confianza**
 
@@ -1564,7 +1572,10 @@ for(v in grupo2){
 }
 ```
 
-**Análisis del Grupo 2:** En las preguntas sobre actitudes sí se notan algunas diferencias. Los gráficos indican que los hombres reportan mayores niveles de confianza y disposición al riesgo, mientras que las mujeres tienden a ser más conservadoras en su percepción sobre el manejo del dinero. **Grupo 3: Entorno Macro y Recursos Escolares**
+**Análisis del Grupo 2:** En las preguntas sobre actitudes sí se notan algunas diferencias. Los gráficos indican que los hombres reportan mayores niveles de confianza y disposición al riesgo, mientras que las mujeres tienden a ser más conservadoras en su percepción sobre el manejo del dinero. 
+
+
+**Grupo 3: Entorno Macro y Recursos Escolares**
 
 ```{r}
 #| label: graficos-grupo3
