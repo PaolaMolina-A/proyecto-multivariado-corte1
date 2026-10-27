@@ -12,8 +12,8 @@ website:
         menu:
           - text: "Primera Entrega"
             href: index.qmd
-          #- text: "Segunda Entrega"
-            #href: corte2.qmd
+          - text: "Segunda Entrega"
+            href: Corte_2/quarto_corte2.qmd
          # - text: "Tercera Entrega"
            # href: corte3.qmd
       - text: "Talleres"
