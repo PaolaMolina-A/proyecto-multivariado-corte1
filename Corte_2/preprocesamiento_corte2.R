@@ -11,9 +11,8 @@ library(writexl)
 set.seed(2026)
 options(scipen = 999)
 
-ruta_excel <- "C:/Users/paoan/Desktop/Mis cosas/Universidad/Multivariado/Proyecto/proyecto-multivariado-corte1/base_TOP30_PISA_alfabetizacion_financiera.xlsx"
 
-base_pisa_post_corte1 <- read_excel(ruta_excel, sheet = "Datos")
+base_pisa_post_corte1 <- read.csv("base_final_pisa.csv")
 
 base_con_subregiones <- base_pisa_post_corte1 %>%
   mutate(

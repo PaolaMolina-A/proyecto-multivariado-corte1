@@ -112,6 +112,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
+<style>
+p {
+  text-align: justify;
+}
+</style>
 
 
 </head>
@@ -203,7 +208,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="muestreo" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> MUESTREO</h1>
+<p>::: {style=“text-align: justify;”}</p>
 <p>Para esta segunda etapa, donde vamos a realizar análisis factoriales, decidimos hacer una reducción de la base de datos con 97983 observaciones, 31 variables de las cuales hay 15cualitativas, 15 cuantitativas, y una variable que tiene la función de identificar las observaciones del estudiante. Esta reducción no es sinónimo de imputación de datos, sino un muestreo, donde tomamos como población la totalidad de observaciones, lo que nos permite tener un marco de lista, y que las probabilidades de inclusión de cada unidad de muestreo del diseño original por parte de PISA sean del mismo valor para todos; cabe aclarar que el curso no se enfoca en el muestreo o inferencia estadística, por lo que no vemos necesario calcular valores propios del diseño muestral para medir el efecto de este, por lo que no necesitamos estimar el tamaño de muestra adecuado para el total de la población. De este modo, usaremos un muestreo aleatorio simple, con un tamaño de 10000 unidades estadísticas, con el fin de reducir la capacidad de cómputo para los análisis posteriores. A continuación, usaremos la función slice_sample() que tomara la muestra, mostraremos la proporción de estudiantes por país en relación al tamaño inicial en la columna “Original”, también la misma proporción, pero respecto al tamaño de la muestra en “Submuestra”; además en la columna “Diferencia” tenemos la diferencia entre las proporciones originales y las muestrales con el fin de mostrar que no se introdujo un sesgo o desproporción en la muestra tomada. Finalmente, anexamos una salida gráfica como ayuda visual, donde comprobamos que las proporciones de observaciones por país se mantuvieron.</p>
+<p>:::</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>

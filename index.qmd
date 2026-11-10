@@ -10,7 +10,7 @@ Link a la página web:
 
 <a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/" target="_blank">Proyecto Multivariado - Corte 1</a>
 
-Link al video de youtube: 
+Link al video de youtube:
 
 <a href="https://youtu.be/d-wC_SglBOA">Video Presentación - Primera Entrega</a>
 
@@ -323,7 +323,7 @@ write_xlsx(
   ),
   path = "base_TOP30_PISA_alfabetizacion_financiera.xlsx"
 )
-
+write.csv(base_final, na = "NA", file = "base_final_pisa.csv")
 ```
 
 # Presentación de las variables.
@@ -335,7 +335,7 @@ El análisis se realiza sobre un conjunto ampliado y curado de **30 variables** 
 Representan mediciones numéricas continuas compuestas por las calificaciones en las áreas principales de PISA, características estructurales del núcleo familiar y por índices estandarizados de estimación de máxima verosimilitud ponderada (WLE).
 
 | Código | Descripción y Contexto | Tipo de Escala | Estudio Fuente |
-|:-----------------|:------------------|:----------------:|:-----------------|
+|:---|:---|:--:|:---|
 | **`PV1FLIT`** | **Alfabetización Financiera:** Puntaje de desempeño del estudiante en la evaluación de competencias financieras (variable de interés principal). | Continua | Estudio 3 |
 | **`PV1MATH`** | **Competencia Matemática:** Puntaje obtenido en la evaluación de matemáticas. | Continua | Estudio 3 |
 | **`PV1READ`** | **Competencia Lectora:** Puntaje obtenido en la evaluación de lectura y comprensión de textos. | Continua | Estudio 3 |
@@ -359,7 +359,7 @@ Representan mediciones numéricas continuas compuestas por las calificaciones en
 Representan atributos demográficos, accesibilidad digital, percepciones cognitivas y comportamientos del entorno del estudiante, dividiéndose en escalas nominales (sin jerarquía) y ordinales (con un orden de gradación implícito).
 
 | Código | Descripción y Contexto | Tipo de Escala | Estudio Fuente |
-|:-----------------|:-----------------|:-----------------:|:-----------------|
+|:---|:---|:--:|:---|
 | **`CNT`** | **País de Origen:** Identificador de la nación o economía participante a la que pertenece el estudiante. | Categórica Nominal | Estudio 4 |
 | **`ST004D01T`** | **Género:** Género reportado por el estudiante. | Categórica Nominal | Estudio 3 |
 | **`ST255Q01JA`** | **Libros en el Hogar:** Estimación del volumen de libros impresos disponibles en la vivienda (proxy de capital cultural). | Categórica Ordinal | Estudio 2 |
@@ -1572,8 +1572,7 @@ for(v in grupo2){
 }
 ```
 
-**Análisis del Grupo 2:** En las preguntas sobre actitudes sí se notan algunas diferencias. Los gráficos indican que los hombres reportan mayores niveles de confianza y disposición al riesgo, mientras que las mujeres tienden a ser más conservadoras en su percepción sobre el manejo del dinero. 
-
+**Análisis del Grupo 2:** En las preguntas sobre actitudes sí se notan algunas diferencias. Los gráficos indican que los hombres reportan mayores niveles de confianza y disposición al riesgo, mientras que las mujeres tienden a ser más conservadoras en su percepción sobre el manejo del dinero.
 
 **Grupo 3: Entorno Macro y Recursos Escolares**
 
