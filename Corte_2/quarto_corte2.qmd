@@ -14,7 +14,7 @@ execute:
   message: false
 ---
 
-# MUESTREO
+# Método de reducción de observaciones
 
 Para esta segunda etapa, donde vamos a realizar análisis factoriales, decidimos hacer una reducción de la base de datos con 97983 observaciones, 31 variables de las cuales hay 15cualitativas, 15 cuantitativas, y una variable que tiene la función de identificar las observaciones del estudiante. Esta reducción no es sinónimo de imputación de datos, sino un muestreo, donde tomamos como población la totalidad de observaciones, lo que nos permite tener un marco de lista, y que las probabilidades de inclusión de cada unidad de muestreo del diseño original por parte de PISA sean del mismo valor para todos; cabe aclarar que el curso no se enfoca en el muestreo o inferencia estadística, por lo que no vemos necesario calcular valores propios del diseño muestral para medir el efecto de este, por lo que no necesitamos estimar el tamaño de muestra adecuado para el total de la población. De este modo, usaremos un muestreo aleatorio simple, con un tamaño de 10000 unidades estadísticas, con el fin de reducir la capacidad de cómputo para los análisis posteriores. A continuación, usaremos la función slice_sample() que tomara la muestra, mostraremos la proporción de estudiantes por país en relación al tamaño inicial en la columna “Original”, también la misma proporción, pero respecto al tamaño de la muestra en “Submuestra”; además en la columna “Diferencia” tenemos la diferencia entre las proporciones originales y las muestrales con el fin de mostrar que no se introdujo un sesgo o desproporción en la muestra tomada. Finalmente, anexamos una salida gráfica como ayuda visual, donde comprobamos que las proporciones de observaciones por país se mantuvieron.
 
@@ -47,7 +47,7 @@ kable(
     bootstrap_options = c("striped", "hover", "condensed")
   )
 
-
+ 
 ```
 
 ```{r grafica muestreo}
@@ -61,7 +61,7 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-# 1. Calcular proporciones para el dataset original y la submuestra
+
 df_prop_orig <- datos_pisa %>%
   filter(!is.na(CNT)) %>%
   count(CNT) %>%
@@ -72,10 +72,10 @@ df_prop_muestra <- datos_c2 %>%
   count(CNT) %>%
   mutate(Porcentaje = (n / sum(n)) * 100, Tipo = "Muestra  (N = 10.000)")
 
-# 2. Unificar los datos para graficar
+
 df_comparacion <- bind_rows(df_prop_orig, df_prop_muestra)
 
-# 3. Graficar la comparación de proporciones
+
 ggplot(df_comparacion, aes(x = reorder(CNT, Porcentaje), y = Porcentaje, fill = Tipo)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7) +
   geom_text(aes(label = sprintf("%.1f%%", Porcentaje)), 
@@ -99,409 +99,662 @@ ggplot(df_comparacion, aes(x = reorder(CNT, Porcentaje), y = Porcentaje, fill = 
   )
 ```
 
+# Análisis de componentes principales
 
+## Resumen del análisis cuantitativo univariado
 
+Para fundamentar la construcción de los espacios factoriales, se retomaron las 15 variables cuantitativas continuas del módulo de Alfabetización Financiera de PISA 2022, estructuradas en cuatro dimensiones principales:
 
+- **Rendimiento Cognitivo (`PV1FLIT`, `PV1MATH`, `PV1READ`):** Las tres pruebas muestran distribuciones simétricas y acampanadas, muy parecidas a una distribución normal. Registran promedios cercanos (473 en alfabetización financiera, 447.5 en matemáticas y 455.1 en lectura) y una elevada varianza muestral, lo que refleja una notable dispersión en las capacidades académicas de los estudiantes.
 
+- **Estatus Socioeconómico y Recursos del Hogar (`ESCS`, `HOMEPOS`, `HISEI`, `PAREDINT`):** Presentan promedios e índices estandarizados centrados cerca de cero. `ESCS` expone una asimetría hacia la izquierda con valores mínimos cercanos a -6.0, evidenciando un segmento de alta vulnerabilidad socioeconómica. Por su parte, `PAREDINT` muestra una fuerte concentración en los niveles educativos superiores (mediana de 16 años de escolaridad parental) y `HISEI` cubre un rango amplio de prestigio ocupacional (11 a 89 puntos).
 
+- **Actitudes, Acceso y Familiaridad Financiera (`FLCONFIN`, `ACCESSFP`, `FCFMLRTY`):** `FLCONFIN` (confianza) exhibe un comportamiento simétrico alrededor de su mediana (-0.10). `ACCESSFP` (acceso a productos) se concentra fuertemente en niveles medios, con presencia de atípicos hacia la cola superior. `FCFMLRTY` (reconocimiento de conceptos) presenta una acumulación inicial en el valor 0 y una amplia dispersión en el rango de conteo (0 a 16).
 
-
-
-
-
-
-
-
-# Análisis de Correspondencias Simples (ACS)
-
-## Introducción y justificación
-
-Para el ACS necesitábamos dos variables cualitativas con varias categorías, y el profesor pidió que entre las dos hubiera 10 o más. Casi todas las variables del cuestionario tenían entre 2 y 6 opciones, así que cruzarlas directamente no daba mucho para analizar.
-
-Por eso volvimos categórica la nota de alfabetización financiera (`PV1FLIT`), partiéndola en cinco grupos con los quintiles de la muestra, y la cruzamos con los países reunidos en siete subregiones. Para Europa usamos la clasificación de la ONU y la partimos en norte/occidental y sur. A Malasia la dejamos con su propio nombre, porque no tenía sentido llamarla una región. Nos queda una tabla de 5 filas por 7 columnas, pero Malasia entra como columna suplementaria, así que las categorías activas son 11 (5 de nota y 6 subregiones).
-
-Hay cosas que hay que tener claras antes de leer cualquier resultado:
-
-- **Los grupos de nota son relativos a nuestra muestra.** «Muy bajo» quiere decir que el estudiante está en el 20% más bajo de los 10.000, no que tenga un nivel bajo en la escala de PISA.
-- **La muestra es nuestra población.** Sacamos 10.000 estudiantes con muestreo aleatorio simple y todo lo que sigue habla de ellos. Como la materia es exploratoria y no inferencial, no decimos nada sobre todos los estudiantes que presentaron la prueba. Por eso las lecturas son del tipo «parece ser que…» o «en esta muestra se ve que…».
-- **Las subregiones no pesan igual.** Cada una pesa según cuántos de sus estudiantes cayeron en la muestra, y eso condiciona cómo leemos los gráficos.
-- **Las subregiones son una agrupación nuestra.** Reunimos países de economías y culturas parecidas, pero dentro de cada subregión puede haber países que se comportan distinto. Lo que veamos de una subregión es un promedio de sus países.
-
-## Definición de las variables
-
-La nota `PV1FLIT` se parte en cinco grupos con los quintiles de los 10.000 estudiantes. Como los cortes salen de la misma muestra, cada grupo queda cerca del 20% por construcción. No es exactamente 20% porque hay puntajes repetidos en los bordes.
-
-Las subregiones quedan así:
-
-| Subregión | Países |
-| :--- | :--- |
-| Norteamerica | Canadá, Estados Unidos |
-| America_Latina | Brasil, Perú, Costa Rica |
-| Europa_Norte_Occidental | Bélgica, Países Bajos, Noruega, Dinamarca, Austria |
-| Europa_Sur | Italia, España, Portugal |
-| Europa_Oriental | República Checa, Polonia, Hungría, Bulgaria |
-| Medio_Oriente | Emiratos Árabes Unidos, Arabia Saudita |
-| Malasia | Malasia |
-
-## Aspectos a tener en cuenta del ACS
-
-1. **Las categorías con poca gente.** En el ACS las distancias se miden con la métrica $\chi^2$, que le da más peso a las categorías pequeñas. Una categoría con muy pocos estudiantes puede terminar dominando un eje y deformar el gráfico. Agrupar los países en subregiones busca evitar eso, y por eso vamos a revisar cuánta gente quedó en las más pequeñas (Malasia y Europa_Sur) antes de interpretar.
-
-2. **La inercia.** En el ACS la inercia se puede leer directamente, sin correcciones como en el ACM. Con 5 filas y 6 columnas activas el máximo son 4 ejes, así que no hay mucho para reducir. Cuántos ejes retenemos lo decidimos cuando veamos los valores propios.
-
-3. **El punto de referencia.** El centro del gráfico es el perfil promedio de toda la muestra. Como una buena parte de los estudiantes es de Europa, ese promedio se va a parecer a un perfil europeo, y las subregiones europeas probablemente caigan cerca del centro. Eso no quiere decir que Europa sea «normal» y las demás «raras», solo que todo se compara contra esta muestra.
-
-4. **Las categorías de nota están ordenadas.** Cuando las categorías de una variable tienen orden, es común que en el primer plano se forme un arco. Si pasa, se explica así y no como un hallazgo raro.
-
-
-
-## Preparación de las variables
+- **Entorno Escolar y Socialización Familiar (`FLSCHOOL`, `FLFAMILY`, `FRINFLFM`, `CREATSCH`, `FAMSUPSL`):** Los índices de instrucción escolar (`FLSCHOOL`), diálogo en casa (`FLFAMILY`) e influencia de pares (`FRINFLFM`) se distribuyen simétricamente en torno al promedio poblacional. Se destaca que variables pertenecientes a módulos opcionales como `FAMSUPSL` y `CREATSCH` registran una elevada proporción de datos faltantes (*Missing by Design*) debido a su omisión en algunos países participantes.
 
 ```{r}
-#| label: preparacion-acs
-#| echo: true
-#| message: false
+#| label: grafico-nas-cuantitativas
 #| warning: false
+#| message: false
+#| fig.width: 10
+#| fig.height: 6
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+titulos_cuantitativos <- c(
+  "PV1FLIT"  = "Puntaje en Alfabetización Financiera",
+  "PV1MATH"  = "Puntaje en Matemática",
+  "PV1READ"  = "Puntaje en Lectura",
+  "ESCS"     = "Estatus Económico, Social y Cultural",
+  "HOMEPOS"  = "Posesiones en el Hogar",
+  "FLCONFIN" = "Confianza en Asuntos Financieros",
+  "ACCESSFP" = "Acceso a Productos Financieros",
+  "FCFMLRTY" = "Familiaridad con Conceptos Financieros",
+  "FLSCHOOL" = "Educación Financiera en el Colegio",
+  "FLFAMILY" = "Involucramiento Familiar en Finanzas",
+  "HISEI"    = "Estatus Ocupacional Máximo de los Padres",
+  "PAREDINT" = "Años Escolares de los Padres (Escala Int.)",
+  "FRINFLFM" = "Influencia de Amigos en Asuntos Financieros",
+  "CREATSCH" = "Ambiente Escolar y de Clase Creativo",
+  "FAMSUPSL" = "Apoyo Familiar para el Aprendizaje Autónomo"
+)
+vars_cuanti <- names(titulos_cuantitativos)
+df_nas <- datos_c2 %>%
+  select(all_of(vars_cuanti)) %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
+  pivot_longer(cols = everything(), names_to = "Variable_Codigo", values_to = "Total_NAs") %>%
+  mutate(
+    Porcentaje = (Total_NAs / nrow(datos_c2)) * 100,
+    Variable = titulos_cuantitativos[Variable_Codigo]
+  ) %>%
+  arrange(desc(Total_NAs))
+
+
+ggplot(df_nas, aes(x = reorder(Variable, Total_NAs), y = Total_NAs)) +
+  geom_col(fill = "#023047", color = "white", width = 0.7) +
+  geom_text(aes(label = sprintf("%s (%.1f%%)", format(Total_NAs, big.mark = "."), Porcentaje)), 
+            hjust = -0.1, size = 3.1, fontface = "bold", color = "#023047") +
+  coord_flip(ylim = c(0, max(df_nas$Total_NAs) * 1.25)) +
+  labs(
+    title = "Conteo Total de Datos Faltantes (NAs) por Variable Cuantitativa",
+    subtitle = "Submuestra PISA 2022 (N = 10.000 estudiantes)",
+    x = "Variable Cuantitativa",
+    y = "Cantidad de NAs"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13, color = "#023047"),
+    axis.text.y = element_text(face = "bold", color = "black", size = 9),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+El diagrama ilustra la marcada polarización en la presencia de datos faltantes en la submuestra. Las tres competencias cognitivas principales (`PV1FLIT`, `PV1MATH` y `PV1READ`) presentan integridad total (0% de NAs). En el extremo opuesto, la variable de apoyo familiar (`FAMSUPSL`) encabeza la omisión con más del 40% de registros ausentes, seguida por el ambiente creativo escolar (`CREATSCH`) e influencias contextuales (`FRINFLFM`, `FLCONFIN`, `ACCESSFP`), las cuales oscilan entre el 15% y el 20% de valores vacíos.
+
+Incluir las 15 variables cuantitativas en el ACP en su estado actual conlleva graves consecuencias metodológicas:
+
+1.  La matemática del ACP exige matrices completas. Si se ejecuta el algoritmo por defecto en R (`FactoMineR::PCA`), el sistema aplica un borrado por listas (`na.omit()`), eliminando a cualquier estudiante que tenga al menos un `NA` en cualquiera de las variables activas. Al combinar variables con un alto volumen de faltantes, la submuestra efectiva de 10.000 observaciones se reduciría a una fracción mínima, destruyendo la representatividad.
+
+2.  **Sesgo de selección e invalidez de los ejes factoriales:** Si la omisión de datos no es aleatoria, eliminar por completo los registros incompletos provocaría la exclusión sistemática de países o perfiles enteros del cálculo. Esto distorsionaría la matriz de correlaciones sobre la que se construyen los componentes principales, generando ejes factoriales sesgados que no reflejarían la varianza real de la población estudiada.
+
+## Tratamiento de datos faltantes (Na's)
+
+Antes de abordar la reducción de dimensión mediante el Análisis de Componentes Principales (ACP), es indispensable establecer una estrategia rigurosa para la gestión de los datos faltantes. La presencia de valores ausentes condiciona de manera directa la construcción de las matrices de covarianza y correlación, por lo que su tratamiento debe responder a la naturaleza estadística del problema y no a un procedimiento automatizado, comúnmente usan imputación de datos sin precaución.
+
+### Métodos Tradicionales para la Gestión de NAs
+
+En la práctica estadística existen tres aproximaciones generales para abordar la falta de datos:
+
+- **Eliminación por Listas (*Listwise Deletion* o `na.omit`):** Consiste en descartar cualquier registro que contenga al menos un dato faltante en el conjunto de variables activas. Aunque es el método por defecto en la mayoría de paquetes computacionales, genera una pérdida masiva de tamaño muestral y solo es insesgado si los vacíos ocurren completamente al azar (*Missing Completely at Random - MCAR*).
+
+- **Imputación Simple (Media, Mediana o Moda):** Reemplaza cada valor ausente por la medida de tendencia central de la variable. Si bien preserva el tamaño de la muestra, presenta el grave inconveniente de comprimir artificialmente la varianza e inflar las correlaciones, distorsionando la estructura variacional que el ACP intenta resumir.
+
+- **Imputación Factorial o Múltiple (`missMDA`, `MICE`):** Estima los valores ausentes prediciéndolos a partir de las relaciones lineales con las demás variables continuas del modelo. Es una alternativa avanzada y técnicamente sólida cuando los vacíos son de magnitud moderada y corresponden a respuestas omitidas aleatoriamente por los individuos (*Missing at Random - MAR*).
+
+- **Identificación de Patrones Estructurales (*Missing by Design*):** Consiste en auditar la distribución de las omisiones cruzándolas contra variables de agrupación (como el país de origen o el tipo de colegio). Permite comprobar si la ausencia de datos responde a una omisión aleatoria del estudiante o a una decisión institucional del diseño de la prueba.
+
+### Justificación del método de tratamiento de datos faltantes
+
+Los anteriores métodos, usan en su mayoría técnicas avanzadas, por lo que se sale de los objetivos de este curso, así que usarlos no es necesario, de modo que usaremos la identificación de patrones estructurales, para identificar un posible patrón en los datos faltantes, así justificar la eliminación de la categoría que mas lo contenga, en caso que no se identifique un patrón, nos veremos forzados a trabajar el ACP con menos variables activas. Las razones metodológicas que fundamentan esta decisión son las siguientes:
+
+1.  **Riesgo de sesgo por volumen de vacíos:** La análisis univariado previo evidenció que variables como el apoyo familiar (`FAMSUPSL`) superan el 40% de registros faltantes en la muestra. Someter una variable con este volumen de vacíos a un proceso de imputación significaría "inventar" sintéticamente las respuestas de más de 4.000 estudiantes, inyectando varianza artificial e invalidando la geometría de los ejes factoriales.
+
+2.  **Naturaleza institucional del estudio PISA:** En las pruebas PISA, diversos módulos del cuestionario de contexto son de carácter opcional para los estados participantes. Cuando un país decide no aplicar un módulo complementario (como el de recursos TIC o entorno creativo), el 100% de sus estudiantes registra automáticamente `NA` en esas columnas. Imputar estos valores implicaría asignar valores simulados a estudiantes de países donde la pregunta jamás fue formulada.
+
+3.  **Preservación de la validez empírica:** Al identificar qué variables responden al patrón *Missing by Design*, es posible tomar decisiones transparentes: bien sea excluir del ACP las variables opcionales con omisión masiva para trabajar con variables puramente observadas en los 20 países, o filtrar países específicos conservando la integridad de los datos restantes.
+
+```{r}
+#| label: patron-nas
+#| warning: false
+#| message: false
+
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+
+tabla_nas_pais <- datos_c2 %>%
+  group_by(CNT) %>%
+  summarise(across(all_of(vars_cuanti), ~ round(mean(is.na(.)) * 100, 1)))
+
+
+kable(
+  tabla_nas_pais, 
+  caption = "Porcentaje de Datos Faltantes (NA) por País y Variable Cuantitativa",
+  align = "c"
+) %>%
+  kable_styling(
+    full_width = FALSE, 
+    position = "center", 
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  scroll_box(width = "100%", height = "450px")
+
+```
+
+```{r}
+#| label: tabla-nas-cuantitativas
+#| warning: false
+#| message: false
+#| fig.width: 10
+#| fig.height: 6
+modulos_omitidos <- tabla_nas_pais %>%
+  pivot_longer(cols = -CNT, names_to = "Variable_Codigo", values_to = "Pct_NA") %>%
+  filter(Pct_NA >= 60) %>%
+  mutate(Variable = titulos_cuantitativos[Variable_Codigo]) %>%
+  select(CNT, Variable, Pct_NA)
+
+kable(
+  modulos_omitidos,
+  col.names = c("País (CNT)", "Variable Omitida", "% de NA"),
+  caption = "países que aportan mas de un 60% de datos faltantes"
+) %>%
+  kable_styling(full_width = FALSE, position = "center", bootstrap_options = c("striped", "hover"))
+```
+
+La tabla evidencia que la falta de datos en ciertos casos se debe a que la pregunta no se realizó en ese país. Costa Rica (CRI) no aplicó el módulo socioeconómico y familiar (ESCS, HISEI y PAREDINT), registrando un 100% de datos faltantes. Por su parte, República Checa (CZE), Dinamarca (DNK) y Noruega (NOR) no evaluaron el apoyo familiar (FAMSUPSL), mientras que Estados Unidos (USA) omitió el módulo de ambiente escolar creativo (CREATSCH). Esto confirma que la ausencia de respuestas no es aleatoria ni depende del estudiante, sino que responde a la estructura con la que se aplicó la prueba en cada país.
+
+## Decisión Metodológica para el ACP 
+
+Con base en estos hallazgos, tomamos dos decisiones para mantener la validez del Análisis de Componentes Principales sin recurrir a imputaciones sintéticas:Retiro de variables opcionales: Se excluyen del ACP las variables FAMSUPSL y CREATSCH. Al retirarlas, recuperamos la integridad de los datos de Estados Unidos, República Checa, Dinamarca y Noruega. Tratamiento de Costa Rica: Debido a que Costa Rica no aplicó el bloque socioeconómico (ESCS, HISEI, PAREDINT), se excluye este país para la ejecución del ACP.
+
+```{r}
+#| label: creacion-base-acp
+#| warning: false
+#| message: false
+
+library(dplyr)
+library(tidyr)
+titulos_cuantitativos <- c(
+  "PV1FLIT"  = "Puntaje en Alfabetización Financiera",
+  "PV1MATH"  = "Puntaje en Matemática",
+  "PV1READ"  = "Puntaje en Lectura",
+  "ESCS"     = "Estatus Económico, Social y Cultural",
+  "HOMEPOS"  = "Posesiones en el Hogar",
+  "FLCONFIN" = "Confianza en Asuntos Financieros",
+  "ACCESSFP" = "Acceso a Productos Financieros",
+  "FCFMLRTY" = "Familiaridad con Conceptos Financieros",
+  "FLSCHOOL" = "Educación Financiera en el Colegio",
+  "FLFAMILY" = "Involucramiento Familiar en Finanzas",
+  "HISEI"    = "Estatus Ocupacional Máximo de los Padres",
+  "PAREDINT" = "Años Escolares de los Padres (Escala Int.)",
+  "FRINFLFM" = "Influencia de Amigos en Asuntos Financieros"
+)
+
+vars_acp <- names(titulos_cuantitativos)
+
+
+base_acp <- datos_c2 %>%
+  filter(CNT != "CRI" & CNT != "Costa Rica") %>%
+  select(all_of(vars_acp), CNT, ST004D01T )
+
+cat("Muestra restante en base_acp:", nrow(base_acp), "estudiantes en 19 países.\n")
+```
+
+s
+
+```{r}
+#| label: grafico-nas-base-acp
+#| warning: false
+#| message: false
+#| fig.width: 10
+#| fig.height: 5.5
+
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+
+
+df_nas_acp <- base_acp %>%
+  select(all_of(vars_acp)) %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
+  pivot_longer(cols = everything(), names_to = "Variable_Codigo", values_to = "Total_NAs") %>%
+  mutate(
+    Porcentaje = (Total_NAs / nrow(base_acp)) * 100,
+    Variable = titulos_cuantitativos[Variable_Codigo]
+  ) %>%
+  arrange(desc(Total_NAs))
+
+
+ggplot(df_nas_acp, aes(x = reorder(Variable, Total_NAs), y = Porcentaje)) +
+  geom_col(fill = "#219EBC", color = "white", width = 0.7) +
+  geom_text(aes(label = sprintf("%s NAs (%.1f%%)", format(Total_NAs, big.mark = "."), Porcentaje)), 
+            hjust = -0.1, size = 3.2, fontface = "bold", color = "#023047") +
+  coord_flip(ylim = c(0, max(df_nas_acp$Porcentaje) * 1.3)) +
+  labs(
+    title = "Porcentaje de Datos Faltantes Residuales en base_acp",
+    subtitle = "Matriz optimizada (13 variables cuantitativas x 19 países)",
+    x = "Variable Cuantitativa",
+    y = "Porcentaje de NAs (%)"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13, color = "#023047"),
+    axis.text.y = element_text(face = "bold", color = "black", size = 9),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+La gráfica demuestra el impacto positivo de las decisiones metodológicas adoptadas. Al retirar las variables opcionales FAMSUPSL y CREATSCH, el porcentaje máximo de datos faltantes por variable se redujo de más del 40% a un máximo de apenas 10.3% (en FLCONFIN). Asimismo, la exclusión de Costa Rica eliminó el 100% de NAs que afectaba al bloque de estatus socioeconómico (ESCS, HISEI y PAREDINT), el cual ahora presenta una integridad casi perfecta (entre 0% y 2.4% de vacíos).
+
+```{r}
+#| label: tabla-comparativa-impacto-metodologia
+#| warning: false
+#| message: false
 
 library(dplyr)
 library(knitr)
 library(kableExtra)
-library(FactoClass)   # carga ade4 también
 
-# Orden fijo de las subregiones (así salen siempre igual en tablas y gráficos)
-niveles_subregion <- c("Norteamerica", "America_Latina", "Europa_Norte_Occidental",
-                       "Europa_Sur", "Europa_Oriental", "Medio_Oriente", "Malasia")
 
-# Revisar que no haya NA en la nota antes de partirla
-stopifnot("Hay NA en PV1FLIT: decidir qué hacer antes de seguir" = !anyNA(datos_c2$PV1FLIT))
+vars_15_orig <- c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS", 
+                  "FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY", 
+                  "HISEI", "PAREDINT", "FRINFLFM", "CREATSCH", "FAMSUPSL")
 
-# Cortes de los quintiles calculados sobre la muestra completa
-cortes <- quantile(datos_c2$PV1FLIT, probs = seq(0, 1, 0.2))
+vars_13_opt <- c("PV1FLIT", "PV1MATH", "PV1READ", "ESCS", "HOMEPOS", 
+                 "FLCONFIN", "ACCESSFP", "FCFMLRTY", "FLSCHOOL", "FLFAMILY", 
+                 "HISEI", "PAREDINT", "FRINFLFM")
 
-datos_acs <- datos_c2 %>%
+
+df_submuestra <- datos_c2 %>% 
+  select(all_of(vars_15_orig), CNT) %>% 
+  na.omit()
+
+n_submuestra <- nrow(df_submuestra)
+paises_submuestra <- length(unique(df_submuestra$CNT))
+pct_submuestra <- (n_submuestra / nrow(datos_c2)) * 100
+
+
+df_metodologico <- base_acp %>% 
+  select(all_of(vars_13_opt), CNT) %>% 
+  na.omit()
+
+n_metodologico <- nrow(df_metodologico)
+paises_metodologico <- length(unique(df_metodologico$CNT))
+pct_metodologico <- (n_metodologico / nrow(datos_c2)) * 100
+
+
+tabla_comparativa <- data.frame(
+  `Criterio de Evaluación` = c(
+    "Variables cuantitativas activas",
+    "Países representados en los resultados",
+    "Países excluidos por datos faltantes",
+    "Estudiantes con información completa (Casos completos)",
+    "Porcentaje de retención muestral sobre los 10.000 iniciales"
+  ),
+  `ACP (Sin tratamiento de NAs)` = c(
+    "15 variables",
+    paste(paises_submuestra, "países"),
+    paste(20 - paises_submuestra, "países (CRI, CZE, DNK, NOR, USA)"),
+    format(n_submuestra, big.mark = "."),
+    sprintf("%.1f%%", pct_submuestra)
+  ),
+  `ACP (Propuesta Metodológica)` = c(
+    "13 variables",
+    paste(paises_metodologico, "países"),
+    "1 país (Costa Rica - por omitir módulo socioeconómico)",
+    format(n_metodologico, big.mark = "."),
+    sprintf("%.1f%%", pct_metodologico)
+  ),
+  check.names = FALSE
+)
+
+# 5. Renderizado de la tabla comparativa
+kable(
+  tabla_comparativa,
+  caption = "Comparación entre el ACP sobre la submuestra de 10000 y el ACP Depurado Metodológicamente"
+) %>%
+  kable_styling(
+    full_width = FALSE, 
+    position = "center", 
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  column_spec(2, bold = TRUE, color = "#D90429") %>%
+  column_spec(3, bold = TRUE, color = "#2A9D8F")
+```
+
+La tabla comparativa evidencia la utilidad técnica de la auditoría de datos faltantes. Si se hubiese aplicado una eliminación por listas estándar (ACP Sin tratamiento de NAs) sobre las 15 variables originales, el choque de datos faltantes en las preguntas opcionales habría provocado la eliminación automática del 100% de los estudiantes de 5 países (Estados Unidos, Dinamarca, Noruega, República Checa y Costa Rica), reduciendo la muestra utilizable a una fracción muy baja. Por el contrario, la estrategia metodológica de tratamiento de datos faltantes por medio de la identificación de Patrones Estructurales, permitió rescatar la totalidad de las observaciones de 4 países al retirar únicamente las 2 variables opcionales con mayor volumen de omisión (FAMSUPSL y CREATSCH). Esto incrementó la retención final de observaciones al 70.1% (7.006 estudiantes) conservando 19 de los 20 países en el análisis.
+
+## Transformación y Estandarización de Variables
+
+¿Por qué es indispensable hacer esta transformación?
+
+Las 13 variables cuantitativas seleccionadas operan en escalas completamente heterogéneas:
+
+- **Puntajes de desempeño (`PV1FLIT`, `PV1MATH`, `PV1READ`):** Escala de 0 a 1.000 puntos (con desviaciones estándar cercanas a 90 o 100 puntos).
+
+- **Índices contextuales (`ESCS`, `HOMEPOS`, `FLCONFIN`, `ACCESSFP`):** Escala estandarizada de respuestas centradas en cero (de -6.0 a +5.0).
+
+- **Educación y Ocupación de Padres (`PAREDINT`, `HISEI`):** Años de escolaridad (3 a 16) y prestigio ocupacional (11 a 89 puntos).
+
+Si se ejecutara el ACP sobre la matriz de covarianzas originales (sin estandarizar), las variables con mayor varianza absoluta (como `PV1FLIT` o `HISEI`) absorberían por completo el primer componente principal únicamente por el tamaño de sus unidades de medida, invisibilizando a los índices contextuales.
+
+Al estandarizar, todas las variables pasan a tener media $\mu = 0$ y varianza $\sigma^2 = 1$, logrando que **todas tengan el mismo peso relativo inicial (1 unidad de inercia)** y operen sobre la matriz de correlación Pearson ($R$).
+
+```{r}
+#| label: transformacion-variables
+#| warning: false
+#| message: false
+
+library(dplyr)
+library(FactoMineR)
+
+base_acp_completa <- base_acp %>% 
+  select(all_of(vars_13_opt), CNT, ST004D01T ) %>% 
+  na.omit()
+
+res_acp <- PCA(
+  X = base_acp_completa,
+  quali.sup = 14,       
+  scale.unit = TRUE,    
+  graph = FALSE
+)
+```
+
+## Varianza explicada y selección de dimensiones (Autovalores)
+
+Una vez estandarizada la matriz de datos `base_acp`, el primer paso en el análisis factorial consiste en descomponer la inercia total del sistema (que en este caso equivale a 13 unidades, correspondiente a las 13 variables cuantitativas estandarizadas).
+
+A continuación se presenta el cálculo de los autovalores ($\lambda_k$), el porcentaje de varianza explicada por cada dimensión y el porcentaje acumulado:
+
+```{r}
+#| label: tabla-autovalores
+#| warning: false
+#| message: false
+
+library(factoextra)
+library(knitr)
+library(kableExtra)
+
+autovalores <- get_eigenvalue(res_acp)
+
+
+tabla_eig <- data.frame(
+  Dimension = paste("Dimensión", 1:min(10, nrow(autovalores))),
+  Autovalor = round(autovalores[1:min(10, nrow(autovalores)), 1], 3),
+  Varianza_Pct = round(autovalores[1:min(10, nrow(autovalores)), 2], 2),
+  Varianza_Acum_Pct = round(autovalores[1:min(10, nrow(autovalores)), 3], 2)
+)
+
+
+kable(
+  tabla_eig,
+  col.names = c("Dimensión", "Autovalor (λ)", "% Varianza Explicada", "% Varianza Acumulada"),
+  align = c("l", "r", "r", "r"),
+  caption = "Descomposición de la Inercia Total y Autovalores"
+) %>%
+  kable_styling(
+    full_width = FALSE, 
+    position = "center", 
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
+
+La tabla de autovalores muestra la capacidad de síntesis del análisis. La **Dimensión 1** y la **Dimensión 2** destacan ampliamente al tener autovalores superiores a 1.0 ($4.003$ y $2.214$, respectivamente), lo que significa que cada una resume más información que una variable individual por separado. Al combinar estas dos primeras dimensiones en un plano cartesiano (Eje X y Eje Y), se logra resumir el **47.82% de toda la información del estudio**. A partir de la Dimensión 4, la ganancia de información se vuelve residual ($\lambda < 1.0$),
+
+### Gráfico de Codo
+
+Para evaluar de forma gráfica la velocidad de decaimiento de la inercia explicada y determinar el punto de inflexión del espacio multidimensional, se genera el gráfico de codo:
+
+```{r}
+#| label: grafico-codo-autovalores
+#| warning: false
+#| message: false
+#| fig.width: 9
+#| fig.height: 5
+
+# Gráfico de codo para visualizar la caída de varianza
+fviz_eig(
+  res_acp,
+  addlabels = TRUE,
+  ylim = c(0, max(autovalores[, 2]) + 10),
+  barfill = "#023047",
+  barcolor = "#023047",
+  linecolor = "#FB8500",
+  choice = "variance",
+  ggtheme = theme_minimal(base_size = 11),
+  main = "Gráfico de Codo: Porcentaje de Varianza Explicada por Dimensión"
+) +
+  labs(
+    x = "Dimensiones Factoriales", 
+    y = "Porcentaje de Varianza Explicada (%)"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13, color = "#023047"),
+    axis.title = element_text(face = "bold")
+  )
+```
+
+El gráfico de codo muestra un punto de quiebre o inflexión claro a partir del segundo componente principal. Tras la marcada pendiente observada entre la Dimensión 1 y la Dimensión 2, la curva se estabiliza en una meseta lineal donde cada dimensión subsiguiente aporta incrementos marginales pequeños de inercia explicada.
+
+### Criterios de Selección del Número de Ejes a Retener
+
+Con base en la teoría metodológica del Análisis Multivariado, la selección del plano factorial se fundamenta en tres criterios complementarios:
+
+1.  **Criterio de Kaiser (**$\lambda_k > 1$**):** Propone retener únicamente aquellas dimensiones cuyo autovalor sea mayor a la varianza promedio de una variable estandarizada ($\lambda > 1$). En este análisis, las dimensiones que satisfacen dicho umbral representan la mayor parte del comportamiento estructural de los datos.
+
+2.  **Criterio del Codo (Inflexión de Cattell):** El gráfico de codo confirma que el cambio de pendiente decisivo ocurre tras el segundo componente principal, recomendando el corte en la Dimensión 2.
+
+## Interpretación del Plano Factorial y Componentes Principales
+
+Siguiendo el esquema del profesor Campo Elías, tras seleccionar las dos primeras dimensiones factoriales ($Dim 1 \times Dim 2$), el siguiente paso consiste en interpretar la naturaleza de los ejes a partir de las **variables activas** (analizando sus coordenadas, calidad de representación $\cos^2$ y contribución $ctr$).
+
+#### Círculo de Correlación y Caracterización de los Ejes
+
+```{r}
+#| label: tabla-contribuciones-cos2
+#| warning: false
+#| message: false
+
+
+var_res <- get_pca_var(res_acp)
+
+
+tabla_vars <- data.frame(
+  Variable_Codigo = rownames(var_res$coord),
+  Coord_D1 = round(var_res$coord[, 1], 3),
+  Cos2_D1  = round(var_res$cos2[, 1], 3),
+  Ctr_D1   = round(var_res$contrib[, 1], 2),
+  Coord_D2 = round(var_res$coord[, 2], 3),
+  Cos2_D2  = round(var_res$cos2[, 2], 3),
+  Ctr_D2   = round(var_res$contrib[, 2], 2)
+) %>%
+  mutate(Variable = titulos_cuantitativos[Variable_Codigo]) %>%
+  select(Variable, Coord_D1, Cos2_D1, Ctr_D1, Coord_D2, Cos2_D2, Ctr_D2) %>%
+  arrange(desc(Ctr_D1))
+
+
+kable(
+  tabla_vars,
+  col.names = c("Variable", "Coord D1", "Cos² D1", "Ctr D1 (%)", "Coord D2", "Cos² D2", "Ctr D2 (%)"),
+  caption = "Indicadores Factoriales de las 13 Variables Activas (Ejes 1 y 2)",
+  align = c("l", "r", "r", "r", "r", "r", "r")
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  )
+```
+
+La tabla resume los tres indicadores clave para interpretar cada eje:
+
+- **Coordenada (`Coord`):** Correlación lineal entre la variable y el eje factorial (va de $-1$ a $+1$).
+
+- **Calidad de representación (**$\cos^2$**):** Qué tan bien proyectada está la variable en ese eje (valores cercanos a 1 indican alta fidelidad).
+
+- **Contribución (`Ctr`):** Porcentaje con el que la variable participa en la construcción de ese eje (el valor teórico promedio para 13 variables es $\frac{100}{13} \approx 7.69\%$).
+
+Se observa que el **Eje 1** está construido principalmente por los tres puntajes de rendimiento académico (`PV1FLIT`, `PV1MATH`, `PV1READ`) y los indicadores socioeconómicos (`ESCS`, `HISEI`), todos con contribuciones superiores al $10\%$ y correlaciones positivas altas. En contraste, el **Eje 2** está dominado por las variables contextuales de familiaridad, educación y actitud financiera (`FCFMLRTY`, `FLSCHOOL`, `FLCONFIN`, `ACCESSFP`), que aportan las mayores contribuciones a la segunda dimensión.
+
+```{r}
+#| label: circulo-correlacion-variables
+#| warning: false
+#| message: false
+#| fig.width: 8.5
+#| fig.height: 7
+
+
+fviz_pca_var(
+  res_acp,
+  col.var = "contrib", 
+  gradient.cols = c("#2A9D8F", "#E9C46A", "#E76F51"),
+  repel = TRUE,
+  title = "Círculo de Correlación de Variables Activas (Ejes 1 y 2)"
+) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13, color = "#023047"),
+    axis.title = element_text(face = "bold")
+  )
+```
+
+El círculo de correlación refleja la estructura geométrica de las variables en el plano cartesiano:
+
+- **Flechas hacia la derecha (Eje 1 positivo):** Las pruebas académicas (`PV1FLIT`, `PV1MATH`, `PV1READ`) y el nivel socioeconómico (`ESCS`, `HISEI`, `PAREDINT`) se agrupan en un haz estrecho de vectores muy largos orientados horizontalmente. Esto indica una **fuerte correlación positiva entre sí**: los estudiantes con mayor estatus socioeconómico tienden a registrar un desempeño superior en todas las áreas evaluadas.
+
+- **Flechas hacia arriba (Eje 2 positivo):** Las variables **`ACCESSFP`** (acceso a productos), **`FLFAMILY`** (involucramiento familiar), **`FLSCHOOL`** (educación financiera en la escuela) y **`FRINFLFM`** (influencia de amigos) se proyectan prácticamente de forma vertical alineadas con el Eje 2. Su ángulo ortogonal ($90^\circ$) respecto a la horizontal confirma que la formación, el acceso práctico y la interacción con el entorno financiero son estadísticamente independientes del desempeño académico y del estatus socioeconómico.
+
+- **Variables de transición:** `FCFMLRTY` (familiaridad con conceptos) y `FLCONFIN` (confianza financiera) forman un ángulo intermedio, aportando varianza compartida tanto a la dimensión socioeducativa (Eje 1) como a la dimensión de socialización práctica (Eje 2).
+
+#### Nombramiento y Definición Conceptual de los Ejes
+
+A partir de las contribuciones y correlaciones observadas, se definen los dos componentes principales retenidos:
+
+1.  **Dimensión 1: *Rendimiento Académico y Capital Socioeducativo* (30.79% de varianza)**
+
+    - **Polaridad:** Hacia el polo positivo se ubican los altos puntajes en competencia financiera, matemáticas y lectura, respaldados por un mayor estatus ocupacional y educativo de los padres (`ESCS`, `HISEI`, `PAREDINT`).
+
+    - **Interpretación:** Este eje sintetiza la dimensión del éxito académico estructural y las oportunidades asociadas al entorno socioeconómico del hogar.
+
+2.  **Dimensión 2: *Entorno, Confianza y Familiaridad Financiera Práctica* (17.03% de varianza)**
+
+    - **Polaridad:** Representa la exposición directa del estudiante a la educación financiera formal (`FLSCHOOL`), la vivencia familiar (`FLFAMILY`), el acceso a herramientas financieras (`ACCESSFP`) y la influencia de pares (`FRINFLFM`), de forma totalmente independiente a sus notas o a su nivel de ingresos.
+
+    - **Interpretación:** Este eje capta el nivel de socialización e interacción práctica del estudiante con el entorno financiero, de manera independiente de su rendimiento académico tradicional.
+
+#### Proyección Suplementaria de Países (`CNT`) y Patrones Regionales
+
+Para evaluar cómo se ubican los países dentro del espacio estructurado por el rendimiento académico y el entorno de socialización financiera, la variable cualitativa **`CNT`** se proyecta de forma suplementaria (sin influir en la construcción de los ejes).
+
+1\. Indicadores Factoriales de los Centroides por País
+
+```{r}
+#| label: tabla-centroides-paises
+#| warning: false
+#| message: false
+
+library(FactoMineR)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+
+paises_res <- res_acp$quali.sup
+
+tabla_paises <- data.frame(
+  Pais = rownames(paises_res$coord),
+  Coord_D1 = round(paises_res$coord[, 1], 3),
+  Cos2_D1  = round(paises_res$cos2[, 1], 3),
+  Vtest_D1 = round(paises_res$v.test[, 1], 2),
+  Coord_D2 = round(paises_res$coord[, 2], 3),
+  Cos2_D2  = round(paises_res$cos2[, 2], 3),
+  Vtest_D2 = round(paises_res$v.test[, 2], 2)
+) %>%
+  arrange(desc(Coord_D1))
+
+
+kable(
+  tabla_paises,
+  col.names = c("País (CNT)", "Coord D1", "Cos² D1", "v-test D1", "Coord D2", "Cos² D2", "v-test D2"),
+  caption = "Posicionamiento Factorial y Pruebas de Valor (v-test) de los Países Suplementarios",
+  align = c("l", "r", "r", "r", "r", "r", "r")
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center",
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  scroll_box(width = "100%", height = "400px")
+```
+
+La prueba de valor (`v-test`) mide la significancia estadística de la distancia del centroide de cada país respecto al origen ($0,0$):
+
+- Un $\vert{}v\text{-test}\vert{} > 1.96$ indica que la posición del país en esa dimensión es significativamente distinta del promedio global al 95% de confianza.
+
+- Los países con valores de `v-test D1` positivos y elevados presentan un nivel de rendimiento académico y estatus socioeconómico significativamente superior a la media global.
+
+2\. Biplot: Proyección Conjunta de Países y Variables
+
+```{r}
+#| label: crear-variable-region-genero
+#| warning: false
+#| message: false
+
+library(dplyr)
+library(FactoMineR)
+
+
+base_acp_completa <- base_acp_completa %>%
   mutate(
-    CNT_chr = trimws(as.character(CNT)),
-    Subregion = case_when(
-      CNT_chr %in% c("Canada", "United States", "CAN", "USA") ~ "Norteamerica",
-      CNT_chr %in% c("Brazil", "Peru", "Costa Rica", "BRA", "PER", "CRI") ~ "America_Latina",
-      CNT_chr %in% c("Belgium", "Netherlands", "Norway", "Denmark", "Austria",
-                     "BEL", "NLD", "NOR", "DNK", "AUT") ~ "Europa_Norte_Occidental",
-      CNT_chr %in% c("Italy", "Spain", "Portugal", "ITA", "ESP", "PRT") ~ "Europa_Sur",
-      CNT_chr %in% c("Czech Republic", "Poland", "Hungary", "Bulgaria",
-                     "CZE", "POL", "HUN", "BGR") ~ "Europa_Oriental",
-      CNT_chr %in% c("United Arab Emirates", "Saudi Arabia", "ARE", "SAU") ~ "Medio_Oriente",
-      CNT_chr %in% c("Malaysia", "MYS") ~ "Malasia",
-      TRUE ~ NA_character_     # lo que no coincida queda NA, no se esconde en "Otro"
+    Genero = factor(ifelse(ST004D01T == 1, "Femenino", "Masculino")),
+    Region = case_when(
+      CNT %in% c("PER", "BRA") ~ "América Latina",
+      CNT %in% c("CAN", "USA") ~ "Norteamérica",
+      CNT %in% c("ESP", "PRT", "ITA", "AUT", "BEL", "NLD", "DNK", "NOR") ~ "Europa Occidental",
+      CNT %in% c("POL", "HUN", "CZE", "BGR") ~ "Europa Oriental",
+      CNT %in% c("MYS", "SAU", "ARE") ~ "Asia / Medio Oriente",
+      TRUE ~ "Otros"
     ),
-    Subregion = factor(Subregion, levels = niveles_subregion),
-    Nivel_Desempeno = cut(
-      PV1FLIT,
-      breaks = cortes,
-      labels = c("Q1: Muy bajo", "Q2: Bajo", "Q3: Medio", "Q4: Alto", "Q5: Muy alto"),
-      include.lowest = TRUE,
-      right = TRUE
-    )
   )
 
-# Si algún país no entró en ninguna subregión, mostrar cuál es y detenerse
-sin_clasificar <- datos_acs %>% filter(is.na(Subregion)) %>% count(CNT_chr)
-if (nrow(sin_clasificar) > 0) print(sin_clasificar)
-stopifnot("Hay países sin subregión: revisar el case_when" = nrow(sin_clasificar) == 0)
-stopifnot("Hay NA en el nivel de desempeño" = !anyNA(datos_acs$Nivel_Desempeno))
-```
 
-## Exploración univariada de las dos variables
-
-Antes del ACS miramos cómo se reparten los 10.000 estudiantes en las dos variables. En los quintiles ya sabemos que cada grupo va a quedar cerca del 20% porque así los construimos, así que ahí no hay mucho que mirar. Lo que sí nos interesa es la subregión: esos porcentajes son los pesos de las categorías en el análisis, y una subregión con poca gente va a influir menos en los ejes.
-
-```{r}
-#| label: tablas-univariadas-acs
-#| echo: true
-
-# Tabla 1: grupos de desempeño
-tab_nivel <- table(datos_acs$Nivel_Desempeno)
-tabla_cortes <- data.frame(
-  Grupo      = names(tab_nivel),
-  Desde      = round(cortes[1:5], 2),
-  Hasta      = round(cortes[2:6], 2),
-  n          = as.vector(tab_nivel),
-  Porcentaje = round(as.vector(prop.table(tab_nivel)) * 100, 1),
-  row.names  = NULL
+res_acp_sup <- PCA(
+  X = base_acp_completa,
+  quali.sup = c("CNT", "Region", "Genero"),
+  scale.unit = TRUE,
+  graph = FALSE
 )
-kable(tabla_cortes,
-      caption = "Tabla 1. Grupos de desempeño según los quintiles de PV1FLIT (muestra de 10.000)") %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
 
-# Tabla 2: estudiantes por subregión
-tab_sub <- table(datos_acs$Subregion)
-tabla_sub <- data.frame(
-  Subregion  = names(tab_sub),
-  n          = as.vector(tab_sub),
-  Porcentaje = round(as.vector(prop.table(tab_sub)) * 100, 1),
-  row.names  = NULL
-)
-tabla_sub <- rbind(tabla_sub, data.frame(Subregion = "Total", n = sum(tab_sub), Porcentaje = 100))
-kable(tabla_sub, caption = "Tabla 2. Estudiantes por subregión en la muestra") %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
+
 ```
 
 ```{r}
-#| label: graficos-univariados-acs
-#| echo: true
-#| fig-width: 10
-#| fig-height: 4.5
-#| fig-cap: "Distribución en la muestra: niveles de desempeño y subregiones"
-
-perc_desempeno <- prop.table(table(datos_acs$Nivel_Desempeno)) * 100
-perc_subregion <- sort(prop.table(table(datos_acs$Subregion)) * 100)   # de menor a mayor
-
-op <- par(no.readonly = TRUE)          # guardar la configuración gráfica original
-par(las = 1, mfrow = c(1, 2), mai = c(0.8, 1.8, 0.6, 0.3))
-
-# Desempeño: con rev() Q1 queda arriba y Q5 abajo
-pl1 <- barplot(rev(perc_desempeno), horiz = TRUE,
-               col = gray(seq(0.4, 0.9, length.out = 5)),
-               main = "Nivel de desempeño (quintiles)",
-               xlab = "Porcentaje (%)", xlim = c(0, max(perc_desempeno) + 10),
-               cex.names = 0.85)
-text(rev(perc_desempeno), pl1, paste0(round(rev(perc_desempeno), 1), "%"),
-     cex = 0.85, pos = 4)
-
-# Subregión: ordenada por tamaño y de un solo color (no tiene orden natural)
-pl2 <- barplot(perc_subregion, horiz = TRUE, col = "grey60",
-               main = "Subregión",
-               xlab = "Porcentaje (%)", xlim = c(0, max(perc_subregion) + 10),
-               cex.names = 0.85)
-text(perc_subregion, pl2, paste0(round(perc_subregion, 1), "%"),
-     cex = 0.85, pos = 4)
-
-par(op)                                 # restaurar
-```
-
-Lo que se ve en el gráfico de la izquierda es lo esperado: cada grupo de nota queda cerca del 20%. En el de la derecha vemos cuántos estudiantes de la muestra quedaron en cada subregión. Esto no dice nada sobre cuántos estudiantes hay en cada región en total, solo cómo salió el muestreo.
-
-Malasia es la subregión con menos estudiantes de la tabla: `r tabla_sub$n[tabla_sub$Subregion == "Malasia"]` estudiantes, el `r tabla_sub$Porcentaje[tabla_sub$Subregion == "Malasia"]`% de la muestra. No son pocos, pero Malasia es un solo país y no una región como las otras seis, así que decidimos dejarla como columna suplementaria: aparece en el gráfico pero no define los ejes. De esta forma los ejes se arman con seis subregiones y después miramos hacia dónde cae Malasia respecto a ellos.
-
-## Matriz de contingencia
-
-```{r}
-#| label: tabla-contingencia
-#| echo: true
-
-# Invertimos el orden para mejor visualización: Subregiones (7 filas) vs Desempeño (5 columnas)
-tabla_contingencia <- table(datos_acs$Subregion, datos_acs$Nivel_Desempeno)
-
-stopifnot(sum(tabla_contingencia) == nrow(datos_acs))        # no se perdió nadie
-stopifnot(all(dim(tabla_contingencia) == c(7, 5)))           # 7 filas x 5 columnas
-
-kable(addmargins(tabla_contingencia),
-      caption = "Tabla 3. Subregión por nivel de desempeño (con totales)") %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
-```
-
-## Frecuencias Relativas Porcentuales
-
-Una vez construida la matriz de conteos absolutos, realizamos tamben la **matriz de frecuencias relativas porcentuales ($F$)**. 
-
-### ¿Qué representa esta tabla y para qué sirve?
-Cada celda $f_{ij}$ de esta matriz representa la proporción de la muestra total ($N = 10{,}000$ estudiantes) que pertenece simultáneamente a la subregión $i$ y al nivel de desempeño $j$:
-
-$$f_{ij} = \frac{k_{ij}}{N} \times 100$$
-
-Esta tabla nos permite observar la distribución conjunta del sistema en una misma escala porcentual , identificando qué combinaciones de región y desempeño concentran la mayor masa de estudiantes y cómo se reparten las masas marginales totales en las filas  y columnas.
-
-```{r}
-#| label: tabla-frecuencias-relativas-globales
-#| echo: true
-
-# 1. Matriz de contingencia: 7 subregiones (filas) x 5 quintiles (columnas)
-tabla_contingencia <- table(datos_acs$Subregion, datos_acs$Nivel_Desempeno)
-
-# 2. Frecuencias relativas porcentuales sobre el total muestral (N = 10,000)
-F_relativa <- prop.table(tabla_contingencia) * 100
-F_relativa_add <- addmargins(F_relativa)
-
-# 3. Presentación gráfica en Quarto
-kable(
-  round(F_relativa_add, 2),
-  caption = "Tabla 4. Matriz de frecuencias relativas porcentuales globales (F) con totales marginales (%)"
-) %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
-```
-
-La última fila confirma que cada grupo de nota queda en 20%, algo esperado porque los quintiles salen de la misma muestra. La última columna muestra cuánto pesa cada subregión en nuestros 10.000 estudiantes: Europa Norte/Occidental es la más grande (19,41%) y Malasia la más pequeña (4,35%). Si sumamos las tres europeas (19,41% + 14,37% + 16,21%) da casi el 50%, o sea que en esta muestra la mitad de los estudiantes viene de países europeos. Esto habla de cómo salió la muestra y no de cuántos estudiantes hay en cada región en total.
-
- Si el nivel de nota y la subregión no tuvieran nada que ver, cada subregión repartiría su peso en partes iguales entre los cinco grupos, o sea el 20% de su porcentaje total en cada celda. Por ejemplo, Medio Oriente pesa 18,94%, así que esperaríamos unos 3,8% en cada grupo. Lo que se ve es que en «Muy bajo» tiene 5,96%, bastante más, y en «Muy alto» 2,73%, menos. En Europa Norte/Occidental pasa al revés: tiene 6,01% en «Muy alto» (la celda más grande de toda la tabla) frente a un 1,92% en «Muy bajo». América Latina se parece al caso de Medio Oriente, con 4,77% en «Muy bajo» y solo 1,05% en «Muy alto». Parece ser que en esta muestra las subregiones no se reparten parejo entre los grupos de nota.
-
-En Norteamérica y en las tres subregiones europeas el porcentaje en «alto o más» es mayor que en «bajo o menos». En América Latina, Medio Oriente y Malasia pasa lo contrario. Europa Norte/Occidental es la de mayor diferencia a favor de los grupos altos (10,69% frente a 5,19%) y Medio Oriente tiene la mayor diferencia en sentido contrario (10,24% frente a 5,44%). Como en cada comparación se usa la misma subregión, el tamaño de la subregión no cambia la lectura. 
-
-
-## Análisis de Perfiles Condicionales (Fila y Columna)
-
-### Introducción Metodológica
-
-En el Análisis de Correspondencias Simples (ACS), las frecuencias absolutas no permiten comparar directamente el comportamiento entre categorías de distinto tamaño muestral. Por ejemplo, subregiones como *Europa Norte y Occidental* concentran una mayor cantidad absoluta de estudiantes en la muestra que *Malasia*. 
-
-Para eliminar el efecto del tamaño de grupo y aislar la estructura de asociación entre la **Subregión Geográfica** y el **Nivel de Desempeño Financiero (Quintiles `Q1` a `Q5`)**, recurrimos a las **matrices de perfiles condicionales**, calculadas mediante la función `plotct()` de la librería `FactoClass`.
-
----
-
-
-### 1. Perfiles Condicionales Fila
-
-#### Contexto y Propósito en el Proyecto PISA 2022
-
-En nuestra muestra de PISA 2022, las subregiones geográficas tienen tamaños muestrales muy diferentes (por ejemplo, *Europa Norte y Occidental* representa el 19.4% de los estudiantes, mientras que *Malasia* representa el 4.3%). Si comparáramos conteos absolutos, las subregiones más grandes dominarían el análisis.
-
-Para corregir esto y realizar una comparación justa, calculamos los **perfiles condicionales fila**. Este cálculo estandariza los datos de modo que **cada subregión sume exactamente el 100%**.
-
-En la práctica, los perfiles fila responden a la pregunta: *Dado un estudiante que pertenece a una subregión específica, ¿qué porcentaje de probabilidad tiene de ubicarse en cada uno de los 5 quintiles de desempeño (`Q1` a `Q5`)?*
-
-
-```{r}
-#| label: perfiles-fila-factoclass
-#| echo: true
-#| message: false
+#| label: grafico-elipses-regiones
 #| warning: false
-#| fig-width: 9.5
-#| fig-height: 5.5
-#| fig-cap: "Perfiles condicionales fila (FactoClass)"
-
-library(FactoClass)
-library(knitr)
-library(kableExtra)
-
-# 1. Matriz de contingencia K: 7 Subregiones (filas) x 5 Quintiles (columnas)
-K <- unclass(table(datos_acs$Subregion, datos_acs$Nivel_Desempeno))
-
-# 2. Perfiles fila en porcentaje (cada fila suma 100%)
-perfiles_fila <- prop.table(K, margin = 1) * 100
-
-# 3. Presentación de la Tabla de Perfiles Fila
-kable(
-  round(perfiles_fila, 2),
-  caption = "Tabla 4. Perfiles condicionales fila en porcentaje (% de desempeño dentro de cada subregión)"
-) %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
-
-# 4. Ajuste de margen izquierdo (mai = c(abajo, izquierda, arriba, derecha))
-op <- par(no.readonly = TRUE)
-par(mai = c(0.6, 2.3, 0.4, 0.2), las = 1)
-
-# 5. Única gráfica de perfiles fila (barras horizontales por subregión)
-plotct(K, profiles = "row", col = gray(seq(0.9, 0.3, length.out = 5)))
-
-# Restaurar configuración de gráficos
-par(op)
-
-```
-
-
-
-#### Interpretación de los Perfiles Fila
-
-Al comparar el porcentaje de cada subregión contra el perfil promedio (20% en cada quintil), se destacan tres patrones principales:
-
-1. **Subregiones concentradas en alto desempeño (Europa Norte/Occidental y Norteamérica):**  
-   Muestran una fuerte inclinación hacia los niveles superiores (`Q4` y `Q5`). En *Europa Norte y Occidental*, más del 55% de sus estudiantes se ubican entre los quintiles alto y muy alto, teniendo su punto más elevado en `Q5` con un 30.96%. *Norteamérica* sigue esta misma tendencia con un 27.32% de sus estudiantes en el nivel muy alto.
-
-2. **Subregiones concentradas en bajo desempeño (Malasia, América Latina y Medio Oriente):**  
-   Presentan una sobre-representación en los quintiles de menor puntaje (`Q1` y `Q2`). El caso más marcado es *Malasia*, donde el 66.21% de sus estudiantes se agrupa entre `Q1` (37.01%) y `Q2` (29.20%), mientras que solo el 2.76% alcanza el grupo muy alto. En *América Latina*, cerca del 58.83% se concentra en los niveles bajo y muy bajo (`Q1`: 33.85% y `Q2`: 24.98%).
-
-3. **Subregiones con comportamiento equilibrado e intermedio (Europa Oriental y Europa Sur):**  
-   Mantienen distribuciones mucho más parejas a lo largo de los 5 quintiles, manteniéndose cerca del perfil promedio del 20%. *Europa Oriental* muestra un equilibrio notable en todos los grupos (entre 15.36% y 23.50%), mientras que *Europa Sur* concentra su mayor masa en los niveles medios (`Q3` con 24.50% y `Q4` con 26.30%).
-   
-   
-### 2. Perfiles Condicionales Columna
-
-#### Contexto y Significado
-
-Los **perfiles condicionales columna** evalúan la distribución de las subregiones geográficas dentro de cada uno de los quintiles de desempeño financiero (`Q1` a `Q5`). En lugar de analizar cómo rinde una región específica, esta matriz responde a la pregunta inversa: *Si tomamos a todos los estudiantes que pertenecen a un nivel de desempeño particular (por ejemplo, el quintil de notas más altas `Q5`), ¿qué porcentaje de ellos proviene de cada una de las 7 subregiones?*
-
-Al calcular estos perfiles, **cada columna suma exactamente el 100%**. 
-
-A diferencia de los perfiles fila, donde el punto de referencia era parejo (20%), aquí el perfil promedio con el que se comparan los datos es la **masa marginal de cada subregión** (es decir, el peso real de cada región en la muestra total de 10,000 estudiantes). Si el porcentaje de una subregión dentro de un quintil supera su propio peso marginal, significa que esa geografía aporta más estudiantes a ese nivel de desempeño de lo que se esperaría si no existiera ninguna asociación.
-
-```{r}
-
-#| label: perfiles-columna-factoclass
-#| echo: true
 #| message: false
-#| warning: false
-#| fig-width: 9.5
-#| fig-height: 6
-#| fig-cap: "Perfiles condicionales columna (FactoClass)"
+#| fig.width: 9.5
+#| fig.height: 6.5
 
-# 1. Perfiles columna en porcentaje (cada columna suma 100%)
-perfiles_columna <- prop.table(K, margin = 2) * 100
+library(factoextra)
+library(ggplot2)
 
-# 2. Presentación de la Tabla de Perfiles Columna
-kable(
-  round(perfiles_columna, 2),
-  caption = "Tabla 5. Perfiles condicionales columna en porcentaje (% de composición regional dentro de cada quintil)"
-) %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
-
-# 3. Ajuste de márgenes (ampliamos el margen inferior a 1.4 pulgadas para las etiquetas del eje X)
-op <- par(no.readonly = TRUE)
-par(mai = c(1.4, 0.8, 0.4, 0.2), las = 2)
-
-# 4. Paleta de colores corporativa para las 7 subregiones
-paleta_columnas <- c("#023047", "#219EBC", "#8ECAE6", "#A8DADC", "#FFB703", "#FB8500", "#E63946")
-
-# 5. Gráfica de perfiles columna
-plotct(K, profiles = "col", col = paleta_columnas)
-
-# Restaurar configuración de gráficos
-par(op)
-  
+fviz_pca_ind(
+  res_acp_sup,
+  habillage = "Region",          
+  geom.ind = "point",            
+  label = "quali",               
+  addEllipses = TRUE,            
+  ellipse.level = 0.95,         
+  ellipse.type = "confidence",
+  pointsize = 0.6,
+  alpha.ind = 0.1,
+  geom.var = c("arrow", "text"),
+  col.var = "#023047",
+  mean.point = TRUE,
+  mean.point.size = 4,
+  palette = c("#E76F51", "#2A9D8F", "#E9C46A", "#264653", "#9B5DE5"),
+  legend.title = "Región",
+  title = "Plano Factorial: Elipses de Concentración por Región Geográfica"
+) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13, color = "#023047"),
+    axis.title = element_text(face = "bold"),
+    legend.position = "right"
+  )
 ```
-## Frecuencias Esperadas bajo Independencia y Tabla de Desvíos
-
-Para profundizar en el diagnóstico del ACS antes de construir los ejes factoriales, el profesor Campo Elías Pardo plantea comparar lo que observamos en la realidad frente a lo que ocurriría si la **Subregión** y el **Nivel de Desempeño** fueran totalmente independientes.
-
-### 1. Modelo Teórico de Independencia ($A$)
-Si no existiera relación alguna entre la región del estudiante y sus notas, la proporción esperada en cada celda $a_{ij}$ sería igual al producto de sus masas marginales ($f_{i.} \times f_{.j}$).
-
-### 2. Matriz de Diferencias o Desvíos ($F - A$)
-Al restar las frecuencias esperadas de las observadas ($f_{ij} - a_{ij}$), obtenemos los desvíos en puntos porcentuales:
-* **Valores positivos ($> 0$):** Indican **atracción o sobre-representación** respecto a la independencia (la combinación ocurre con mayor frecuencia de la esperada por puro azar).
-* **Valores negativos ($< 0$):** Indican **repulsión o bajo peso relativo** (la combinación ocurre menos de lo esperado).
-* **Valores cercanos a cero ($\approx 0$):** Reflejan comportamiento neutro e independiente.
-
-```{r}
-#| label: independencia-y-desvios-acs
-#| echo: true
-#| message: false
-#| warning: false
-
-library(knitr)
-library(kableExtra)
-
-# 1. Matriz de frecuencias relativas observadas F (en %)
-F_obs <- prop.table(K) * 100
-
-# 2. Masas marginales de filas (f_i.) y columnas (f_.j) en porcentaje
-f_i <- rowSums(F_obs)
-f_j <- colSums(F_obs)
-
-# 3. Matriz de frecuencias relativas esperadas bajo independencia A (en %)
-A_esp <- outer(f_i, f_j) / 100
-A_esp_add <- addmargins(A_esp)
-
-kable(
-  round(A_esp_add, 2),
-  caption = "Tabla 6. Frecuencias relativas esperadas bajo el supuesto de independencia (%)"
-) %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
-
-# 4. Matriz de desvíos (F - A) en puntos porcentuales
-F_diff <- F_obs - A_esp
-
-kable(
-  round(F_diff, 2),
-  caption = "Tabla 7. Matriz de desvíos entre frecuencias observadas y esperadas bajo independencia (puntos porcentuales)"
-) %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
-
-``` 
