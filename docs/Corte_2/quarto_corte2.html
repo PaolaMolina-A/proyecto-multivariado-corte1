@@ -112,7 +112,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
+<style>
+p {
+  text-align: justify;
+}
+</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -176,6 +210,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#muestreo" id="toc-muestreo" class="nav-link active" data-scroll-target="#muestreo"><span class="header-section-number">1</span> MUESTREO</a></li>
+  <li><a href="#análisis-de-correspondencias-simples-acs" id="toc-análisis-de-correspondencias-simples-acs" class="nav-link" data-scroll-target="#análisis-de-correspondencias-simples-acs"><span class="header-section-number">2</span> Análisis de Correspondencias Simples (ACS)</a>
+  <ul class="collapse">
+  <li><a href="#introducción-y-justificación" id="toc-introducción-y-justificación" class="nav-link" data-scroll-target="#introducción-y-justificación"><span class="header-section-number">2.1</span> Introducción y justificación</a></li>
+  <li><a href="#definición-de-las-variables" id="toc-definición-de-las-variables" class="nav-link" data-scroll-target="#definición-de-las-variables"><span class="header-section-number">2.2</span> Definición de las variables</a></li>
+  <li><a href="#aspectos-a-tener-en-cuenta-del-acs" id="toc-aspectos-a-tener-en-cuenta-del-acs" class="nav-link" data-scroll-target="#aspectos-a-tener-en-cuenta-del-acs"><span class="header-section-number">2.3</span> Aspectos a tener en cuenta del ACS</a></li>
+  <li><a href="#preparación-de-las-variables" id="toc-preparación-de-las-variables" class="nav-link" data-scroll-target="#preparación-de-las-variables"><span class="header-section-number">2.4</span> Preparación de las variables</a></li>
+  <li><a href="#exploración-univariada-de-las-dos-variables" id="toc-exploración-univariada-de-las-dos-variables" class="nav-link" data-scroll-target="#exploración-univariada-de-las-dos-variables"><span class="header-section-number">2.5</span> Exploración univariada de las dos variables</a></li>
+  <li><a href="#matriz-de-contingencia" id="toc-matriz-de-contingencia" class="nav-link" data-scroll-target="#matriz-de-contingencia"><span class="header-section-number">2.6</span> Matriz de contingencia</a></li>
+  <li><a href="#frecuencias-relativas-porcentuales" id="toc-frecuencias-relativas-porcentuales" class="nav-link" data-scroll-target="#frecuencias-relativas-porcentuales"><span class="header-section-number">2.7</span> Frecuencias Relativas Porcentuales</a>
+  <ul class="collapse">
+  <li><a href="#qué-representa-esta-tabla-y-para-qué-sirve" id="toc-qué-representa-esta-tabla-y-para-qué-sirve" class="nav-link" data-scroll-target="#qué-representa-esta-tabla-y-para-qué-sirve"><span class="header-section-number">2.7.1</span> ¿Qué representa esta tabla y para qué sirve?</a></li>
+  </ul></li>
+  <li><a href="#análisis-de-perfiles-condicionales-fila-y-columna" id="toc-análisis-de-perfiles-condicionales-fila-y-columna" class="nav-link" data-scroll-target="#análisis-de-perfiles-condicionales-fila-y-columna"><span class="header-section-number">2.8</span> Análisis de Perfiles Condicionales (Fila y Columna)</a>
+  <ul class="collapse">
+  <li><a href="#introducción-metodológica" id="toc-introducción-metodológica" class="nav-link" data-scroll-target="#introducción-metodológica"><span class="header-section-number">2.8.1</span> Introducción Metodológica</a></li>
+  <li><a href="#perfiles-condicionales-fila" id="toc-perfiles-condicionales-fila" class="nav-link" data-scroll-target="#perfiles-condicionales-fila"><span class="header-section-number">2.8.2</span> 1. Perfiles Condicionales Fila</a></li>
+  <li><a href="#perfiles-condicionales-columna" id="toc-perfiles-condicionales-columna" class="nav-link" data-scroll-target="#perfiles-condicionales-columna"><span class="header-section-number">2.8.3</span> 2. Perfiles Condicionales Columna</a></li>
+  </ul></li>
+  <li><a href="#frecuencias-esperadas-bajo-independencia-y-tabla-de-desvíos" id="toc-frecuencias-esperadas-bajo-independencia-y-tabla-de-desvíos" class="nav-link" data-scroll-target="#frecuencias-esperadas-bajo-independencia-y-tabla-de-desvíos"><span class="header-section-number">2.9</span> Frecuencias Esperadas bajo Independencia y Tabla de Desvíos</a>
+  <ul class="collapse">
+  <li><a href="#modelo-teórico-de-independencia-a" id="toc-modelo-teórico-de-independencia-a" class="nav-link" data-scroll-target="#modelo-teórico-de-independencia-a"><span class="header-section-number">2.9.1</span> 1. Modelo Teórico de Independencia (<span class="math inline">\(A\)</span>)</a></li>
+  <li><a href="#matriz-de-diferencias-o-desvíos-f---a" id="toc-matriz-de-diferencias-o-desvíos-f---a" class="nav-link" data-scroll-target="#matriz-de-diferencias-o-desvíos-f---a"><span class="header-section-number">2.9.2</span> 2. Matriz de Diferencias o Desvíos (<span class="math inline">\(F - A\)</span>)</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -423,8 +481,1124 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="análisis-de-correspondencias-simples-acs" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Análisis de Correspondencias Simples (ACS)</h1>
+<section id="introducción-y-justificación" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="introducción-y-justificación"><span class="header-section-number">2.1</span> Introducción y justificación</h2>
+<p>Para el ACS necesitábamos dos variables cualitativas con varias categorías, y el profesor pidió que entre las dos hubiera 10 o más. Casi todas las variables del cuestionario tenían entre 2 y 6 opciones, así que cruzarlas directamente no daba mucho para analizar.</p>
+<p>Por eso volvimos categórica la nota de alfabetización financiera (<code>PV1FLIT</code>), partiéndola en cinco grupos con los quintiles de la muestra, y la cruzamos con los países reunidos en siete subregiones. Para Europa usamos la clasificación de la ONU y la partimos en norte/occidental y sur. A Malasia la dejamos con su propio nombre, porque no tenía sentido llamarla una región. Nos queda una tabla de 5 filas por 7 columnas, pero Malasia entra como columna suplementaria, así que las categorías activas son 11 (5 de nota y 6 subregiones).</p>
+<p>Hay cosas que hay que tener claras antes de leer cualquier resultado:</p>
+<ul>
+<li><strong>Los grupos de nota son relativos a nuestra muestra.</strong> «Muy bajo» quiere decir que el estudiante está en el 20% más bajo de los 10.000, no que tenga un nivel bajo en la escala de PISA.</li>
+<li><strong>La muestra es nuestra población.</strong> Sacamos 10.000 estudiantes con muestreo aleatorio simple y todo lo que sigue habla de ellos. Como la materia es exploratoria y no inferencial, no decimos nada sobre todos los estudiantes que presentaron la prueba. Por eso las lecturas son del tipo «parece ser que…» o «en esta muestra se ve que…».</li>
+<li><strong>Las subregiones no pesan igual.</strong> Cada una pesa según cuántos de sus estudiantes cayeron en la muestra, y eso condiciona cómo leemos los gráficos.</li>
+<li><strong>Las subregiones son una agrupación nuestra.</strong> Reunimos países de economías y culturas parecidas, pero dentro de cada subregión puede haber países que se comportan distinto. Lo que veamos de una subregión es un promedio de sus países.</li>
+</ul>
+</section>
+<section id="definición-de-las-variables" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="definición-de-las-variables"><span class="header-section-number">2.2</span> Definición de las variables</h2>
+<p>La nota <code>PV1FLIT</code> se parte en cinco grupos con los quintiles de los 10.000 estudiantes. Como los cortes salen de la misma muestra, cada grupo queda cerca del 20% por construcción. No es exactamente 20% porque hay puntajes repetidos en los bordes.</p>
+<p>Las subregiones quedan así:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Subregión</th>
+<th style="text-align: left;">Países</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Norteamerica</td>
+<td style="text-align: left;">Canadá, Estados Unidos</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America_Latina</td>
+<td style="text-align: left;">Brasil, Perú, Costa Rica</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Norte_Occidental</td>
+<td style="text-align: left;">Bélgica, Países Bajos, Noruega, Dinamarca, Austria</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Europa_Sur</td>
+<td style="text-align: left;">Italia, España, Portugal</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Oriental</td>
+<td style="text-align: left;">República Checa, Polonia, Hungría, Bulgaria</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medio_Oriente</td>
+<td style="text-align: left;">Emiratos Árabes Unidos, Arabia Saudita</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Malasia</td>
+<td style="text-align: left;">Malasia</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="aspectos-a-tener-en-cuenta-del-acs" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="aspectos-a-tener-en-cuenta-del-acs"><span class="header-section-number">2.3</span> Aspectos a tener en cuenta del ACS</h2>
+<ol type="1">
+<li><p><strong>Las categorías con poca gente.</strong> En el ACS las distancias se miden con la métrica <span class="math inline">\(\chi^2\)</span>, que le da más peso a las categorías pequeñas. Una categoría con muy pocos estudiantes puede terminar dominando un eje y deformar el gráfico. Agrupar los países en subregiones busca evitar eso, y por eso vamos a revisar cuánta gente quedó en las más pequeñas (Malasia y Europa_Sur) antes de interpretar.</p></li>
+<li><p><strong>La inercia.</strong> En el ACS la inercia se puede leer directamente, sin correcciones como en el ACM. Con 5 filas y 6 columnas activas el máximo son 4 ejes, así que no hay mucho para reducir. Cuántos ejes retenemos lo decidimos cuando veamos los valores propios.</p></li>
+<li><p><strong>El punto de referencia.</strong> El centro del gráfico es el perfil promedio de toda la muestra. Como una buena parte de los estudiantes es de Europa, ese promedio se va a parecer a un perfil europeo, y las subregiones europeas probablemente caigan cerca del centro. Eso no quiere decir que Europa sea «normal» y las demás «raras», solo que todo se compara contra esta muestra.</p></li>
+<li><p><strong>Las categorías de nota están ordenadas.</strong> Cuando las categorías de una variable tienen orden, es común que en el primer plano se forme un arco. Si pasa, se explica así y no como un hallazgo raro.</p></li>
+</ol>
+</section>
+<section id="preparación-de-las-variables" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="preparación-de-las-variables"><span class="header-section-number">2.4</span> Preparación de las variables</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoClass)   <span class="co"># carga ade4 también</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Orden fijo de las subregiones (así salen siempre igual en tablas y gráficos)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>niveles_subregion <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Norteamerica"</span>, <span class="st">"America_Latina"</span>, <span class="st">"Europa_Norte_Occidental"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Europa_Sur"</span>, <span class="st">"Europa_Oriental"</span>, <span class="st">"Medio_Oriente"</span>, <span class="st">"Malasia"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Revisar que no haya NA en la nota antes de partirla</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="st">"Hay NA en PV1FLIT: decidir qué hacer antes de seguir"</span> <span class="ot">=</span> <span class="sc">!</span><span class="fu">anyNA</span>(datos_c2<span class="sc">$</span>PV1FLIT))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Cortes de los quintiles calculados sobre la muestra completa</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>cortes <span class="ot">&lt;-</span> <span class="fu">quantile</span>(datos_c2<span class="sc">$</span>PV1FLIT, <span class="at">probs =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.2</span>))</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>datos_acs <span class="ot">&lt;-</span> datos_c2 <span class="sc">%&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">CNT_chr =</span> <span class="fu">trimws</span>(<span class="fu">as.character</span>(CNT)),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Subregion =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      CNT_chr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Canada"</span>, <span class="st">"United States"</span>, <span class="st">"CAN"</span>, <span class="st">"USA"</span>) <span class="sc">~</span> <span class="st">"Norteamerica"</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>      CNT_chr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Brazil"</span>, <span class="st">"Peru"</span>, <span class="st">"Costa Rica"</span>, <span class="st">"BRA"</span>, <span class="st">"PER"</span>, <span class="st">"CRI"</span>) <span class="sc">~</span> <span class="st">"America_Latina"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      CNT_chr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Belgium"</span>, <span class="st">"Netherlands"</span>, <span class="st">"Norway"</span>, <span class="st">"Denmark"</span>, <span class="st">"Austria"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"BEL"</span>, <span class="st">"NLD"</span>, <span class="st">"NOR"</span>, <span class="st">"DNK"</span>, <span class="st">"AUT"</span>) <span class="sc">~</span> <span class="st">"Europa_Norte_Occidental"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>      CNT_chr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Italy"</span>, <span class="st">"Spain"</span>, <span class="st">"Portugal"</span>, <span class="st">"ITA"</span>, <span class="st">"ESP"</span>, <span class="st">"PRT"</span>) <span class="sc">~</span> <span class="st">"Europa_Sur"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>      CNT_chr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Czech Republic"</span>, <span class="st">"Poland"</span>, <span class="st">"Hungary"</span>, <span class="st">"Bulgaria"</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"CZE"</span>, <span class="st">"POL"</span>, <span class="st">"HUN"</span>, <span class="st">"BGR"</span>) <span class="sc">~</span> <span class="st">"Europa_Oriental"</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>      CNT_chr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"United Arab Emirates"</span>, <span class="st">"Saudi Arabia"</span>, <span class="st">"ARE"</span>, <span class="st">"SAU"</span>) <span class="sc">~</span> <span class="st">"Medio_Oriente"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>      CNT_chr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Malaysia"</span>, <span class="st">"MYS"</span>) <span class="sc">~</span> <span class="st">"Malasia"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span>     <span class="co"># lo que no coincida queda NA, no se esconde en "Otro"</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">Subregion =</span> <span class="fu">factor</span>(Subregion, <span class="at">levels =</span> niveles_subregion),</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">Nivel_Desempeno =</span> <span class="fu">cut</span>(</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>      PV1FLIT,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> cortes,</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Q1: Muy bajo"</span>, <span class="st">"Q2: Bajo"</span>, <span class="st">"Q3: Medio"</span>, <span class="st">"Q4: Alto"</span>, <span class="st">"Q5: Muy alto"</span>),</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">include.lowest =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">right =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Si algún país no entró en ninguna subregión, mostrar cuál es y detenerse</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>sin_clasificar <span class="ot">&lt;-</span> datos_acs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(Subregion)) <span class="sc">%&gt;%</span> <span class="fu">count</span>(CNT_chr)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nrow</span>(sin_clasificar) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="fu">print</span>(sin_clasificar)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="st">"Hay países sin subregión: revisar el case_when"</span> <span class="ot">=</span> <span class="fu">nrow</span>(sin_clasificar) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="st">"Hay NA en el nivel de desempeño"</span> <span class="ot">=</span> <span class="sc">!</span><span class="fu">anyNA</span>(datos_acs<span class="sc">$</span>Nivel_Desempeno))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="exploración-univariada-de-las-dos-variables" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="exploración-univariada-de-las-dos-variables"><span class="header-section-number">2.5</span> Exploración univariada de las dos variables</h2>
+<p>Antes del ACS miramos cómo se reparten los 10.000 estudiantes en las dos variables. En los quintiles ya sabemos que cada grupo va a quedar cerca del 20% porque así los construimos, así que ahí no hay mucho que mirar. Lo que sí nos interesa es la subregión: esos porcentajes son los pesos de las categorías en el análisis, y una subregión con poca gente va a influir menos en los ejes.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla 1: grupos de desempeño</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tab_nivel <span class="ot">&lt;-</span> <span class="fu">table</span>(datos_acs<span class="sc">$</span>Nivel_Desempeno)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>tabla_cortes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Grupo      =</span> <span class="fu">names</span>(tab_nivel),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Desde      =</span> <span class="fu">round</span>(cortes[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">2</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Hasta      =</span> <span class="fu">round</span>(cortes[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>], <span class="dv">2</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n          =</span> <span class="fu">as.vector</span>(tab_nivel),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Porcentaje =</span> <span class="fu">round</span>(<span class="fu">as.vector</span>(<span class="fu">prop.table</span>(tab_nivel)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names  =</span> <span class="cn">NULL</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tabla_cortes,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">caption =</span> <span class="st">"Tabla 1. Grupos de desempeño según los quintiles de PV1FLIT (muestra de 10.000)"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small">
+<caption>Tabla 1. Grupos de desempeño según los quintiles de PV1FLIT (muestra de 10.000)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Grupo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Desde</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Hasta</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">n</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Q1: Muy bajo</td>
+<td style="text-align: right;">104.73</td>
+<td style="text-align: right;">375.54</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Q2: Bajo</td>
+<td style="text-align: right;">375.54</td>
+<td style="text-align: right;">443.65</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Q3: Medio</td>
+<td style="text-align: right;">443.65</td>
+<td style="text-align: right;">501.33</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Q4: Alto</td>
+<td style="text-align: right;">501.33</td>
+<td style="text-align: right;">564.87</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Q5: Muy alto</td>
+<td style="text-align: right;">564.87</td>
+<td style="text-align: right;">823.63</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">20</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla 2: estudiantes por subregión</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tab_sub <span class="ot">&lt;-</span> <span class="fu">table</span>(datos_acs<span class="sc">$</span>Subregion)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tabla_sub <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Subregion  =</span> <span class="fu">names</span>(tab_sub),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">n          =</span> <span class="fu">as.vector</span>(tab_sub),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Porcentaje =</span> <span class="fu">round</span>(<span class="fu">as.vector</span>(<span class="fu">prop.table</span>(tab_sub)) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names  =</span> <span class="cn">NULL</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>tabla_sub <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tabla_sub, <span class="fu">data.frame</span>(<span class="at">Subregion =</span> <span class="st">"Total"</span>, <span class="at">n =</span> <span class="fu">sum</span>(tab_sub), <span class="at">Porcentaje =</span> <span class="dv">100</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tabla_sub, <span class="at">caption =</span> <span class="st">"Tabla 2. Estudiantes por subregión en la muestra"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small">
+<caption>Tabla 2. Estudiantes por subregión en la muestra</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Subregion</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">n</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Norteamerica</td>
+<td style="text-align: right;">1263</td>
+<td style="text-align: right;">12.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America_Latina</td>
+<td style="text-align: right;">1409</td>
+<td style="text-align: right;">14.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Norte_Occidental</td>
+<td style="text-align: right;">1941</td>
+<td style="text-align: right;">19.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Europa_Sur</td>
+<td style="text-align: right;">1437</td>
+<td style="text-align: right;">14.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Oriental</td>
+<td style="text-align: right;">1621</td>
+<td style="text-align: right;">16.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medio_Oriente</td>
+<td style="text-align: right;">1894</td>
+<td style="text-align: right;">18.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Malasia</td>
+<td style="text-align: right;">435</td>
+<td style="text-align: right;">4.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>perc_desempeno <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(<span class="fu">table</span>(datos_acs<span class="sc">$</span>Nivel_Desempeno)) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>perc_subregion <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(datos_acs<span class="sc">$</span>Subregion)) <span class="sc">*</span> <span class="dv">100</span>)   <span class="co"># de menor a mayor</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)          <span class="co"># guardar la configuración gráfica original</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">las =</span> <span class="dv">1</span>, <span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">mai =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">1.8</span>, <span class="fl">0.6</span>, <span class="fl">0.3</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Desempeño: con rev() Q1 queda arriba y Q5 abajo</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>pl1 <span class="ot">&lt;-</span> <span class="fu">barplot</span>(<span class="fu">rev</span>(perc_desempeno), <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">col =</span> <span class="fu">gray</span>(<span class="fu">seq</span>(<span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">main =</span> <span class="st">"Nivel de desempeño (quintiles)"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">xlab =</span> <span class="st">"Porcentaje (%)"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(perc_desempeno) <span class="sc">+</span> <span class="dv">10</span>),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">cex.names =</span> <span class="fl">0.85</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fu">rev</span>(perc_desempeno), pl1, <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="fu">rev</span>(perc_desempeno), <span class="dv">1</span>), <span class="st">"%"</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex =</span> <span class="fl">0.85</span>, <span class="at">pos =</span> <span class="dv">4</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Subregión: ordenada por tamaño y de un solo color (no tiene orden natural)</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>pl2 <span class="ot">&lt;-</span> <span class="fu">barplot</span>(perc_subregion, <span class="at">horiz =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"grey60"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">main =</span> <span class="st">"Subregión"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">xlab =</span> <span class="st">"Porcentaje (%)"</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(perc_subregion) <span class="sc">+</span> <span class="dv">10</span>),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">cex.names =</span> <span class="fl">0.85</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(perc_subregion, pl2, <span class="fu">paste0</span>(<span class="fu">round</span>(perc_subregion, <span class="dv">1</span>), <span class="st">"%"</span>),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex =</span> <span class="fl">0.85</span>, <span class="at">pos =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="quarto_corte2_files/figure-html/graficos-univariados-acs-1.png" class="img-fluid figure-img" width="960"></p>
+<figcaption>Distribución en la muestra: niveles de desempeño y subregiones</figcaption>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(op)                                 <span class="co"># restaurar</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Lo que se ve en el gráfico de la izquierda es lo esperado: cada grupo de nota queda cerca del 20%. En el de la derecha vemos cuántos estudiantes de la muestra quedaron en cada subregión. Esto no dice nada sobre cuántos estudiantes hay en cada región en total, solo cómo salió el muestreo.</p>
+<p>Malasia es la subregión con menos estudiantes de la tabla: 435 estudiantes, el 4.3% de la muestra. No son pocos, pero Malasia es un solo país y no una región como las otras seis, así que decidimos dejarla como columna suplementaria: aparece en el gráfico pero no define los ejes. De esta forma los ejes se arman con seis subregiones y después miramos hacia dónde cae Malasia respecto a ellos.</p>
+</section>
+<section id="matriz-de-contingencia" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="matriz-de-contingencia"><span class="header-section-number">2.6</span> Matriz de contingencia</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Invertimos el orden para mejor visualización: Subregiones (7 filas) vs Desempeño (5 columnas)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>tabla_contingencia <span class="ot">&lt;-</span> <span class="fu">table</span>(datos_acs<span class="sc">$</span>Subregion, datos_acs<span class="sc">$</span>Nivel_Desempeno)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">sum</span>(tabla_contingencia) <span class="sc">==</span> <span class="fu">nrow</span>(datos_acs))        <span class="co"># no se perdió nadie</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">dim</span>(tabla_contingencia) <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">5</span>)))           <span class="co"># 7 filas x 5 columnas</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">addmargins</span>(tabla_contingencia),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">caption =</span> <span class="st">"Tabla 3. Subregión por nivel de desempeño (con totales)"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small">
+<caption>Tabla 3. Subregión por nivel de desempeño (con totales)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q1: Muy bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q2: Bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q3: Medio</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q4: Alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q5: Muy alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Sum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Norteamerica</td>
+<td style="text-align: right;">162</td>
+<td style="text-align: right;">215</td>
+<td style="text-align: right;">271</td>
+<td style="text-align: right;">270</td>
+<td style="text-align: right;">345</td>
+<td style="text-align: right;">1263</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America_Latina</td>
+<td style="text-align: right;">477</td>
+<td style="text-align: right;">352</td>
+<td style="text-align: right;">283</td>
+<td style="text-align: right;">192</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">1409</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Norte_Occidental</td>
+<td style="text-align: right;">192</td>
+<td style="text-align: right;">327</td>
+<td style="text-align: right;">353</td>
+<td style="text-align: right;">468</td>
+<td style="text-align: right;">601</td>
+<td style="text-align: right;">1941</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Europa_Sur</td>
+<td style="text-align: right;">163</td>
+<td style="text-align: right;">261</td>
+<td style="text-align: right;">352</td>
+<td style="text-align: right;">378</td>
+<td style="text-align: right;">283</td>
+<td style="text-align: right;">1437</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Oriental</td>
+<td style="text-align: right;">249</td>
+<td style="text-align: right;">290</td>
+<td style="text-align: right;">333</td>
+<td style="text-align: right;">368</td>
+<td style="text-align: right;">381</td>
+<td style="text-align: right;">1621</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medio_Oriente</td>
+<td style="text-align: right;">596</td>
+<td style="text-align: right;">428</td>
+<td style="text-align: right;">326</td>
+<td style="text-align: right;">271</td>
+<td style="text-align: right;">273</td>
+<td style="text-align: right;">1894</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Malasia</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">127</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">435</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sum</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">10000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="frecuencias-relativas-porcentuales" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="frecuencias-relativas-porcentuales"><span class="header-section-number">2.7</span> Frecuencias Relativas Porcentuales</h2>
+<p>Una vez construida la matriz de conteos absolutos, realizamos tamben la <strong>matriz de frecuencias relativas porcentuales (<span class="math inline">\(F\)</span>)</strong>.</p>
+<section id="qué-representa-esta-tabla-y-para-qué-sirve" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="qué-representa-esta-tabla-y-para-qué-sirve"><span class="header-section-number">2.7.1</span> ¿Qué representa esta tabla y para qué sirve?</h3>
+<p>Cada celda <span class="math inline">\(f_{ij}\)</span> de esta matriz representa la proporción de la muestra total (<span class="math inline">\(N = 10{,}000\)</span> estudiantes) que pertenece simultáneamente a la subregión <span class="math inline">\(i\)</span> y al nivel de desempeño <span class="math inline">\(j\)</span>:</p>
+<p><span class="math display">\[f_{ij} = \frac{k_{ij}}{N} \times 100\]</span></p>
+<p>Esta tabla nos permite observar la distribución conjunta del sistema en una misma escala porcentual , identificando qué combinaciones de región y desempeño concentran la mayor masa de estudiantes y cómo se reparten las masas marginales totales en las filas y columnas.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Matriz de contingencia: 7 subregiones (filas) x 5 quintiles (columnas)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tabla_contingencia <span class="ot">&lt;-</span> <span class="fu">table</span>(datos_acs<span class="sc">$</span>Subregion, datos_acs<span class="sc">$</span>Nivel_Desempeno)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Frecuencias relativas porcentuales sobre el total muestral (N = 10,000)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>F_relativa <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(tabla_contingencia) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>F_relativa_add <span class="ot">&lt;-</span> <span class="fu">addmargins</span>(F_relativa)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Presentación gráfica en Quarto</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(F_relativa_add, <span class="dv">2</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 4. Matriz de frecuencias relativas porcentuales globales (F) con totales marginales (%)"</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small">
+<caption>Tabla 4. Matriz de frecuencias relativas porcentuales globales (F) con totales marginales (%)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q1: Muy bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q2: Bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q3: Medio</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q4: Alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q5: Muy alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Sum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Norteamerica</td>
+<td style="text-align: right;">1.62</td>
+<td style="text-align: right;">2.15</td>
+<td style="text-align: right;">2.71</td>
+<td style="text-align: right;">2.70</td>
+<td style="text-align: right;">3.45</td>
+<td style="text-align: right;">12.63</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America_Latina</td>
+<td style="text-align: right;">4.77</td>
+<td style="text-align: right;">3.52</td>
+<td style="text-align: right;">2.83</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">1.05</td>
+<td style="text-align: right;">14.09</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Norte_Occidental</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">3.27</td>
+<td style="text-align: right;">3.53</td>
+<td style="text-align: right;">4.68</td>
+<td style="text-align: right;">6.01</td>
+<td style="text-align: right;">19.41</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Europa_Sur</td>
+<td style="text-align: right;">1.63</td>
+<td style="text-align: right;">2.61</td>
+<td style="text-align: right;">3.52</td>
+<td style="text-align: right;">3.78</td>
+<td style="text-align: right;">2.83</td>
+<td style="text-align: right;">14.37</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Oriental</td>
+<td style="text-align: right;">2.49</td>
+<td style="text-align: right;">2.90</td>
+<td style="text-align: right;">3.33</td>
+<td style="text-align: right;">3.68</td>
+<td style="text-align: right;">3.81</td>
+<td style="text-align: right;">16.21</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medio_Oriente</td>
+<td style="text-align: right;">5.96</td>
+<td style="text-align: right;">4.28</td>
+<td style="text-align: right;">3.26</td>
+<td style="text-align: right;">2.71</td>
+<td style="text-align: right;">2.73</td>
+<td style="text-align: right;">18.94</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Malasia</td>
+<td style="text-align: right;">1.61</td>
+<td style="text-align: right;">1.27</td>
+<td style="text-align: right;">0.82</td>
+<td style="text-align: right;">0.53</td>
+<td style="text-align: right;">0.12</td>
+<td style="text-align: right;">4.35</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sum</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">100.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>La última fila confirma que cada grupo de nota queda en 20%, algo esperado porque los quintiles salen de la misma muestra. La última columna muestra cuánto pesa cada subregión en nuestros 10.000 estudiantes: Europa Norte/Occidental es la más grande (19,41%) y Malasia la más pequeña (4,35%). Si sumamos las tres europeas (19,41% + 14,37% + 16,21%) da casi el 50%, o sea que en esta muestra la mitad de los estudiantes viene de países europeos. Esto habla de cómo salió la muestra y no de cuántos estudiantes hay en cada región en total.</p>
+<p>Si el nivel de nota y la subregión no tuvieran nada que ver, cada subregión repartiría su peso en partes iguales entre los cinco grupos, o sea el 20% de su porcentaje total en cada celda. Por ejemplo, Medio Oriente pesa 18,94%, así que esperaríamos unos 3,8% en cada grupo. Lo que se ve es que en «Muy bajo» tiene 5,96%, bastante más, y en «Muy alto» 2,73%, menos. En Europa Norte/Occidental pasa al revés: tiene 6,01% en «Muy alto» (la celda más grande de toda la tabla) frente a un 1,92% en «Muy bajo». América Latina se parece al caso de Medio Oriente, con 4,77% en «Muy bajo» y solo 1,05% en «Muy alto». Parece ser que en esta muestra las subregiones no se reparten parejo entre los grupos de nota.</p>
+<p>En Norteamérica y en las tres subregiones europeas el porcentaje en «alto o más» es mayor que en «bajo o menos». En América Latina, Medio Oriente y Malasia pasa lo contrario. Europa Norte/Occidental es la de mayor diferencia a favor de los grupos altos (10,69% frente a 5,19%) y Medio Oriente tiene la mayor diferencia en sentido contrario (10,24% frente a 5,44%). Como en cada comparación se usa la misma subregión, el tamaño de la subregión no cambia la lectura.</p>
+</section>
+</section>
+<section id="análisis-de-perfiles-condicionales-fila-y-columna" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="análisis-de-perfiles-condicionales-fila-y-columna"><span class="header-section-number">2.8</span> Análisis de Perfiles Condicionales (Fila y Columna)</h2>
+<section id="introducción-metodológica" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="introducción-metodológica"><span class="header-section-number">2.8.1</span> Introducción Metodológica</h3>
+<p>En el Análisis de Correspondencias Simples (ACS), las frecuencias absolutas no permiten comparar directamente el comportamiento entre categorías de distinto tamaño muestral. Por ejemplo, subregiones como <em>Europa Norte y Occidental</em> concentran una mayor cantidad absoluta de estudiantes en la muestra que <em>Malasia</em>.</p>
+<p>Para eliminar el efecto del tamaño de grupo y aislar la estructura de asociación entre la <strong>Subregión Geográfica</strong> y el <strong>Nivel de Desempeño Financiero (Quintiles <code>Q1</code> a <code>Q5</code>)</strong>, recurrimos a las <strong>matrices de perfiles condicionales</strong>, calculadas mediante la función <code>plotct()</code> de la librería <code>FactoClass</code>.</p>
+<hr>
+</section>
+<section id="perfiles-condicionales-fila" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="perfiles-condicionales-fila"><span class="header-section-number">2.8.2</span> 1. Perfiles Condicionales Fila</h3>
+<section id="contexto-y-propósito-en-el-proyecto-pisa-2022" class="level4" data-number="2.8.2.1">
+<h4 data-number="2.8.2.1" class="anchored" data-anchor-id="contexto-y-propósito-en-el-proyecto-pisa-2022"><span class="header-section-number">2.8.2.1</span> Contexto y Propósito en el Proyecto PISA 2022</h4>
+<p>En nuestra muestra de PISA 2022, las subregiones geográficas tienen tamaños muestrales muy diferentes (por ejemplo, <em>Europa Norte y Occidental</em> representa el 19.4% de los estudiantes, mientras que <em>Malasia</em> representa el 4.3%). Si comparáramos conteos absolutos, las subregiones más grandes dominarían el análisis.</p>
+<p>Para corregir esto y realizar una comparación justa, calculamos los <strong>perfiles condicionales fila</strong>. Este cálculo estandariza los datos de modo que <strong>cada subregión sume exactamente el 100%</strong>.</p>
+<p>En la práctica, los perfiles fila responden a la pregunta: <em>Dado un estudiante que pertenece a una subregión específica, ¿qué porcentaje de probabilidad tiene de ubicarse en cada uno de los 5 quintiles de desempeño (<code>Q1</code> a <code>Q5</code>)?</em></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoClass)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Matriz de contingencia K: 7 Subregiones (filas) x 5 Quintiles (columnas)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">unclass</span>(<span class="fu">table</span>(datos_acs<span class="sc">$</span>Subregion, datos_acs<span class="sc">$</span>Nivel_Desempeno))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Perfiles fila en porcentaje (cada fila suma 100%)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>perfiles_fila <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(K, <span class="at">margin =</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Presentación de la Tabla de Perfiles Fila</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(perfiles_fila, <span class="dv">2</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 4. Perfiles condicionales fila en porcentaje (% de desempeño dentro de cada subregión)"</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Tabla 4. Perfiles condicionales fila en porcentaje (% de desempeño dentro de cada subregión)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Q1: Muy bajo
+</th>
+<th style="text-align:right;">
+Q2: Bajo
+</th>
+<th style="text-align:right;">
+Q3: Medio
+</th>
+<th style="text-align:right;">
+Q4: Alto
+</th>
+<th style="text-align:right;">
+Q5: Muy alto
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Norteamerica
+</td>
+<td style="text-align:right;">
+12.83
+</td>
+<td style="text-align:right;">
+17.02
+</td>
+<td style="text-align:right;">
+21.46
+</td>
+<td style="text-align:right;">
+21.38
+</td>
+<td style="text-align:right;">
+27.32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+America_Latina
+</td>
+<td style="text-align:right;">
+33.85
+</td>
+<td style="text-align:right;">
+24.98
+</td>
+<td style="text-align:right;">
+20.09
+</td>
+<td style="text-align:right;">
+13.63
+</td>
+<td style="text-align:right;">
+7.45
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Europa_Norte_Occidental
+</td>
+<td style="text-align:right;">
+9.89
+</td>
+<td style="text-align:right;">
+16.85
+</td>
+<td style="text-align:right;">
+18.19
+</td>
+<td style="text-align:right;">
+24.11
+</td>
+<td style="text-align:right;">
+30.96
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Europa_Sur
+</td>
+<td style="text-align:right;">
+11.34
+</td>
+<td style="text-align:right;">
+18.16
+</td>
+<td style="text-align:right;">
+24.50
+</td>
+<td style="text-align:right;">
+26.30
+</td>
+<td style="text-align:right;">
+19.69
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Europa_Oriental
+</td>
+<td style="text-align:right;">
+15.36
+</td>
+<td style="text-align:right;">
+17.89
+</td>
+<td style="text-align:right;">
+20.54
+</td>
+<td style="text-align:right;">
+22.70
+</td>
+<td style="text-align:right;">
+23.50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Medio_Oriente
+</td>
+<td style="text-align:right;">
+31.47
+</td>
+<td style="text-align:right;">
+22.60
+</td>
+<td style="text-align:right;">
+17.21
+</td>
+<td style="text-align:right;">
+14.31
+</td>
+<td style="text-align:right;">
+14.41
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Malasia
+</td>
+<td style="text-align:right;">
+37.01
+</td>
+<td style="text-align:right;">
+29.20
+</td>
+<td style="text-align:right;">
+18.85
+</td>
+<td style="text-align:right;">
+12.18
+</td>
+<td style="text-align:right;">
+2.76
+</td>
+</tr>
+</tbody>
+</table>
+<p>Perfiles condicionales fila (FactoClass)</p>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Ajuste de margen izquierdo (mai = c(abajo, izquierda, arriba, derecha))</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">2.3</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>), <span class="at">las =</span> <span class="dv">1</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Única gráfica de perfiles fila (barras horizontales por subregión)</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plotct</span>(K, <span class="at">profiles =</span> <span class="st">"row"</span>, <span class="at">col =</span> <span class="fu">gray</span>(<span class="fu">seq</span>(<span class="fl">0.9</span>, <span class="fl">0.3</span>, <span class="at">length.out =</span> <span class="dv">5</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="quarto_corte2_files/figure-html/perfiles-fila-factoclass-1.png" class="img-fluid figure-img" width="912"></p>
+<figcaption>Perfiles condicionales fila (FactoClass)</figcaption>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Restaurar configuración de gráficos</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(op)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="interpretación-de-los-perfiles-fila" class="level4" data-number="2.8.2.2">
+<h4 data-number="2.8.2.2" class="anchored" data-anchor-id="interpretación-de-los-perfiles-fila"><span class="header-section-number">2.8.2.2</span> Interpretación de los Perfiles Fila</h4>
+<p>Al comparar el porcentaje de cada subregión contra el perfil promedio (20% en cada quintil), se destacan tres patrones principales:</p>
+<ol type="1">
+<li><p><strong>Subregiones concentradas en alto desempeño (Europa Norte/Occidental y Norteamérica):</strong><br>
+Muestran una fuerte inclinación hacia los niveles superiores (<code>Q4</code> y <code>Q5</code>). En <em>Europa Norte y Occidental</em>, más del 55% de sus estudiantes se ubican entre los quintiles alto y muy alto, teniendo su punto más elevado en <code>Q5</code> con un 30.96%. <em>Norteamérica</em> sigue esta misma tendencia con un 27.32% de sus estudiantes en el nivel muy alto.</p></li>
+<li><p><strong>Subregiones concentradas en bajo desempeño (Malasia, América Latina y Medio Oriente):</strong><br>
+Presentan una sobre-representación en los quintiles de menor puntaje (<code>Q1</code> y <code>Q2</code>). El caso más marcado es <em>Malasia</em>, donde el 66.21% de sus estudiantes se agrupa entre <code>Q1</code> (37.01%) y <code>Q2</code> (29.20%), mientras que solo el 2.76% alcanza el grupo muy alto. En <em>América Latina</em>, cerca del 58.83% se concentra en los niveles bajo y muy bajo (<code>Q1</code>: 33.85% y <code>Q2</code>: 24.98%).</p></li>
+<li><p><strong>Subregiones con comportamiento equilibrado e intermedio (Europa Oriental y Europa Sur):</strong><br>
+Mantienen distribuciones mucho más parejas a lo largo de los 5 quintiles, manteniéndose cerca del perfil promedio del 20%. <em>Europa Oriental</em> muestra un equilibrio notable en todos los grupos (entre 15.36% y 23.50%), mientras que <em>Europa Sur</em> concentra su mayor masa en los niveles medios (<code>Q3</code> con 24.50% y <code>Q4</code> con 26.30%).</p></li>
+</ol>
+</section>
+</section>
+<section id="perfiles-condicionales-columna" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="perfiles-condicionales-columna"><span class="header-section-number">2.8.3</span> 2. Perfiles Condicionales Columna</h3>
+<section id="contexto-y-significado" class="level4" data-number="2.8.3.1">
+<h4 data-number="2.8.3.1" class="anchored" data-anchor-id="contexto-y-significado"><span class="header-section-number">2.8.3.1</span> Contexto y Significado</h4>
+<p>Los <strong>perfiles condicionales columna</strong> evalúan la distribución de las subregiones geográficas dentro de cada uno de los quintiles de desempeño financiero (<code>Q1</code> a <code>Q5</code>). En lugar de analizar cómo rinde una región específica, esta matriz responde a la pregunta inversa: <em>Si tomamos a todos los estudiantes que pertenecen a un nivel de desempeño particular (por ejemplo, el quintil de notas más altas <code>Q5</code>), ¿qué porcentaje de ellos proviene de cada una de las 7 subregiones?</em></p>
+<p>Al calcular estos perfiles, <strong>cada columna suma exactamente el 100%</strong>.</p>
+<p>A diferencia de los perfiles fila, donde el punto de referencia era parejo (20%), aquí el perfil promedio con el que se comparan los datos es la <strong>masa marginal de cada subregión</strong> (es decir, el peso real de cada región en la muestra total de 10,000 estudiantes). Si el porcentaje de una subregión dentro de un quintil supera su propio peso marginal, significa que esa geografía aporta más estudiantes a ese nivel de desempeño de lo que se esperaría si no existiera ninguna asociación.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: perfiles-columna-factoclass</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9.5</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 6</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Perfiles condicionales columna (FactoClass)"</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Perfiles columna en porcentaje (cada columna suma 100%)</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>perfiles_columna <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(K, <span class="at">margin =</span> <span class="dv">2</span>) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Presentación de la Tabla de Perfiles Columna</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(perfiles_columna, <span class="dv">2</span>),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 5. Perfiles condicionales columna en porcentaje (% de composición regional dentro de cada quintil)"</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small">
+<caption>Tabla 5. Perfiles condicionales columna en porcentaje (% de composición regional dentro de cada quintil)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q1: Muy bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q2: Bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q3: Medio</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q4: Alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q5: Muy alto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Norteamerica</td>
+<td style="text-align: right;">8.10</td>
+<td style="text-align: right;">10.75</td>
+<td style="text-align: right;">13.55</td>
+<td style="text-align: right;">13.50</td>
+<td style="text-align: right;">17.25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America_Latina</td>
+<td style="text-align: right;">23.85</td>
+<td style="text-align: right;">17.60</td>
+<td style="text-align: right;">14.15</td>
+<td style="text-align: right;">9.60</td>
+<td style="text-align: right;">5.25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Norte_Occidental</td>
+<td style="text-align: right;">9.60</td>
+<td style="text-align: right;">16.35</td>
+<td style="text-align: right;">17.65</td>
+<td style="text-align: right;">23.40</td>
+<td style="text-align: right;">30.05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Europa_Sur</td>
+<td style="text-align: right;">8.15</td>
+<td style="text-align: right;">13.05</td>
+<td style="text-align: right;">17.60</td>
+<td style="text-align: right;">18.90</td>
+<td style="text-align: right;">14.15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Oriental</td>
+<td style="text-align: right;">12.45</td>
+<td style="text-align: right;">14.50</td>
+<td style="text-align: right;">16.65</td>
+<td style="text-align: right;">18.40</td>
+<td style="text-align: right;">19.05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medio_Oriente</td>
+<td style="text-align: right;">29.80</td>
+<td style="text-align: right;">21.40</td>
+<td style="text-align: right;">16.30</td>
+<td style="text-align: right;">13.55</td>
+<td style="text-align: right;">13.65</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Malasia</td>
+<td style="text-align: right;">8.05</td>
+<td style="text-align: right;">6.35</td>
+<td style="text-align: right;">4.10</td>
+<td style="text-align: right;">2.65</td>
+<td style="text-align: right;">0.60</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Ajuste de márgenes (ampliamos el margen inferior a 1.4 pulgadas para las etiquetas del eje X)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai =</span> <span class="fu">c</span>(<span class="fl">1.4</span>, <span class="fl">0.8</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>), <span class="at">las =</span> <span class="dv">2</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Paleta de colores corporativa para las 7 subregiones</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>paleta_columnas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#023047"</span>, <span class="st">"#219EBC"</span>, <span class="st">"#8ECAE6"</span>, <span class="st">"#A8DADC"</span>, <span class="st">"#FFB703"</span>, <span class="st">"#FB8500"</span>, <span class="st">"#E63946"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Gráfica de perfiles columna</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plotct</span>(K, <span class="at">profiles =</span> <span class="st">"col"</span>, <span class="at">col =</span> paleta_columnas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="quarto_corte2_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Restaurar configuración de gráficos</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(op)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+</section>
+<section id="frecuencias-esperadas-bajo-independencia-y-tabla-de-desvíos" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="frecuencias-esperadas-bajo-independencia-y-tabla-de-desvíos"><span class="header-section-number">2.9</span> Frecuencias Esperadas bajo Independencia y Tabla de Desvíos</h2>
+<p>Para profundizar en el diagnóstico del ACS antes de construir los ejes factoriales, el profesor Campo Elías Pardo plantea comparar lo que observamos en la realidad frente a lo que ocurriría si la <strong>Subregión</strong> y el <strong>Nivel de Desempeño</strong> fueran totalmente independientes.</p>
+<section id="modelo-teórico-de-independencia-a" class="level3" data-number="2.9.1">
+<h3 data-number="2.9.1" class="anchored" data-anchor-id="modelo-teórico-de-independencia-a"><span class="header-section-number">2.9.1</span> 1. Modelo Teórico de Independencia (<span class="math inline">\(A\)</span>)</h3>
+<p>Si no existiera relación alguna entre la región del estudiante y sus notas, la proporción esperada en cada celda <span class="math inline">\(a_{ij}\)</span> sería igual al producto de sus masas marginales (<span class="math inline">\(f_{i.} \times f_{.j}\)</span>).</p>
+</section>
+<section id="matriz-de-diferencias-o-desvíos-f---a" class="level3" data-number="2.9.2">
+<h3 data-number="2.9.2" class="anchored" data-anchor-id="matriz-de-diferencias-o-desvíos-f---a"><span class="header-section-number">2.9.2</span> 2. Matriz de Diferencias o Desvíos (<span class="math inline">\(F - A\)</span>)</h3>
+<p>Al restar las frecuencias esperadas de las observadas (<span class="math inline">\(f_{ij} - a_{ij}\)</span>), obtenemos los desvíos en puntos porcentuales: * <strong>Valores positivos (<span class="math inline">\(&gt; 0\)</span>):</strong> Indican <strong>atracción o sobre-representación</strong> respecto a la independencia (la combinación ocurre con mayor frecuencia de la esperada por puro azar). * <strong>Valores negativos (<span class="math inline">\(&lt; 0\)</span>):</strong> Indican <strong>repulsión o bajo peso relativo</strong> (la combinación ocurre menos de lo esperado). * <strong>Valores cercanos a cero (<span class="math inline">\(\approx 0\)</span>):</strong> Reflejan comportamiento neutro e independiente.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Matriz de frecuencias relativas observadas F (en %)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>F_obs <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(K) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Masas marginales de filas (f_i.) y columnas (f_.j) en porcentaje</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>f_i <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(F_obs)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>f_j <span class="ot">&lt;-</span> <span class="fu">colSums</span>(F_obs)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Matriz de frecuencias relativas esperadas bajo independencia A (en %)</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>A_esp <span class="ot">&lt;-</span> <span class="fu">outer</span>(f_i, f_j) <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>A_esp_add <span class="ot">&lt;-</span> <span class="fu">addmargins</span>(A_esp)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(A_esp_add, <span class="dv">2</span>),</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 6. Frecuencias relativas esperadas bajo el supuesto de independencia (%)"</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small">
+<caption>Tabla 6. Frecuencias relativas esperadas bajo el supuesto de independencia (%)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q1: Muy bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q2: Bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q3: Medio</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q4: Alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q5: Muy alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Sum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Norteamerica</td>
+<td style="text-align: right;">2.53</td>
+<td style="text-align: right;">2.53</td>
+<td style="text-align: right;">2.53</td>
+<td style="text-align: right;">2.53</td>
+<td style="text-align: right;">2.53</td>
+<td style="text-align: right;">12.63</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America_Latina</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">2.82</td>
+<td style="text-align: right;">14.09</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Norte_Occidental</td>
+<td style="text-align: right;">3.88</td>
+<td style="text-align: right;">3.88</td>
+<td style="text-align: right;">3.88</td>
+<td style="text-align: right;">3.88</td>
+<td style="text-align: right;">3.88</td>
+<td style="text-align: right;">19.41</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Europa_Sur</td>
+<td style="text-align: right;">2.87</td>
+<td style="text-align: right;">2.87</td>
+<td style="text-align: right;">2.87</td>
+<td style="text-align: right;">2.87</td>
+<td style="text-align: right;">2.87</td>
+<td style="text-align: right;">14.37</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Oriental</td>
+<td style="text-align: right;">3.24</td>
+<td style="text-align: right;">3.24</td>
+<td style="text-align: right;">3.24</td>
+<td style="text-align: right;">3.24</td>
+<td style="text-align: right;">3.24</td>
+<td style="text-align: right;">16.21</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medio_Oriente</td>
+<td style="text-align: right;">3.79</td>
+<td style="text-align: right;">3.79</td>
+<td style="text-align: right;">3.79</td>
+<td style="text-align: right;">3.79</td>
+<td style="text-align: right;">3.79</td>
+<td style="text-align: right;">18.94</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Malasia</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">4.35</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sum</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">100.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Matriz de desvíos (F - A) en puntos porcentuales</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>F_diff <span class="ot">&lt;-</span> F_obs <span class="sc">-</span> A_esp</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(F_diff, <span class="dv">2</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 7. Matriz de desvíos entre frecuencias observadas y esperadas bajo independencia (puntos porcentuales)"</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover caption-top table-sm small">
+<caption>Tabla 7. Matriz de desvíos entre frecuencias observadas y esperadas bajo independencia (puntos porcentuales)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q1: Muy bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q2: Bajo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q3: Medio</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q4: Alto</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Q5: Muy alto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Norteamerica</td>
+<td style="text-align: right;">-0.91</td>
+<td style="text-align: right;">-0.38</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.92</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America_Latina</td>
+<td style="text-align: right;">1.95</td>
+<td style="text-align: right;">0.70</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">-0.90</td>
+<td style="text-align: right;">-1.77</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Norte_Occidental</td>
+<td style="text-align: right;">-1.96</td>
+<td style="text-align: right;">-0.61</td>
+<td style="text-align: right;">-0.35</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">2.13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Europa_Sur</td>
+<td style="text-align: right;">-1.24</td>
+<td style="text-align: right;">-0.26</td>
+<td style="text-align: right;">0.65</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: right;">-0.04</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Europa_Oriental</td>
+<td style="text-align: right;">-0.75</td>
+<td style="text-align: right;">-0.34</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: right;">0.57</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medio_Oriente</td>
+<td style="text-align: right;">2.17</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">-0.53</td>
+<td style="text-align: right;">-1.08</td>
+<td style="text-align: right;">-1.06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Malasia</td>
+<td style="text-align: right;">0.74</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">-0.05</td>
+<td style="text-align: right;">-0.34</td>
+<td style="text-align: right;">-0.75</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
