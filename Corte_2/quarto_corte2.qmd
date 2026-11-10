@@ -50,7 +50,7 @@ kable(
  
 ```
 
-```{r grafica muestreo}
+```{r}
 #| label: validacion-muestreo
 #| warning: false
 #| message: false
@@ -84,7 +84,7 @@ ggplot(df_comparacion, aes(x = reorder(CNT, Porcentaje), y = Porcentaje, fill = 
   coord_flip() +
   scale_fill_manual(values = c("#FB8500", "#023047")) +
   labs(
-    title = "Validación de Muestreo Aletorio Simple (N = 10.000)",
+    title = "Validación de Muestreo Aleatorio Simple (N = 10.000)",
     subtitle = "Comparación de proporciones de estudiantes por país en PISA 2022",
     x = "País de Origen (CNT)",
     y = "Porcentaje Muestral (%)",
@@ -97,11 +97,12 @@ ggplot(df_comparacion, aes(x = reorder(CNT, Porcentaje), y = Porcentaje, fill = 
     legend.position = "top",
     panel.grid.major.y = element_blank()
   )
-```
 
 # Análisis de componentes principales
 
 ## Resumen del análisis cuantitativo univariado
+
+```
 
 Para fundamentar la construcción de los espacios factoriales, se retomaron las 15 variables cuantitativas continuas del módulo de Alfabetización Financiera de PISA 2022, estructuradas en cuatro dimensiones principales:
 
