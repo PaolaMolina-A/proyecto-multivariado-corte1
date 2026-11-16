@@ -1,5 +1,7 @@
 ---
-title: "segundo corte: analisis factoriales"
+title: "Programa para la Evaluación Internacional de Estudiantes (PISA)"
+subtitle: "Análisis factorial ACP y ACS"
+author: "Paola Andrea Molina Aparicio y Brayan Camilo Moreno Villalobos"
 format: 
   html:
     include-in-header:
@@ -13,6 +15,10 @@ execute:
   warning: false
   message: false
 ---
+
+Link a la página web:
+
+<a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/" target="_blank">Proyecto Multivariado - Corte 1</a>
 
 # Método de reducción de observaciones
 
@@ -99,6 +105,7 @@ ggplot(df_comparacion, aes(x = reorder(CNT, Porcentaje), y = Porcentaje, fill = 
   )
 
 ```
+
 # Análisis de componentes principales
 
 ## Resumen del análisis cuantitativo univariado
@@ -200,7 +207,7 @@ En la práctica estadística existen tres aproximaciones generales para abordar 
 
 Los anteriores métodos, usan en su mayoría técnicas avanzadas, por lo que se sale de los objetivos de este curso, así que usarlos no es necesario, de modo que usaremos la identificación de patrones estructurales, para identificar un posible patrón en los datos faltantes, así justificar la eliminación de la categoría que mas lo contenga, en caso que no se identifique un patrón, nos veremos forzados a trabajar el ACP con menos variables activas. Las razones metodológicas que fundamentan esta decisión son las siguientes:
 
-1.  **Riesgo de sesgo por volumen de vacíos:** La análisis univariado previo evidenció que variables como el apoyo familiar (`FAMSUPSL`) superan el 40% de registros faltantes en la muestra. Someter una variable con este volumen de vacíos a un proceso de imputación significaría "inventar" sintéticamente las respuestas de más de 4.000 estudiantes, inyectando varianza artificial e invalidando la geometría de los ejes factoriales.
+1.  **Riesgo de sesgo por volumen de vacíos:** El análisis univariado previo evidenció que variables como el apoyo familiar (`FAMSUPSL`) superan el 40% de registros faltantes en la muestra. Someter una variable con este volumen de vacíos a un proceso de imputación significaría "inventar" sintéticamente las respuestas de más de 4.000 estudiantes, inyectando varianza artificial e invalidando la geometría de los ejes factoriales.
 
 2.  **Naturaleza institucional del estudio PISA:** En las pruebas PISA, diversos módulos del cuestionario de contexto son de carácter opcional para los estados participantes. Cuando un país decide no aplicar un módulo complementario (como el de recursos TIC o entorno creativo), el 100% de sus estudiantes registra automáticamente `NA` en esas columnas. Imputar estos valores implicaría asignar valores simulados a estudiantes de países donde la pregunta jamás fue formulada.
 
@@ -258,9 +265,13 @@ kable(
 
 La tabla evidencia que la falta de datos en ciertos casos se debe a que la pregunta no se realizó en ese país. Costa Rica (CRI) no aplicó el módulo socioeconómico y familiar (ESCS, HISEI y PAREDINT), registrando un 100% de datos faltantes. Por su parte, República Checa (CZE), Dinamarca (DNK) y Noruega (NOR) no evaluaron el apoyo familiar (FAMSUPSL), mientras que Estados Unidos (USA) omitió el módulo de ambiente escolar creativo (CREATSCH). Esto confirma que la ausencia de respuestas no es aleatoria ni depende del estudiante, sino que responde a la estructura con la que se aplicó la prueba en cada país.
 
-## Decisión Metodológica para el ACP 
+## Decisión Metodológica para el ACP
 
-Con base en estos hallazgos, tomamos dos decisiones para mantener la validez del Análisis de Componentes Principales sin recurrir a imputaciones sintéticas:Retiro de variables opcionales: Se excluyen del ACP las variables FAMSUPSL y CREATSCH. Al retirarlas, recuperamos la integridad de los datos de Estados Unidos, República Checa, Dinamarca y Noruega. Tratamiento de Costa Rica: Debido a que Costa Rica no aplicó el bloque socioeconómico (ESCS, HISEI, PAREDINT), se excluye este país para la ejecución del ACP.
+Con base en estos hallazgos, tomamos dos decisiones para mantener la validez del Análisis de Componentes Principales sin recurrir a imputaciones sintéticas:
+
+**Retiro de variables opcionales:** Se excluyen del ACP las variables FAMSUPSL y CREATSCH. Al retirarlas, recuperamos la integridad de los datos de Estados Unidos, República Checa, Dinamarca y Noruega.
+
+**Tratamiento de Costa Rica:** Debido a que Costa Rica no aplicó el bloque socioeconómico (ESCS, HISEI, PAREDINT), se excluye este país para la ejecución del ACP.
 
 ```{r}
 #| label: creacion-base-acp
@@ -294,7 +305,6 @@ base_acp <- datos_c2 %>%
 
 cat("Muestra restante en base_acp:", nrow(base_acp), "estudiantes en 19 países.\n")
 ```
-
 
 ```{r}
 #| label: grafico-nas-base-acp
@@ -418,21 +428,22 @@ kable(
 
 La tabla comparativa evidencia la utilidad técnica de la auditoría de datos faltantes. Si se hubiese aplicado una eliminación por listas estándar (ACP Sin tratamiento de NAs) sobre las 15 variables originales, el choque de datos faltantes en las preguntas opcionales habría provocado la eliminación automática del 100% de los estudiantes de 5 países (Estados Unidos, Dinamarca, Noruega, República Checa y Costa Rica), reduciendo la muestra utilizable a una fracción muy baja. Por el contrario, la estrategia metodológica de tratamiento de datos faltantes por medio de la identificación de Patrones Estructurales, permitió rescatar la totalidad de las observaciones de 4 países al retirar únicamente las 2 variables opcionales con mayor volumen de omisión (FAMSUPSL y CREATSCH). Esto incrementó la retención final de observaciones al 70.1% (7.006 estudiantes) conservando 19 de los 20 países en el análisis.
 
-## Transformación y Estandarización de Variables
+| Elemento en el ACP | Rol Asignado | Cantidad | Justificación Metodológica |
+|:-----------------|:-----------------|:------------------:|:-----------------|
+| **Estudiantes completos** | Filas Activas | $7.006$ | Observaciones sin valores faltantes en las 13 variables activas tras depurar el diseño muestral. |
+| **Indicadores cognitivos y contextuales** | Columnas Activas | $13$ variables | Variables cuantitativas continuas que definen la geometría de los ejes factoriales bajo el ACP normado. |
+| **País (`CNT`), `Region` y `Genero`** | Columnas Suplementarias | $3$ variables ($26$ categorías) | Variables cualitativas ilustrativas; se proyectan sobre el plano sin intervenir en el cálculo de la inercia. |
+| **Costa Rica (`CRI`), `FAMSUPSL` y `CREATSCH`** | Excluidos | $1$ país / $2$ variables | Omitidos por patrón institucional de no aplicación (*Missing by Design*) para evitar sesgos o imputaciones artificiales. |
 
-¿Por qué es indispensable hacer esta transformación?
+## Elección del Tipo de Análisis: ACP Normado
 
-Las 13 variables cuantitativas seleccionadas operan en escalas completamente heterogéneas:
+Dado que las 13 variables cuantitativas activas están expresadas en unidades y escalas completamente heterogéneas, no es adecuado aplicar un ACP centrado (no normado) sobre la matriz de covarianzas, ya que las variables con mayor varianza numérica dominarían los primeros ejes:
 
-- **Puntajes de desempeño (`PV1FLIT`, `PV1MATH`, `PV1READ`):** Escala de 0 a 1.000 puntos (con desviaciones estándar cercanas a 90 o 100 puntos).
+- **Puntajes de desempeño (`PV1FLIT`, `PV1MATH`, `PV1READ`):** Escala de 0 a 1.000 puntos (desviaciones estándar cercanas a 90–100 puntos).
+- **Índices contextuales (`ESCS`, `HOMEPOS`, `FLCONFIN`, `ACCESSFP`, entre otros):** Índices estandarizados centrados alrededor de 0 (rango aproximado de -6.0 a +5.0).
+- **Educación y ocupación parental (`PAREDINT`, `HISEI`):** Años de escolaridad (3 a 16) y escala de prestigio ocupacional (11 a 89 puntos).
 
-- **Índices contextuales (`ESCS`, `HOMEPOS`, `FLCONFIN`, `ACCESSFP`):** Escala estandarizada de respuestas centradas en cero (de -6.0 a +5.0).
-
-- **Educación y Ocupación de Padres (`PAREDINT`, `HISEI`):** Años de escolaridad (3 a 16) y prestigio ocupacional (11 a 89 puntos).
-
-Si se ejecutara el ACP sobre la matriz de covarianzas originales (sin estandarizar), las variables con mayor varianza absoluta (como `PV1FLIT` o `HISEI`) absorberían por completo el primer componente principal únicamente por el tamaño de sus unidades de medida, invisibilizando a los índices contextuales.
-
-Al estandarizar, todas las variables pasan a tener media $\mu = 0$ y varianza $\sigma^2 = 1$, logrando que **todas tengan el mismo peso relativo inicial (1 unidad de inercia)** y operen sobre la matriz de correlación Pearson ($R$).
+Por esta razón, no se realizó una transformación manual previa sobre la tabla de datos, sino que se optó por ejecutar directamente un **ACP normado** (`scale.unit = TRUE` en `FactoMineR::PCA`). Este procedimiento estandariza internamente cada variable activa ($\mu = 0$, $\sigma^2 = 1$) para operar sobre la **matriz de correlaciones (**$\mathbf{R}$), garantizando que las 13 variables participen con igual peso relativo ($1$ unidad de inercia cada una) en la construcción de los ejes factoriales.
 
 ```{r}
 #| label: transformacion-variables
@@ -443,12 +454,26 @@ library(dplyr)
 library(FactoMineR)
 
 base_acp_completa <- base_acp %>% 
-  select(all_of(vars_13_opt), CNT, ST004D01T ) %>% 
-  na.omit()
+  select(all_of(vars_13_opt), CNT, ST004D01T) %>% 
+  na.omit() %>%
+  mutate(
+    CNT = factor(CNT),
+    Genero = factor(ifelse(ST004D01T == 1, "Femenino", "Masculino")),
+    Region = factor(case_when(
+      CNT %in% c("PER", "BRA") ~ "América Latina",
+      CNT %in% c("CAN", "USA") ~ "Norteamérica",
+      CNT %in% c("ESP", "PRT", "ITA", "AUT", "BEL", "NLD", "DNK", "NOR") ~ "Europa Occidental",
+      CNT %in% c("POL", "HUN", "CZE", "BGR") ~ "Europa Oriental",
+      CNT %in% c("MYS", "SAU", "ARE") ~ "Asia / Medio Oriente",
+      TRUE ~ "Otros"
+    ))
+  ) %>%
+  select(all_of(vars_13_opt), CNT, Region, Genero)
+
 
 res_acp <- PCA(
   X = base_acp_completa,
-  quali.sup = 14,       
+  quali.sup = 14:16,   
   scale.unit = TRUE,    
   graph = FALSE
 )
@@ -493,20 +518,20 @@ kable(
   )
 ```
 
-La tabla de autovalores muestra la capacidad de síntesis del análisis. La **Dimensión 1** y la **Dimensión 2** destacan ampliamente al tener autovalores superiores a 1.0 ($4.003$ y $2.214$, respectivamente), lo que significa que cada una resume más información que una variable individual por separado. Al combinar estas dos primeras dimensiones en un plano cartesiano (Eje X y Eje Y), se logra resumir el **47.82% de toda la información del estudio**. A partir de la Dimensión 4, la ganancia de información se vuelve residual ($\lambda < 1.0$),
+La tabla de autovalores muestra la capacidad de síntesis del análisis. La **Dimensión 1** y la **Dimensión 2** destacan ampliamente al tener autovalores superiores a 1.0 ($4.003$ y $2.214$, respectivamente), lo que significa que cada una resume más información que una variable individual por separado. Al combinar estas dos primeras dimensiones en un plano cartesiano (Eje X y Eje Y), se logra resumir el **47.82% de toda la información del estudio**. A partir de la Dimensión 4, la ganancia de información se vuelve residual ($\lambda < 1.0$), por lo que resulta suficiente trabajar con las primeras dimensiones para resumir el comportamiento global de los datos.
 
-### Gráfico de Codo
+### Histograma de Valores Propios (Descomposición de la Inercia)
 
-Para evaluar de forma gráfica la velocidad de decaimiento de la inercia explicada y determinar el punto de inflexión del espacio multidimensional, se genera el gráfico de codo:
+Para evaluar de forma gráfica la distribución de la varianza capturada por cada componente y la magnitud de su decaida a lo largo de los ejes, se presenta el histograma de valores propios:
 
 ```{r}
-#| label: grafico-codo-autovalores
+#| label: histograma-valores-propios
 #| warning: false
 #| message: false
 #| fig.width: 9
 #| fig.height: 5
 
-# Gráfico de codo para visualizar la caída de varianza
+# Histograma de valores propios para visualizar la distribución de la inercia
 fviz_eig(
   res_acp,
   addlabels = TRUE,
@@ -516,7 +541,7 @@ fviz_eig(
   linecolor = "#FB8500",
   choice = "variance",
   ggtheme = theme_minimal(base_size = 11),
-  main = "Gráfico de Codo: Porcentaje de Varianza Explicada por Dimensión"
+  main = "Histograma de Valores Propios: Varianza Explicada por Dimensión"
 ) +
   labs(
     x = "Dimensiones Factoriales", 
@@ -528,15 +553,14 @@ fviz_eig(
   )
 ```
 
-El gráfico de codo muestra un punto de quiebre o inflexión claro a partir del segundo componente principal. Tras la marcada pendiente observada entre la Dimensión 1 y la Dimensión 2, la curva se estabiliza en una meseta lineal donde cada dimensión subsiguiente aporta incrementos marginales pequeños de inercia explicada.
+El diagrama evidencia una fuerte concentración de la varianza en las dos primeras dimensiones (**30.79%** y **17.03%**, respectivamente), seguida de una reducción progresiva en los componentes posteriores. A partir de la tercera dimensión, los incrementos de información se vuelven marginales frente al peso de los dos ejes iniciales.
 
 ### Criterios de Selección del Número de Ejes a Retener
 
-Con base en la teoría metodológica del Análisis Multivariado, la selección del plano factorial se fundamenta en tres criterios complementarios:
+Con base en la metodología del Análisis de Componentes Principales normado, la selección del plano factorial se fundamenta en dos criterios complementarios:
 
-1.  **Criterio de Kaiser (**$\lambda_k > 1$**):** Propone retener únicamente aquellas dimensiones cuyo autovalor sea mayor a la varianza promedio de una variable estandarizada ($\lambda > 1$). En este análisis, las dimensiones que satisfacen dicho umbral representan la mayor parte del comportamiento estructural de los datos.
-
-2.  **Criterio del Codo (Inflexión de Cattell):** El gráfico de codo confirma que el cambio de pendiente decisivo ocurre tras el segundo componente principal, recomendando el corte en la Dimensión 2.
+1.  **Criterio de Kaiser (**$\lambda_k > 1$): Establece que deben retenerse únicamente aquellas dimensiones cuyo valor propio supere la varianza unitaria de una variable estandarizada ($\lambda > 1$), garantizando que cada eje retenido resuma más información que una variable original por separado.
+2.  **Caída de Inercia y Representabilidad en el Plano (**$Dim 1 \times Dim 2$): Las dos primeras dimensiones acumulan el **47.82%** de la inercia total de las 13 variables activas y presentan el mayor salto en magnitud respecto a los ejes subsiguientes. Retener este primer plano factorial permite interpretar de forma directa y parsimoniosa la estructura latente de los datos sin dispersar el análisis en dimensiones secundarias de baja contribución.
 
 ## Interpretación del Plano Factorial y Componentes Principales
 
@@ -588,7 +612,7 @@ La tabla resume los tres indicadores clave para interpretar cada eje:
 
 - **Contribución (`Ctr`):** Porcentaje con el que la variable participa en la construcción de ese eje (el valor teórico promedio para 13 variables es $\frac{100}{13} \approx 7.69\%$).
 
-Se observa que el **Eje 1** está construido principalmente por los tres puntajes de rendimiento académico (`PV1FLIT`, `PV1MATH`, `PV1READ`) y los indicadores socioeconómicos (`ESCS`, `HISEI`), todos con contribuciones superiores al $10\%$ y correlaciones positivas altas. En contraste, el **Eje 2** está dominado por las variables contextuales de familiaridad, educación y actitud financiera (`FCFMLRTY`, `FLSCHOOL`, `FLCONFIN`, `ACCESSFP`), que aportan las mayores contribuciones a la segunda dimensión.
+Se observa que el **Eje 1** está construido principalmente por los tres puntajes de rendimiento académico (`PV1FLIT`, `PV1MATH`, `PV1READ`) y los indicadores socioeconómicos (`ESCS`, `HISEI`), todos con contribuciones superiores al $10\%$ y correlaciones positivas altas. En contraste, el Eje 2 está dominado por las variables de socialización, acceso e instrucción financiera práctica (`ACCESSFP`, `FLFAMILY`, `FLSCHOOL`, `FRINFLFM`), que aportan las mayores contribuciones a la segunda dimensión.
 
 ```{r}
 #| label: circulo-correlacion-variables
@@ -636,91 +660,103 @@ A partir de las contribuciones y correlaciones observadas, se definen los dos co
 
     - **Interpretación:** Este eje capta el nivel de socialización e interacción práctica del estudiante con el entorno financiero, de manera independiente de su rendimiento académico tradicional.
 
-#### Proyección Suplementaria de Países (`CNT`) y Patrones Regionales
+#### Proyección Suplementaria de Países (`CNT`), Regiones y Género
 
-Para evaluar cómo se ubican los países dentro del espacio estructurado por el rendimiento académico y el entorno de socialización financiera, la variable cualitativa **`CNT`** se proyecta de forma suplementaria (sin influir en la construcción de los ejes).
+Para evaluar cómo se ubican los países, las regiones geográficas y el género dentro del espacio estructurado por el rendimiento académico y la socialización financiera, las variables cualitativas **`CNT`**, **`Region`** y **`Genero`** se proyectan de forma suplementaria (sin influir en la construcción de los ejes).
 
-1\. Indicadores Factoriales de los Centroides por País
+1.  Indicadores Factoriales de los Centroides Suplementarios
 
 ```{r}
-#| label: tabla-centroides-paises
+#| label: tabla-centroides-suplementarias
 #| warning: false
 #| message: false
 
-library(FactoMineR)
-library(dplyr)
-library(knitr)
-library(kableExtra)
-
-
 paises_res <- res_acp$quali.sup
 
+# 1. Tabla exclusiva para los 19 Países (CNT)
+cats_cnt <- levels(base_acp_completa$CNT)
 tabla_paises <- data.frame(
-  Pais = rownames(paises_res$coord),
-  Coord_D1 = round(paises_res$coord[, 1], 3),
-  Cos2_D1  = round(paises_res$cos2[, 1], 3),
-  Vtest_D1 = round(paises_res$v.test[, 1], 2),
-  Coord_D2 = round(paises_res$coord[, 2], 3),
-  Cos2_D2  = round(paises_res$cos2[, 2], 3),
-  Vtest_D2 = round(paises_res$v.test[, 2], 2)
+  Pais     = cats_cnt,
+  Coord_D1 = round(paises_res$coord[cats_cnt, 1], 3),
+  Cos2_D1  = round(paises_res$cos2[cats_cnt, 1], 3),
+  Vtest_D1 = round(paises_res$v.test[cats_cnt, 1], 2),
+  Coord_D2 = round(paises_res$coord[cats_cnt, 2], 3),
+  Cos2_D2  = round(paises_res$cos2[cats_cnt, 2], 3),
+  Vtest_D2 = round(paises_res$v.test[cats_cnt, 2], 2)
 ) %>%
   arrange(desc(Coord_D1))
 
-
 kable(
   tabla_paises,
+  row.names = FALSE,
   col.names = c("País (CNT)", "Coord D1", "Cos² D1", "v-test D1", "Coord D2", "Cos² D2", "v-test D2"),
-  caption = "Posicionamiento Factorial y Pruebas de Valor (v-test) de los Países Suplementarios",
+  caption = "Coordenadas y pruebas de valor (v-test) de los países suplementarios",
   align = c("l", "r", "r", "r", "r", "r", "r")
+) %>%
+  kable_styling(full_width = FALSE, position = "center", bootstrap_options = c("striped", "hover", "condensed")) %>%
+  scroll_box(width = "100%", height = "380px")
+
+# 2. Tabla de centroides para Regiones Geográficas y Género
+cats_agrup <- c(levels(base_acp_completa$Region), levels(base_acp_completa$Genero))
+tabla_agrup <- data.frame(
+  Categoria = cats_agrup,
+  Coord_D1  = round(paises_res$coord[cats_agrup, 1], 3),
+  Cos2_D1   = round(paises_res$cos2[cats_agrup, 1], 3),
+  Vtest_D1  = round(paises_res$v.test[cats_agrup, 1], 2),
+  Coord_D2  = round(paises_res$coord[cats_agrup, 2], 3),
+  Cos2_D2   = round(paises_res$cos2[cats_agrup, 2], 3),
+  Vtest_D2  = round(paises_res$v.test[cats_agrup, 2], 2)
+)
+
+kable(
+  tabla_agrup,
+  row.names = FALSE,
+  col.names = c("Categoría Suplementaria", "Coord D1", "Cos² D1", "v-test D1", "Coord D2", "Cos² D2", "v-test D2"),
+  caption = "Coordenadas y pruebas de valor (v-test) por Región Geográfica y Género",
+  align = c("l", "r", "r", "r", "r", "r", "r")
+) %>%
+  kable_styling(full_width = FALSE, position = "center", bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+La prueba de valor (`v-test`) mide la significancia estadística de la distancia del centroide de cada categoría respecto al origen $(0,0)$:
+
+- Un $\vert{}v\text{-test}\vert{} > 1.96$ indica que la posición de la categoría en esa dimensión es significativamente distinta del promedio global al 95% de confianza.
+- Los países y regiones con valores de `v-test D1` positivos y elevados presentan un nivel de rendimiento académico y estatus socioeconómico significativamente superior a la media global.
+
+```{r}
+#| label: tabla-extracto-individuos
+#| warning: false
+#| message: false
+
+ind_res <- get_pca_ind(res_acp)
+
+tabla_ind_10 <- data.frame(
+  Estudiante = paste("Est.", 1:10),
+  Pais       = base_acp_completa$CNT[1:10],
+  Region     = base_acp_completa$Region[1:10],
+  Coord_D1   = round(ind_res$coord[1:10, 1], 3),
+  Coord_D2   = round(ind_res$coord[1:10, 2], 3),
+  Cos2_Plano = round(rowSums(ind_res$cos2[1:10, 1:2]), 3)
+)
+
+kable(
+  tabla_ind_10,
+  col.names = c("Observación", "País", "Región", "Coord. Dim 1", "Coord. Dim 2", "Cos² (Plano 1-2)"),
+  caption = "Extracto de las primeras 10 observaciones activas proyectadas en el plano factorial",
+  align = c("l", "c", "l", "r", "r", "r")
 ) %>%
   kable_styling(
     full_width = FALSE,
     position = "center",
     bootstrap_options = c("striped", "hover", "condensed")
-  ) %>%
-  scroll_box(width = "100%", height = "400px")
-```
-
-La prueba de valor (`v-test`) mide la significancia estadística de la distancia del centroide de cada país respecto al origen ($0,0$):
-
-- Un $\vert{}v\text{-test}\vert{} > 1.96$ indica que la posición del país en esa dimensión es significativamente distinta del promedio global al 95% de confianza.
-
-- Los países con valores de `v-test D1` positivos y elevados presentan un nivel de rendimiento académico y estatus socioeconómico significativamente superior a la media global.
-
-2\. Biplot: Proyección Conjunta de Países y Variables
-
-```{r}
-#| label: crear-variable-region-genero
-#| warning: false
-#| message: false
-
-library(dplyr)
-library(FactoMineR)
-
-
-base_acp_completa <- base_acp_completa %>%
-  mutate(
-    Genero = factor(ifelse(ST004D01T == 1, "Femenino", "Masculino")),
-    Region = case_when(
-      CNT %in% c("PER", "BRA") ~ "América Latina",
-      CNT %in% c("CAN", "USA") ~ "Norteamérica",
-      CNT %in% c("ESP", "PRT", "ITA", "AUT", "BEL", "NLD", "DNK", "NOR") ~ "Europa Occidental",
-      CNT %in% c("POL", "HUN", "CZE", "BGR") ~ "Europa Oriental",
-      CNT %in% c("MYS", "SAU", "ARE") ~ "Asia / Medio Oriente",
-      TRUE ~ "Otros"
-    ),
   )
-
-
-res_acp_sup <- PCA(
-  X = base_acp_completa,
-  quali.sup = c("CNT", "Region", "Genero"),
-  scale.unit = TRUE,
-  graph = FALSE
-)
-
-
 ```
+
+La tabla anterior presenta los primeros diez estudiantes de la matriz activa, mostrando sus coordenadas individuales sobre los dos ejes retenidos y su calidad de representación conjunta ($\cos^2$). Aquellos estudiantes con coordenadas positivas en la Dimensión 1 superan el promedio muestral en competencias académicas y estatus socioeconómico, mientras que los valores positivos en la Dimensión 2 reflejan una mayor exposición a educación y productos financieros prácticos.
+
+2.  Proyección de Regiones Geográficas (Elipses de Concentración)
+
+Dado que proyectar 19 elipses simultáneas por país satura visualmente el plano cartesiano, los países se agruparon en cinco bloques regionales para visualizar sus centroides y zonas de dispersión al 95%:
 
 ```{r}
 #| label: grafico-elipses-regiones
@@ -733,17 +769,15 @@ library(factoextra)
 library(ggplot2)
 
 fviz_pca_ind(
-  res_acp_sup,
+  res_acp,
   habillage = "Region",          
   geom.ind = "point",            
   label = "quali",               
   addEllipses = TRUE,            
   ellipse.level = 0.95,         
-  ellipse.type = "confidence",
+  ellipse.type = "norm",         
   pointsize = 0.6,
-  alpha.ind = 0.1,
-  geom.var = c("arrow", "text"),
-  col.var = "#023047",
+  alpha.ind = 0.12,
   mean.point = TRUE,
   mean.point.size = 4,
   palette = c("#E76F51", "#2A9D8F", "#E9C46A", "#264653", "#9B5DE5"),
@@ -758,126 +792,76 @@ fviz_pca_ind(
   )
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+3.  Indicadores Factoriales de los Centroides por Género
+
+```{r}
+#| label: grafico-elipses-genero
+#| warning: false
+#| message: false
+#| fig.width: 9
+#| fig.height: 6
+
+fviz_pca_ind(
+  res_acp,
+  habillage = "Genero",
+  geom.ind = "point",
+  label = "quali",
+  addEllipses = TRUE,
+  ellipse.level = 0.95,
+  ellipse.type = "norm",
+  pointsize = 0.6,
+  alpha.ind = 0.12,
+  mean.point = TRUE,
+  mean.point.size = 4.5,
+  palette = c("#D90429", "#0077B6"),
+  legend.title = "Género",
+  title = "Plano Factorial: Comparación por Género (Femenino vs. Masculino)"
+) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 13, color = "#023047"),
+    axis.title = element_text(face = "bold"),
+    legend.position = "right"
+  )
+```
+
+Por su parte, la proyección suplementaria por género muestra que los centroides de mujeres (`Femenino`) y hombres (`Masculino`) coinciden prácticamente en el origen $(0,0)$, con un traslape casi completo de sus elipses de concentración. Esto confirma que, en el agregado internacional, la estructura de rendimiento académico y socialización financiera no presenta sesgos significativos atribuibles al sexo del estudiante.
+
+### Síntesis de Relaciones entre Individuos, Regiones y Variables
+
+Al superponer la geometría del círculo de correlaciones con la ubicación de las regiones y estudiantes en el plano $Dim 1 \times Dim 2$, se establecen tres hallazgos relacionales fundamentales:
+
+1.  **Sinergia entre estatus socioeconómico y rendimiento académico:** Los estudiantes y países ubicados en el cuadrante derecho comparten simultáneamente altos índices de bienestar familiar (`ESCS`, `HOMEPOS`, `HISEI`) y altas puntuaciones en matemáticas, lectura y alfabetización financiera.
+
+2.  **Independencia entre desempeño escolar y educación financiera práctica:** La ortogonalidad entre los vectores horizontales (desempeño/estatus) y verticales (`FLSCHOOL`, `ACCESSFP`, `FLFAMILY`) demuestra que recibir clases de educación financiera o tener acceso temprano a productos bancarios no garantiza por sí solo un puntaje alto en las pruebas cognitivas si no existe una base sólida en competencias matemáticas y lectoras.
+
+3.  **Confianza y familiaridad como puente entre dimensiones:** Las variables `FLCONFIN` y `FCFMLRTY` se proyectan en diagonal hacia el primer cuadrante, indicando que los estudiantes con mayor seguridad y dominio conceptual financiero son aquellos que logran combinar un buen respaldo académico con una exposición práctica activa.
+
+### Resumen Práctico y Conclusiones Ejecutivas para Política Educativa
+
+A partir del diagnóstico multidimensional realizado sobre los datos de PISA 2022 para la entidad interesada, se presentan los siguientes hallazgos estratégicos y recomendaciones para el diseño de programas de educación financiera:
+
+1.  **Integridad de la información y alcance del diagnóstico:** La depuración previa de módulos no aplicados por diseño institucional permitió conservar el **70.1% de la submuestra (**$7.006$ estudiantes en $19$ países) sin recurrir a imputaciones artificiales. Esto garantiza que las decisiones de política pública se fundamenten en comportamiento empírico real.
+2.  **El desempeño financiero depende de las competencias base (Dimensión 1 — 30.79%):** El principal factor que diferencia a los estudiantes a nivel internacional es la sinergia entre el capital socioeducativo del hogar (`ESCS`, `HISEI`, `PAREDINT`) y el dominio de competencias fundamentales en matemáticas y lectura (`PV1MATH`, `PV1READ`). Un estudiante con vacíos en razonamiento matemático o comprensión lectora difícilmente alcanza altos puntajes en alfabetización financiera (`PV1FLIT`).
+3.  **La exposición práctica por sí sola no basta (Dimensión 2 — 17.03%):** El acceso temprano a productos financieros (`ACCESSFP`), las charlas en el hogar (`FLFAMILY`) y las clases específicas de finanzas en el colegio (`FLSCHOOL`) conforman una dimensión independiente del rendimiento académico. Como evidencia el caso de la región de Asia / Medio Oriente, una alta exposición a contenidos o productos financieros no se traduce automáticamente en mejores puntajes cognitivos si no está respaldada por una base académica sólida.
+4.  **Recomendación estratégica para la entidad:** Para reducir la brecha observada en regiones rezagadas como América Latina, las políticas educativas no deben limitarse a introducir cátedras aisladas de educación financiera o bancarización juvenil (`Dim 2`). Los programas deben articular los contenidos financieros prácticos directamente con el fortalecimiento curricular en matemáticas aplicadas y lectura crítica (`Dim 1`), focalizando recursos de apoyo pedagógico en los hogares de menor índice socioeconómico.
 
 # Análisis de Correspondencias Simples (ACS)
 
-Para realizar el Análisis de Correspondencias Simples (ACS) se requiere el cruce de dos variables cualitativas con múltiples categorías resumidas en una Tabla de Contingencia[cite: 2]. Conservamos los **20 países** participantes en la muestra (`CNT`) y transformamos la variable cuantitativa continua de puntaje de alfabetización financiera (`PV1FLIT`) en una variable cualitativa ordinal dividida en **20 veintiles empíricos** (`V1` a `V20`)[cite: 2].
+Para realizar el Análisis de Correspondencias Simples (ACS) se requiere el cruce de dos variables cualitativas con múltiples categorías resumidas en una Tabla de Contingencia\[cite: 2\]. Conservamos los **20 países** participantes en la muestra (`CNT`) y transformamos la variable cuantitativa continua de puntaje de alfabetización financiera (`PV1FLIT`) en una variable cualitativa ordinal dividida en **20 veintiles empíricos** (`V1` a `V20`)\[cite: 2\].
 
-Esta estructura genera una matriz de contingencia $\mathbf{K}$ de **20 filas por 20 columnas** (400 celdas), donde los totales de las filas representan el marginal fila (estudiantes evaluados por país) y los totales de las columnas representan el marginal columna ($5.0\%$ de la muestra en cada tramo de puntaje)[cite: 3].
+Esta estructura genera una matriz de contingencia $\mathbf{K}$ de **20 filas por 20 columnas** (400 celdas), donde los totales de las filas representan el marginal fila (estudiantes evaluados por país) y los totales de las columnas representan el marginal columna ($5.0\%$ de la muestra en cada tramo de puntaje)\[cite: 3\].
 
 | Variable | Rol en la Matriz $\mathbf{K}$ | Categorías | Descripción |
-| :--- | :--- | :--- | :--- |
+|:-----------------|:-----------------|:-----------------|:-----------------|
 | **`CNT`** | Filas ($I = 20$) | 20 Países | País de origen del estudiante evaluado en PISA 2022. |
-| **`Veintil`** | Columnas ($J = 20$) | `V1` a `V20` | Nivel de desempeño en alfabetización financiera (`PV1FLIT`) dividido en 20 rangos equiprobables ($5\%$ cada uno)[cite: 2]. |
+| **`Veintil`** | Columnas ($J = 20$) | `V1` a `V20` | Nivel de desempeño en alfabetización financiera (`PV1FLIT`) dividido en 20 rangos equiprobables ($5\%$ cada uno)\[cite: 2\]. |
 
----
+------------------------------------------------------------------------
 
 ## Preparación de los Datos y Discretización en Veintiles
 
-Se establece la configuración global de formato numérico (`digits = 3`, sin notación científica)[cite: 2] y se construye la variable cualitativa `Veintil` a partir de los 21 puntos de corte de `PV1FLIT` ($0\%, 5\%, 10\%, \dots, 100\%$)[cite: 2].
+Se establece la configuración global de formato numérico (`digits = 3`, sin notación científica)\[cite: 2\] y se construye la variable cualitativa `Veintil` a partir de los 21 puntos de corte de `PV1FLIT` ($0\%, 5\%, 10\%, \dots, 100\%$)\[cite: 2\].
 
 ```{r}
 #| label: preparacion-acs-20x20
@@ -927,8 +911,7 @@ datos_acs <- datos_c2 %>%
   )
 ```
 
-
----
+------------------------------------------------------------------------
 
 ## Guía de Lectura: Rangos de Puntaje PISA por Veintil (`V1` a `V20`)
 
@@ -978,15 +961,15 @@ kable(
 
 La **Tabla 1** sirve como guía de referencia para interpretar los resultados del ACS en términos de puntaje real:
 
-* **Desempeño bajo (`V1` a `V5`):** Reúne al $25\%$ de los estudiantes con menores puntuaciones en la escala PISA, donde `V1` identifica al $5\%$ con el rendimiento más crítico de toda la muestra.
-* **Desempeño intermedio (`V6` a `V15`):** Agrupa al $50\%$ central de los alumnos evaluados alrededor de la mediana muestral, caracterizado por rangos de puntaje más estrechos dada la mayor concentración de estudiantes.
-* **Desempeño alto (`V16` a `V20`):** Corresponde al $25\%$ de mayor rendimiento en alfabetización financiera, culminando en `V20`, que concentra al $5\%$ de los estudiantes con los puntajes más elevados.
+- **Desempeño bajo (`V1` a `V5`):** Reúne al $25\%$ de los estudiantes con menores puntuaciones en la escala PISA, donde `V1` identifica al $5\%$ con el rendimiento más crítico de toda la muestra.
+- **Desempeño intermedio (`V6` a `V15`):** Agrupa al $50\%$ central de los alumnos evaluados alrededor de la mediana muestral, caracterizado por rangos de puntaje más estrechos dada la mayor concentración de estudiantes.
+- **Desempeño alto (`V16` a `V20`):** Corresponde al $25\%$ de mayor rendimiento en alfabetización financiera, culminando en `V20`, que concentra al $5\%$ de los estudiantes con los puntajes más elevados.
 
----
+------------------------------------------------------------------------
 
 ## Distribución Marginal de las Variables Activas
 
-La **Tabla 2** y la **Figura 1** resumen el comportamiento marginal de los países (`CNT`) y los veintiles (`Veintil`). Mientras que cada veintil posee una masa marginal uniforme del $5.0\%$ ($n_{\cdot j} \approx 500$), los países presentan distintos tamaños muestrales ($f_{i\cdot}$), determinando su peso en el perfil promedio global[cite: 1, 2].
+La **Tabla 2** y la **Figura 1** resumen el comportamiento marginal de los países (`CNT`) y los veintiles (`Veintil`). Mientras que cada veintil posee una masa marginal uniforme del $5.0\%$ ($n_{\cdot j} \approx 500$), los países presentan distintos tamaños muestrales ($f_{i\cdot}$), determinando su peso en el perfil promedio global\[cite: 1, 2\].
 
 ```{r}
 #| label: exploracion-univariada-paises
@@ -1059,16 +1042,13 @@ text(perc_cnt + 0.15, pl2, paste0(round(perc_cnt, 1), "%"), cex = 0.7, pos = 4)
 par(op)
 ```
 
-Como se aprecia en la **Figura 1B**, todas las naciones superan ampliamente umbrales de frecuencia mínima, evitando que categorías con recuentos marginales raros distorsionen los ejes por efecto de la distancia $\chi^2$[cite: 2].
+Como se aprecia en la **Figura 1B**, todas las naciones superan ampliamente umbrales de frecuencia mínima, evitando que categorías con recuentos marginales raros distorsionen los ejes por efecto de la distancia $\chi^2$\[cite: 2\].
 
-
-
-
----
+------------------------------------------------------------------------
 
 ## Tabla de Contingencia ($\mathbf{K}$)
 
-La matriz de contingencia $\mathbf{K}$ cruza a los **20 países** en las filas con los **20 veintiles de desempeño** en las columnas[cite: 1, 2]. Utilizando la función `plotct(K, tables = TRUE)` del paquete `FactoClass`[cite: 1, 3], obtenemos en un solo paso la tabla de contingencia con totales marginales (`$ctm`) y almacenamos las tablas de perfiles fila (`$perR`) y perfiles columna (`$perC`)[cite: 1, 3].
+La matriz de contingencia $\mathbf{K}$ cruza a los **20 países** en las filas con los **20 veintiles de desempeño** en las columnas\[cite: 1, 2\]. Utilizando la función `plotct(K, tables = TRUE)` del paquete `FactoClass`\[cite: 1, 3\], obtenemos en un solo paso la tabla de contingencia con totales marginales (`$ctm`) y almacenamos las tablas de perfiles fila (`$perR`) y perfiles columna (`$perC`)\[cite: 1, 3\].
 
 ```{r}
 #| label: tabla-contingencia-20x20
@@ -1099,16 +1079,15 @@ kable(
   scroll_box(width = "100%", height = "450px")
 ```
 
-La **Tabla 3** exhibe una única vez la matriz $\mathbf{K}$ junto con sus marginales por fila y columna (`Sum`), sumando los $10\,000$ estudiantes de la muestra[cite: 1, 3]. Al cruzar la lectura de esta tabla con los intervalos de la **Tabla 1**, se identifica de manera directa cuántos alumnos de cada país se concentran en cada rango de puntaje PISA.
+La **Tabla 3** exhibe una única vez la matriz $\mathbf{K}$ junto con sus marginales por fila y columna (`Sum`), sumando los $10\,000$ estudiantes de la muestra\[cite: 1, 3\]. Al cruzar la lectura de esta tabla con los intervalos de la **Tabla 1**, se identifica de manera directa cuántos alumnos de cada país se concentran en cada rango de puntaje PISA.
 
+## Matriz de Frecuencias Relativas Porcentuales
 
-## Matriz de Frecuencias Relativas Porcentuales 
-
-A partir de la matriz de contingencia $\mathbf{K}$, calculamos la **tabla de frecuencias relativas porcentuales ($\mathbf{F}$)** dividiendo cada conteo $k_{ij}$ por el total de estudiantes de la muestra ($k = 10\,000$)[cite: 2, 4]:
+A partir de la matriz de contingencia $\mathbf{K}$, calculamos la **tabla de frecuencias relativas porcentuales (**$\mathbf{F}$) dividiendo cada conteo $k_{ij}$ por el total de estudiantes de la muestra ($k = 10\,000$)\[cite: 2, 4\]:
 
 $$f_{ij} = \frac{k_{ij}}{k} \times 100$$
 
-Cada celda $f_{ij}$ expresa el porcentaje del total muestral que pertenece simultáneamente al país $i$ y al veintil de puntaje $j$, mientras que los bordes (`Sum`) contienen la **marginal fila** ($f_{i\cdot}$, peso de cada país) y la **marginal columna** ($f_{\cdot j} = 5.0\%$, peso de cada veintil)[cite: 2, 4].
+Cada celda $f_{ij}$ expresa el porcentaje del total muestral que pertenece simultáneamente al país $i$ y al veintil de puntaje $j$, mientras que los bordes (`Sum`) contienen la **marginal fila** ($f_{i\cdot}$, peso de cada país) y la **marginal columna** ($f_{\cdot j} = 5.0\%$, peso de cada veintil)\[cite: 2, 4\].
 
 ```{r}
 #| label: tabla-frecuencias-relativas-globales
@@ -1137,7 +1116,7 @@ kable(
 
 En la **Tabla 4** se verifica que las columnas (`V1` a `V20`) reparten la muestra en tramos iguales del $5.0\%$, mientras que la columna `Sum` muestra las diferencias de tamaño muestral entre países (desde $2.9\%$ en Bélgica hasta $14.9\%$ en Emiratos Árabes).
 
----
+------------------------------------------------------------------------
 
 ## Tablas de Perfiles Condicionales (Fila y Columna)
 
@@ -1147,7 +1126,7 @@ Siguiendo las recomendaciones vistas en clase para tablas de dimensión $20 \tim
 
 ### 1. Tabla de Perfiles Fila (`tabs$perR`)
 
-Los perfiles fila corresponden a las probabilidades condicionales de ubicarse en cada veintil de alfabetización financiera (`V1` a `V20`) dado que el estudiante pertenece a un país determinado ($f_{ij} / f_{i\cdot}$). Como las proporciones de cada país suman exactamente $1$ ($100\%$ en la columna `Suma`), una de las columnas queda determinada como combinación lineal de las demás, por lo que la nube de perfiles fila pierde una dimensión y se soporta como máximo en $\min(20 - 1, 20 - 1) = 19$ dimensiones (máximo 19 valores propios)[cite: 4]. La última fila (`marg`) representa el **perfil fila promedio** ($5.0\%$ en cada veintil) y constituye el **centro de gravedad** de los países en el ACS.
+Los perfiles fila corresponden a las probabilidades condicionales de ubicarse en cada veintil de alfabetización financiera (`V1` a `V20`) dado que el estudiante pertenece a un país determinado ($f_{ij} / f_{i\cdot}$). Como las proporciones de cada país suman exactamente $1$ ($100\%$ en la columna `Suma`), una de las columnas queda determinada como combinación lineal de las demás, por lo que la nube de perfiles fila pierde una dimensión y se soporta como máximo en $\min(20 - 1, 20 - 1) = 19$ dimensiones (máximo 19 valores propios)\[cite: 4\]. La última fila (`marg`) representa el **perfil fila promedio** ($5.0\%$ en cada veintil) y constituye el **centro de gravedad** de los países en el ACS.
 
 ```{r}
 #| label: tabla-perfiles-fila
@@ -1178,18 +1157,17 @@ kable(
   scroll_box(width = "100%", height = "420px")
 ```
 
-Al comparar la fila de cada país contra el **Promedio Marginal (`marg`)** de $5.0\%$ por veintil[cite: 11, 12], ya sin el efecto de que unos países tengan más estudiantes que otros en la muestra, resaltan dos cosas principales:
+Al comparar la fila de cada país contra el **Promedio Marginal (`marg`)** de $5.0\%$ por veintil\[cite: 11, 12\], ya sin el efecto de que unos países tengan más estudiantes que otros en la muestra, resaltan dos cosas principales:
 
-* **Países inclinados hacia los puntajes más altos vs. más bajos:** Por un lado, naciones como **Países Bajos** y **Bélgica** concentran más del doble de lo esperado en los tramos superiores, acumulando en `V19` y `V20` el $8.4\%$ y $11.4\%$ en Países Bajos[cite: 10, 11], y el $11.2\%$ y $10.8\%$ en Bélgica[cite: 9] (mientras que en `V1` apenas tienen $1.7\%$ y $1.0\%$[cite: 9, 10]), seguidos muy de cerca por **República Checa** ($9.9\%$ en `V20`)[cite: 11], **Austria** ($9.4\%$)[cite: 9], **Estados Unidos** ($8.6\%$)[cite: 10, 11] y **Canadá** ($7.8\%$)[cite: 9]. En el extremo opuesto, **Bulgaria** ($13.6\%$ de sus estudiantes en `V1`)[cite: 9], **Malasia** ($11.3\%$ en `V1`)[cite: 10, 11], **Emiratos Árabes** ($10.6\%$ en `V1`)[cite: 10], **Arabia Saudita** ($11.0\%$ en `V2` y solo $0.2\%$ en `V20`)[cite: 9] y los países latinoamericanos (**Brasil, Perú y Costa Rica**) agrupan la mayor parte de su población en los primeros veintiles y casi no tienen presencia en `V20`.
+- **Países inclinados hacia los puntajes más altos vs. más bajos:** Por un lado, naciones como **Países Bajos** y **Bélgica** concentran más del doble de lo esperado en los tramos superiores, acumulando en `V19` y `V20` el $8.4\%$ y $11.4\%$ en Países Bajos\[cite: 10, 11\], y el $11.2\%$ y $10.8\%$ en Bélgica\[cite: 9\] (mientras que en `V1` apenas tienen $1.7\%$ y $1.0\%$\[cite: 9, 10\]), seguidos muy de cerca por **República Checa** ($9.9\%$ en `V20`)\[cite: 11\], **Austria** ($9.4\%$)\[cite: 9\], **Estados Unidos** ($8.6\%$)\[cite: 10, 11\] y **Canadá** ($7.8\%$)\[cite: 9\]. En el extremo opuesto, **Bulgaria** ($13.6\%$ de sus estudiantes en `V1`)\[cite: 9\], **Malasia** ($11.3\%$ en `V1`)\[cite: 10, 11\], **Emiratos Árabes** ($10.6\%$ en `V1`)\[cite: 10\], **Arabia Saudita** ($11.0\%$ en `V2` y solo $0.2\%$ en `V20`)\[cite: 9\] y los países latinoamericanos (**Brasil, Perú y Costa Rica**) agrupan la mayor parte de su población en los primeros veintiles y casi no tienen presencia en `V20`.
 
+- **Países concentrados en la mitad de la tabla:** Naciones como **España**, **Italia** y **Portugal** muestran pocos estudiantes tanto en el veintil más bajo (`V1`, entre $1.2\%$ y $2.4\%$) como en el más alto (`V20`, entre $2.1\%$ y $3.0\%$), pero superan claramente el $5.0\%$ promedio en los veintiles intermedios (`V10` a `V15`, llegando por ejemplo a $8.9\%$ en `V14` para España, $8.0\%$ en `V10` para Portugal y $7.5\%$ en `V14` para Italia), lo que refleja un desempeño medio muy marcado.
 
-* **Países concentrados en la mitad de la tabla:** Naciones como **España**, **Italia** y **Portugal** muestran pocos estudiantes tanto en el veintil más bajo (`V1`, entre $1.2\%$ y $2.4\%$) como en el más alto (`V20`, entre $2.1\%$ y $3.0\%$), pero superan claramente el $5.0\%$ promedio en los veintiles intermedios (`V10` a `V15`, llegando por ejemplo a $8.9\%$ en `V14` para España, $8.0\%$ en `V10` para Portugal y $7.5\%$ en `V14` para Italia), lo que refleja un desempeño medio muy marcado.
-
----
+------------------------------------------------------------------------
 
 ### 2. Tabla de Perfiles Columna (`tabs$perC`)
 
-De forma simétrica, los perfiles columna representan las probabilidades condicionales de pertenecer a cada uno de los 20 países dado que el estudiante se ubicó en un veintil de puntaje específico ($f_{ij} / f_{\cdot j}$)[cite: 2, 4]. En esta matriz cada columna suma verticalmente el $100\%$ (fila `Suma`) y la última columna (`marg`) contiene la distribución marginal de los países, la cual actúa como **centro de gravedad** de la nube de los veintiles[cite: 2, 4].
+De forma simétrica, los perfiles columna representan las probabilidades condicionales de pertenecer a cada uno de los 20 países dado que el estudiante se ubicó en un veintil de puntaje específico ($f_{ij} / f_{\cdot j}$)\[cite: 2, 4\]. En esta matriz cada columna suma verticalmente el $100\%$ (fila `Suma`) y la última columna (`marg`) contiene la distribución marginal de los países, la cual actúa como **centro de gravedad** de la nube de los veintiles\[cite: 2, 4\].
 
 ```{r}
 #| label: tabla-perfiles-columna
@@ -1220,28 +1198,26 @@ kable(
   scroll_box(width = "100%", height = "420px")
 ```
 
-Mirando ahora cómo se reparte cada veintil por vertical (donde cada columna suma $100.0\%$) y comparándolo contra el peso de cada país en la muestra en la columna **`marg`**[cite: 7, 8, 12], se observan dos comportamientos clave:
+Mirando ahora cómo se reparte cada veintil por vertical (donde cada columna suma $100.0\%$) y comparándolo contra el peso de cada país en la muestra en la columna **`marg`**\[cite: 7, 8, 12\], se observan dos comportamientos clave:
 
-* **Cambio en la composición de países entre `V1` y `V20`:** El veintil de puntaje más bajo (`V1`) está compuesto principalmente por estudiantes de **Emiratos Árabes** ($31.6\%$, más del doble de su peso `marg` de $14.9\%$), **Brasil** ($12.0\%$ frente a $6.4\%$), **Bulgaria** ($10.4\%$ frente a $3.8\%$) y **Malasia** ($9.8\%$ frente a $4.3\%$), sumando entre los cuatro casi dos tercios ($63.8\%$) de todos los alumnos de ese primer tramo[cite: 7, 8]. En cambio, al llegar al veintil más alto (`V20`), el peso lo toman **Canadá** ($14.4\%$ frente a su $9.3\%$ en `marg`), **República Checa** ($10.0\%$ frente a $5.1\%$), **Austria** ($8.8\%$ frente a $4.7\%$), **Países Bajos** ($6.8\%$ frente a $3.0\%$) y **Bélgica** ($6.4\%$ frente a $2.9\%$).
+- **Cambio en la composición de países entre `V1` y `V20`:** El veintil de puntaje más bajo (`V1`) está compuesto principalmente por estudiantes de **Emiratos Árabes** ($31.6\%$, más del doble de su peso `marg` de $14.9\%$), **Brasil** ($12.0\%$ frente a $6.4\%$), **Bulgaria** ($10.4\%$ frente a $3.8\%$) y **Malasia** ($9.8\%$ frente a $4.3\%$), sumando entre los cuatro casi dos tercios ($63.8\%$) de todos los alumnos de ese primer tramo\[cite: 7, 8\]. En cambio, al llegar al veintil más alto (`V20`), el peso lo toman **Canadá** ($14.4\%$ frente a su $9.3\%$ en `marg`), **República Checa** ($10.0\%$ frente a $5.1\%$), **Austria** ($8.8\%$ frente a $4.7\%$), **Países Bajos** ($6.8\%$ frente a $3.0\%$) y **Bélgica** ($6.4\%$ frente a $2.9\%$).
 
-* **El caso particular de Emiratos Árabes en los extremos:** Aunque Emiratos Árabes reduce bastante su participación en los niveles medio-altos (bajando hasta $8.6\%$ en `V17`, muy por debajo de su $14.9\%$ marginal), en el último veintil (`V20`) vuelve a subir a $15.2\%$, igualando su peso en la muestra; esto deja ver que, aunque la mayoría de sus estudiantes se concentran en las notas más bajas, también cuenta con un grupo que alcanza los puntajes más altos.
+- **El caso particular de Emiratos Árabes en los extremos:** Aunque Emiratos Árabes reduce bastante su participación en los niveles medio-altos (bajando hasta $8.6\%$ en `V17`, muy por debajo de su $14.9\%$ marginal), en el último veintil (`V20`) vuelve a subir a $15.2\%$, igualando su peso en la muestra; esto deja ver que, aunque la mayoría de sus estudiantes se concentran en las notas más bajas, también cuenta con un grupo que alcanza los puntajes más altos.
 
----
-
+------------------------------------------------------------------------
 
 ## Frecuencias Esperadas bajo Independencia ($\mathbf{A}$), Tabla de Diferencias ($\mathbf{F} - \mathbf{A}$) e Inercia Total
 
-Si el país de origen y el veintil de puntaje fueran **estadísticamente independientes**, los perfiles fila y columna serían iguales a sus marginales respectivas (`marg`), y cada celda de la tabla de frecuencias relativas se obtendría simplemente multiplicando su marginal fila por su marginal columna[cite: 3, 4]:
+Si el país de origen y el veintil de puntaje fueran **estadísticamente independientes**, los perfiles fila y columna serían iguales a sus marginales respectivas (`marg`), y cada celda de la tabla de frecuencias relativas se obtendría simplemente multiplicando su marginal fila por su marginal columna\[cite: 3, 4\]:
 
 $$a_{ij} = f_{i\cdot} \, f_{\cdot j}$$
 
-Para ver qué tanto se alejan nuestros datos de ese escenario hipotético, primero construimos la **tabla de frecuencias relativas esperadas bajo independencia ($\mathbf{A}$)** y luego le restamos a la tabla observada ($\mathbf{F}$) esos valores esperados, obteniendo la **tabla de diferencias o desvíos ($\mathbf{F} - \mathbf{A}$)** en puntos porcentuales[cite: 3, 4]. Donde la resta da positiva ($f_{ij} - a_{ij} > 0$) hay más estudiantes de los que habría si no existiera relación entre el país y la nota; donde da negativa ($f_{ij} - a_{ij} < 0$), hay menos de los esperados.
+Para ver qué tanto se alejan nuestros datos de ese escenario hipotético, primero construimos la **tabla de frecuencias relativas esperadas bajo independencia (**$\mathbf{A}$) y luego le restamos a la tabla observada ($\mathbf{F}$) esos valores esperados, obteniendo la **tabla de diferencias o desvíos (**$\mathbf{F} - \mathbf{A}$) en puntos porcentuales\[cite: 3, 4\]. Donde la resta da positiva ($f_{ij} - a_{ij} > 0$) hay más estudiantes de los que habría si no existiera relación entre el país y la nota; donde da negativa ($f_{ij} - a_{ij} < 0$), hay menos de los esperados.
 
-Para comparar estas matrices cómodamente sin bajar por toda la página, las agrupamos en las siguientes tres pestañas junto con el cálculo de la **inercia total ($\phi^2 = \chi^2 / k$)**[cite: 3, 4]:
+Para comparar estas matrices cómodamente sin bajar por toda la página, las agrupamos en las siguientes tres pestañas junto con el cálculo de la **inercia total (**$\phi^2 = \chi^2 / k$)\[cite: 3, 4\]:
 
-::: {.panel-tabset}
-
-### 1. Esperadas bajo Independencia 
+::: panel-tabset
+### 1. Esperadas bajo Independencia
 
 ```{r}
 #| label: tabla-esperada-independencia
@@ -1277,14 +1253,13 @@ kable(
   scroll_box(width = "100%", height = "420px")
 ```
 
-Al revisar cómo se vería la tabla si el país y el puntaje fueran totalmente independientes[cite: 5, 6], destacan dos puntos que sirven de base para las comparaciones siguientes:
+Al revisar cómo se vería la tabla si el país y el puntaje fueran totalmente independientes\[cite: 5, 6\], destacan dos puntos que sirven de base para las comparaciones siguientes:
 
-* **Repartición pareja en 20 partes iguales por país:** Como cada veintil (`V1` a `V20`) concentra exactamente el $5.00\%$ de la muestra en la fila `Sum`, bajo independencia cada país simplemente divide su peso total (`Sum` horizontal) en 20 casillas idénticas[cite: 5, 6]. Por eso todas las celdas de **Emiratos Árabes** valen $0.75\%$ (sumando su $14.94\%$), las de **Canadá** valen $0.46\%$ (sumando su $9.26\%$), y las de los países con menor muestra como **Bélgica** y **Países Bajos** valen apenas $0.15\%$ en cada tramo (sumando $2.95\%$ y $2.97\%$).
+- **Repartición pareja en 20 partes iguales por país:** Como cada veintil (`V1` a `V20`) concentra exactamente el $5.00\%$ de la muestra en la fila `Sum`, bajo independencia cada país simplemente divide su peso total (`Sum` horizontal) en 20 casillas idénticas\[cite: 5, 6\]. Por eso todas las celdas de **Emiratos Árabes** valen $0.75\%$ (sumando su $14.94\%$), las de **Canadá** valen $0.46\%$ (sumando su $9.26\%$), y las de los países con menor muestra como **Bélgica** y **Países Bajos** valen apenas $0.15\%$ en cada tramo (sumando $2.95\%$ y $2.97\%$).
 
-* **Importancia del peso muestral al comparar:** Esta tabla deja claro que el punto de partida de cada país depende directamente de su participación en los $10\,000$ estudiantes[cite: 5, 6]; por lo tanto, tener un $0.30\%$ en una celda sería muy alto para Bélgica (el doble de su $0.15\%$ esperado), pero muy bajo para Emiratos Árabes (menos de la mitad de su $0.75\%$ esperado).
+- **Importancia del peso muestral al comparar:** Esta tabla deja claro que el punto de partida de cada país depende directamente de su participación en los $10\,000$ estudiantes\[cite: 5, 6\]; por lo tanto, tener un $0.30\%$ en una celda sería muy alto para Bélgica (el doble de su $0.15\%$ esperado), pero muy bajo para Emiratos Árabes (menos de la mitad de su $0.75\%$ esperado).
 
-
-### 2. Tabla de Diferencias 
+### 2. Tabla de Diferencias
 
 ```{r}
 #| label: tabla-diferencias-desvios
@@ -1309,12 +1284,11 @@ kable(
 
 Al restar los porcentajes observados menos los esperados bajo independencia, se distinguen claramente dos aspectos:
 
-* **Efecto de los pesos y valores más extremos de la tabla:** Como estas diferencias están en puntos porcentuales del total de la muestra, los países con mayor participación alcanzan las restas más grandes en valor absoluto. El desvío positivo más alto de toda la tabla lo tiene **Emiratos Árabes** en `V1` con **$+0.83$** (seguido de $+0.47$ en `V2`), mientras que su desvío negativo más fuerte llega a **$-0.32$** en `V17; por su parte, **Canadá** muestra un comportamiento totalmente simétrico entre las dos puntas, con **$-0.26$** en `V1` (menos estudiantes de los esperados en nota muy baja) y **$+0.26$** en `V20` (más estudiantes de los esperados en nota excelente).
+- **Efecto de los pesos y valores más extremos de la tabla:** Como estas diferencias están en puntos porcentuales del total de la muestra, los países con mayor participación alcanzan las restas más grandes en valor absoluto. El desvío positivo más alto de toda la tabla lo tiene **Emiratos Árabes** en `V1` con $+0.83$ (seguido de $+0.47$ en `V2`), mientras que su desvío negativo más fuerte llega a $-0.32$ en `V17; por su parte, **Canadá** muestra un comportamiento totalmente simétrico entre las dos puntas, con **$-0.26$** en`V1`(menos estudiantes de los esperados en nota muy baja) y **$+0.26$** en`V20\` (más estudiantes de los esperados en nota excelente).
 
+- **Contraste de signos entre bloques de países:** Mirando los signos de izquierda a derecha, países como **Brasil** ($+0.28$ en `V1` y $-0.28$ en `V20`), **Bulgaria** ($+0.33$ en `V1`), **Malasia** ($+0.27$ en `V1` y $-0.20$ en `V20`), **Arabia Saudita**, **Perú** y **Costa Rica** mantienen signos positivos en los primeros veintiles y negativos al final; al revés de **Canadá**, **República Checa** ($-0.17$ en `V1` y $+0.25$ en `V20`), **Austria** ($+0.21$ en `V20`), **Países Bajos** ($+0.19$ en `V20`) y **Bélgica**, que pasan de valores negativos en los veintiles bajos a positivos en los altos.
 
-* **Contraste de signos entre bloques de países:** Mirando los signos de izquierda a derecha, países como **Brasil** ($+0.28$ en `V1` y $-0.28$ en `V20`), **Bulgaria** ($+0.33$ en `V1`), **Malasia** ($+0.27$ en `V1` y $-0.20$ en `V20`), **Arabia Saudita**, **Perú** y **Costa Rica** mantienen signos positivos en los primeros veintiles y negativos al final; al revés de **Canadá**, **República Checa** ($-0.17$ en `V1` y $+0.25$ en `V20`), **Austria** ($+0.21$ en `V20`), **Países Bajos** ($+0.19$ en `V20`) y **Bélgica**, que pasan de valores negativos en los veintiles bajos a positivos en los altos.
-
-### 3. Inercia Total  y Estadístico $\chi^2$
+### 3. Inercia Total y Estadístico $\chi^2$
 
 ```{r}
 #| label: inercia-total-chi2
@@ -1348,25 +1322,9 @@ kable(
     bootstrap_options = c("striped", "hover", "condensed")
   )
 ```
-
 :::
 
-* **Confirmación de dependencia entre país y puntaje:** El estadístico $\chi^2 = 1826$ supera de lejos el valor crítico de $406$ (con $361$ grados de libertad y un valor $p < 0.0001$), lo que confirma que las diferencias vistas en las tablas anteriores no se deben al azar y que el nivel de alfabetización financiera sí depende del país en esta muestra.
-* **Magnitud de la Inercia Total ($\phi^2 = 0.183$):** Al dividir el estadístico $\chi^2$ entre los $10\,000$ estudiantes obtenemos una inercia total de **$0.183$**, que resume qué tanto se alejan en conjunto los perfiles de los países respecto al centro de gravedad (`marg`) y es el valor total que pasaremos a descomponer en los ejes factoriales del ACS.
+- **Confirmación de dependencia entre país y puntaje:** El estadístico $\chi^2 = 1826$ supera de lejos el valor crítico de $406$ (con $361$ grados de libertad y un valor $p < 0.0001$), lo que confirma que las diferencias vistas en las tablas anteriores no se deben al azar y que el nivel de alfabetización financiera sí depende del país en esta muestra.
+- **Magnitud de la Inercia Total (**$\phi^2 = 0.183$): Al dividir el estadístico $\chi^2$ entre los $10\,000$ estudiantes obtenemos una inercia total de $0.183$, que resume qué tanto se alejan en conjunto los perfiles de los países respecto al centro de gravedad (`marg`) y es el valor total que pasaremos a descomponer en los ejes factoriales del ACS.
 
-El ACS va más allá de la simple prueba de hipótesis de independencia que se suele hacer en las tablas de contingencia, porque nos permite describir dónde están las dependencias comparando los perfiles fila y columna[cite: 4]. Aquí la **inercia total ($\phi^2 = \chi^2 / k$)** resume qué tanto se alejan en conjunto los países y veintiles de esa tabla de independencia ($\mathbf{A}$)[cite: 3, 4]. Como el estadístico $\chi^2$ calculado está muy por encima del valor crítico teórico con $361$ grados de libertad ($p < 0.0001$), queda claro que el puntaje en alfabetización financiera sí depende del país en esta muestra[cite: 3, 5].
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+El ACS va más allá de la simple prueba de hipótesis de independencia que se suele hacer en las tablas de contingencia, porque nos permite describir dónde están las dependencias comparando los perfiles fila y columna\[cite: 4\]. Aquí la **inercia total (**$\phi^2 = \chi^2 / k$) resume qué tanto se alejan en conjunto los países y veintiles de esa tabla de independencia ($\mathbf{A}$)\[cite: 3, 4\]. Como el estadístico $\chi^2$ calculado está muy por encima del valor crítico teórico con $361$ grados de libertad ($p < 0.0001$), queda claro que el puntaje en alfabetización financiera sí depende del país en esta muestra\[cite: 3, 5\].
