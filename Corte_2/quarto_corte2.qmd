@@ -855,22 +855,25 @@ A partir del diagnóstico multidimensional realizado sobre los datos de PISA 202
 3.  **La exposición práctica por sí sola no basta (Dimensión 2 — 17.03%):** El acceso temprano a productos financieros (`ACCESSFP`), las charlas en el hogar (`FLFAMILY`) y las clases específicas de finanzas en el colegio (`FLSCHOOL`) conforman una dimensión independiente del rendimiento académico. Como evidencia el caso de la región de Asia / Medio Oriente, una alta exposición a contenidos o productos financieros no se traduce automáticamente en mejores puntajes cognitivos si no está respaldada por una base académica sólida.
 4.  **Recomendación estratégica para la entidad:** Para reducir la brecha observada en regiones rezagadas como América Latina, las políticas educativas no deben limitarse a introducir cátedras aisladas de educación financiera o bancarización juvenil (`Dim 2`). Los programas deben articular los contenidos financieros prácticos directamente con el fortalecimiento curricular en matemáticas aplicadas y lectura crítica (`Dim 1`), focalizando recursos de apoyo pedagógico en los hogares de menor índice socioeconómico.
 
+
+
+
 # Análisis de Correspondencias Simples (ACS)
 
-Para realizar el Análisis de Correspondencias Simples (ACS) se requiere el cruce de dos variables cualitativas con múltiples categorías resumidas en una Tabla de Contingencia\[cite: 2\]. Conservamos los **20 países** participantes en la muestra (`CNT`) y transformamos la variable cuantitativa continua de puntaje de alfabetización financiera (`PV1FLIT`) en una variable cualitativa ordinal dividida en **20 veintiles empíricos** (`V1` a `V20`)\[cite: 2\].
+Para realizar el Análisis de Correspondencias Simples (ACS) se requiere el cruce de dos variables cualitativas con múltiples categorías resumidas en una Tabla de Contingencia[cite: 2]. Conservamos los **20 países** participantes en la muestra (`CNT`) y transformamos la variable cuantitativa continua de puntaje de alfabetización financiera (`PV1FLIT`) en una variable cualitativa ordinal dividida en **20 veintiles empíricos** (`V1` a `V20`).
 
-Esta estructura genera una matriz de contingencia $\mathbf{K}$ de **20 filas por 20 columnas** (400 celdas), donde los totales de las filas representan el marginal fila (estudiantes evaluados por país) y los totales de las columnas representan el marginal columna ($5.0\%$ de la muestra en cada tramo de puntaje)\[cite: 3\].
+Esta estructura genera una matriz de contingencia $\mathbf{K}$ de **20 filas por 20 columnas** (400 celdas), donde los totales de las filas representan el marginal fila (estudiantes evaluados por país) y los totales de las columnas representan el marginal columna ($5.0\%$ de la muestra en cada tramo de puntaje).
 
 | Variable | Rol en la Matriz $\mathbf{K}$ | Categorías | Descripción |
-|:-----------------|:-----------------|:-----------------|:-----------------|
-| **`CNT`** | Filas ($I = 20$) | 20 Países | País de origen del estudiante evaluado en PISA 2022. |
-| **`Veintil`** | Columnas ($J = 20$) | `V1` a `V20` | Nivel de desempeño en alfabetización financiera (`PV1FLIT`) dividido en 20 rangos equiprobables ($5\%$ cada uno)\[cite: 2\]. |
-
-------------------------------------------------------------------------
-
+  | :--- | :--- | :--- | :--- |
+  | **`CNT`** | Filas ($I = 20$) | 20 Países | País de origen del estudiante evaluado en PISA 2022. |
+  | **`Veintil`** | Columnas ($J = 20$) | `V1` a `V20` | Nivel de desempeño en alfabetización financiera (`PV1FLIT`) dividido en 20 rangos equiprobables ($5\%$ cada uno). |
+  
+  ---
+  
 ## Preparación de los Datos y Discretización en Veintiles
-
-Se establece la configuración global de formato numérico (`digits = 3`, sin notación científica)\[cite: 2\] y se construye la variable cualitativa `Veintil` a partir de los 21 puntos de corte de `PV1FLIT` ($0\%, 5\%, 10\%, \dots, 100\%$)\[cite: 2\].
+  
+  Se establece la configuración global de formato numérico (`digits = 3`, sin notación científica)[cite: 2] y se construye la variable cualitativa `Veintil` a partir de los 21 puntos de corte de `PV1FLIT` ($0\%, 5\%, 10\%, \dots, 100\%$).
 
 ```{r}
 #| label: preparacion-acs-20x20
@@ -920,11 +923,12 @@ datos_acs <- datos_c2 %>%
   )
 ```
 
-------------------------------------------------------------------------
 
+---
+  
 ## Guía de Lectura: Rangos de Puntaje PISA por Veintil (`V1` a `V20`)
-
-Dado que las etiquetas `V1` a `V20` facilitan la visualización en las tablas y planos factoriales pero no informan por sí solas el puntaje en la escala PISA, la **Tabla 1** presenta la equivalencia exacta de cada veintil con su **Rango Inicial (Desde)** y **Rango Final (Hasta)**. Para extraer exactamente 20 intervalos a partir de los 21 puntos de corte, se emplean `cortes_v[-21]` (primeros 20 cortes) como límites inferiores y `cortes_v[-1]` (últimos 20 cortes) como límites superiores.
+  
+  Dado que las etiquetas `V1` a `V20` facilitan la visualización en las tablas y planos factoriales pero no informan por sí solas el puntaje en la escala PISA, la **Tabla 1** presenta la equivalencia exacta de cada veintil con su **Rango Inicial (Desde)** y **Rango Final (Hasta)**. Para extraer exactamente 20 intervalos a partir de los 21 puntos de corte, se emplean `cortes_v[-21]` (primeros 20 cortes) como límites inferiores y `cortes_v[-1]` (últimos 20 cortes) como límites superiores.
 
 ```{r}
 #| label: tabla-guia-rangos-veintiles
@@ -969,16 +973,16 @@ kable(
 ```
 
 La **Tabla 1** sirve como guía de referencia para interpretar los resultados del ACS en términos de puntaje real:
+  
+* **Desempeño bajo (`V1` a `V5`):** Reúne al $25\%$ de los estudiantes con menores puntuaciones en la escala PISA, donde `V1` identifica al $5\%$ con el rendimiento más crítico de toda la muestra.
+* **Desempeño intermedio (`V6` a `V15`):** Agrupa al $50\%$ central de los alumnos evaluados alrededor de la mediana muestral, caracterizado por rangos de puntaje más estrechos dada la mayor concentración de estudiantes.
+* **Desempeño alto (`V16` a `V20`):** Corresponde al $25\%$ de mayor rendimiento en alfabetización financiera, culminando en `V20`, que concentra al $5\%$ de los estudiantes con los puntajes más elevados.
 
-- **Desempeño bajo (`V1` a `V5`):** Reúne al $25\%$ de los estudiantes con menores puntuaciones en la escala PISA, donde `V1` identifica al $5\%$ con el rendimiento más crítico de toda la muestra.
-- **Desempeño intermedio (`V6` a `V15`):** Agrupa al $50\%$ central de los alumnos evaluados alrededor de la mediana muestral, caracterizado por rangos de puntaje más estrechos dada la mayor concentración de estudiantes.
-- **Desempeño alto (`V16` a `V20`):** Corresponde al $25\%$ de mayor rendimiento en alfabetización financiera, culminando en `V20`, que concentra al $5\%$ de los estudiantes con los puntajes más elevados.
-
-------------------------------------------------------------------------
-
+---
+  
 ## Distribución Marginal de las Variables Activas
-
-La **Tabla 2** y la **Figura 1** resumen el comportamiento marginal de los países (`CNT`) y los veintiles (`Veintil`). Mientras que cada veintil posee una masa marginal uniforme del $5.0\%$ ($n_{\cdot j} \approx 500$), los países presentan distintos tamaños muestrales ($f_{i\cdot}$), determinando su peso en el perfil promedio global\[cite: 1, 2\].
+  
+  La **Tabla 2** y la **Figura 1** resumen el comportamiento marginal de los países (`CNT`) y los veintiles (`Veintil`). Mientras que cada veintil posee una masa marginal uniforme del $5.0\%$ ($n_{\cdot j} \approx 500$), los países presentan distintos tamaños muestrales ($f_{i\cdot}$), determinando su peso en el perfil promedio global.
 
 ```{r}
 #| label: exploracion-univariada-paises
@@ -1051,13 +1055,16 @@ text(perc_cnt + 0.15, pl2, paste0(round(perc_cnt, 1), "%"), cex = 0.7, pos = 4)
 par(op)
 ```
 
-Como se aprecia en la **Figura 1B**, todas las naciones superan ampliamente umbrales de frecuencia mínima, evitando que categorías con recuentos marginales raros distorsionen los ejes por efecto de la distancia $\chi^2$\[cite: 2\].
+Como se aprecia en la **Figura 1B**, todas las naciones superan ampliamente umbrales de frecuencia mínima, evitando que categorías con recuentos marginales raros distorsionen los ejes por efecto de la distancia $\chi^2$.
 
-------------------------------------------------------------------------
 
-## Tabla de Contingencia ($\mathbf{K}$)
 
-La matriz de contingencia $\mathbf{K}$ cruza a los **20 países** en las filas con los **20 veintiles de desempeño** en las columnas\[cite: 1, 2\]. Utilizando la función `plotct(K, tables = TRUE)` del paquete `FactoClass`\[cite: 1, 3\], obtenemos en un solo paso la tabla de contingencia con totales marginales (`$ctm`) y almacenamos las tablas de perfiles fila (`$perR`) y perfiles columna (`$perC`)\[cite: 1, 3\].
+
+---
+  
+## Tabla de Contingencia 
+  
+  La matriz de contingencia $\mathbf{K}$ cruza a los **20 países** en las filas con los **20 veintiles de desempeño** en las columnas[cite: 1, 2]. Utilizando la función `plotct(K, tables = TRUE)` del paquete `FactoClass`[cite: 1, 3], obtenemos en un solo paso la tabla de contingencia con totales marginales (`$ctm`) y almacenamos las tablas de perfiles fila (`$perR`) y perfiles columna (`$perC`).
 
 ```{r}
 #| label: tabla-contingencia-20x20
@@ -1088,15 +1095,16 @@ kable(
   scroll_box(width = "100%", height = "450px")
 ```
 
-La **Tabla 3** exhibe una única vez la matriz $\mathbf{K}$ junto con sus marginales por fila y columna (`Sum`), sumando los $10\,000$ estudiantes de la muestra\[cite: 1, 3\]. Al cruzar la lectura de esta tabla con los intervalos de la **Tabla 1**, se identifica de manera directa cuántos alumnos de cada país se concentran en cada rango de puntaje PISA.
+La **Tabla 3** exhibe una única vez la matriz $\mathbf{K}$ junto con sus marginales por fila y columna (`Sum`), sumando los $10\,000$ estudiantes de la muestra[cite: 1, 3]. Al cruzar la lectura de esta tabla con los intervalos de la **Tabla 1**, se identifica de manera directa cuántos alumnos de cada país se concentran en cada rango de puntaje PISA.
 
-## Matriz de Frecuencias Relativas Porcentuales
 
-A partir de la matriz de contingencia $\mathbf{K}$, calculamos la **tabla de frecuencias relativas porcentuales (**$\mathbf{F}$) dividiendo cada conteo $k_{ij}$ por el total de estudiantes de la muestra ($k = 10\,000$)\[cite: 2, 4\]:
+## Matriz de Frecuencias Relativas Porcentuales 
 
-$$f_{ij} = \frac{k_{ij}}{k} \times 100$$
-
-Cada celda $f_{ij}$ expresa el porcentaje del total muestral que pertenece simultáneamente al país $i$ y al veintil de puntaje $j$, mientras que los bordes (`Sum`) contienen la **marginal fila** ($f_{i\cdot}$, peso de cada país) y la **marginal columna** ($f_{\cdot j} = 5.0\%$, peso de cada veintil)\[cite: 2, 4\].
+A partir de la matriz de contingencia $\mathbf{K}$, calculamos la **tabla de frecuencias relativas porcentuales ($\mathbf{F}$)** dividiendo cada conteo $k_{ij}$ por el total de estudiantes de la muestra ($k = 10\,000$):
+  
+  $$f_{ij} = \frac{k_{ij}}{k} \times 100$$
+  
+  Cada celda $f_{ij}$ expresa el porcentaje del total muestral que pertenece simultáneamente al país $i$ y al veintil de puntaje $j$, mientras que los bordes (`Sum`) contienen la **marginal fila** ($f_{i\cdot}$, peso de cada país) y la **marginal columna** ($f_{\cdot j} = 5.0\%$, peso de cada veintil).
 
 ```{r}
 #| label: tabla-frecuencias-relativas-globales
@@ -1125,17 +1133,17 @@ kable(
 
 En la **Tabla 4** se verifica que las columnas (`V1` a `V20`) reparten la muestra en tramos iguales del $5.0\%$, mientras que la columna `Sum` muestra las diferencias de tamaño muestral entre países (desde $2.9\%$ en Bélgica hasta $14.9\%$ en Emiratos Árabes).
 
-------------------------------------------------------------------------
-
+---
+  
 ## Tablas de Perfiles Condicionales (Fila y Columna)
-
-Dado que los países tienen tamaños muestrales diferentes en la base de datos, no es posible comparar directamente sus conteos absolutos. Para eliminar el efecto del tamaño muestral y analizar las distribuciones condicionales, utilizamos la función `plotct(K, tables = TRUE)` de `FactoClass` para extraer la **tabla de perfiles fila (`tabs$perR`)** y la **tabla de perfiles columna (`tabs$perC`)**
-
-Siguiendo las recomendaciones vistas en clase para tablas de dimensión $20 \times 20$, omitimos en este punto los diagramas de barras apiladas convencionales (cuya lectura visual se satura con 20 categorías) y reservamos la visualización e interpretación conjunta de estos perfiles para la sección de los **planos factoriales**, donde las tablas se presentarán junto a las gráficas de factores para facilitar su lectura directa.
+  
+  Dado que los países tienen tamaños muestrales diferentes en la base de datos, no es posible comparar directamente sus conteos absolutos. Para eliminar el efecto del tamaño muestral y analizar las distribuciones condicionales, utilizamos la función `plotct(K, tables = TRUE)` de `FactoClass` para extraer la **tabla de perfiles fila (`tabs$perR`)** y la **tabla de perfiles columna (`tabs$perC`)**
+  
+  Siguiendo las recomendaciones vistas en clase para tablas de dimensión $20 \times 20$, omitimos en este punto los diagramas de barras apiladas convencionales (cuya lectura visual se satura con 20 categorías) y reservamos la visualización e interpretación conjunta de estos perfiles para la sección de los **planos factoriales**, donde las tablas se presentarán junto a las gráficas de factores para facilitar su lectura directa.
 
 ### 1. Tabla de Perfiles Fila (`tabs$perR`)
 
-Los perfiles fila corresponden a las probabilidades condicionales de ubicarse en cada veintil de alfabetización financiera (`V1` a `V20`) dado que el estudiante pertenece a un país determinado ($f_{ij} / f_{i\cdot}$). Como las proporciones de cada país suman exactamente $1$ ($100\%$ en la columna `Suma`), una de las columnas queda determinada como combinación lineal de las demás, por lo que la nube de perfiles fila pierde una dimensión y se soporta como máximo en $\min(20 - 1, 20 - 1) = 19$ dimensiones (máximo 19 valores propios)\[cite: 4\]. La última fila (`marg`) representa el **perfil fila promedio** ($5.0\%$ en cada veintil) y constituye el **centro de gravedad** de los países en el ACS.
+Los perfiles fila corresponden a las probabilidades condicionales de ubicarse en cada veintil de alfabetización financiera (`V1` a `V20`) dado que el estudiante pertenece a un país determinado ($f_{ij} / f_{i\cdot}$). Como las proporciones de cada país suman exactamente $1$ ($100\%$ en la columna `Suma`), una de las columnas queda determinada como combinación lineal de las demás, por lo que la nube de perfiles fila pierde una dimensión y se soporta como máximo en $\min(20 - 1, 20 - 1) = 19$ dimensiones (máximo 19 valores propios)[cite: 4]. La última fila (`marg`) representa el **perfil fila promedio** ($5.0\%$ en cada veintil) y constituye el **centro de gravedad** de los países en el ACS.
 
 ```{r}
 #| label: tabla-perfiles-fila
@@ -1166,17 +1174,18 @@ kable(
   scroll_box(width = "100%", height = "420px")
 ```
 
-Al comparar la fila de cada país contra el **Promedio Marginal (`marg`)** de $5.0\%$ por veintil\[cite: 11, 12\], ya sin el efecto de que unos países tengan más estudiantes que otros en la muestra, resaltan dos cosas principales:
+Al comparar la fila de cada país contra el **Promedio Marginal (`marg`)** de $5.0\%$ por veintil, ya sin el efecto de que unos países tengan más estudiantes que otros en la muestra, resaltan dos cosas principales:
+  
+  * **Países inclinados hacia los puntajes más altos vs. más bajos:** Por un lado, naciones como **Países Bajos** y **Bélgica** concentran más del doble de lo esperado en los tramos superiores, acumulando en `V19` y `V20` el $8.4\%$ y $11.4\%$ en Países Bajos[cite: 10, 11], y el $11.2\%$ y $10.8\%$ en Bélgica[cite: 9] (mientras que en `V1` apenas tienen $1.7\%$ y $1.0\%$[cite: 9, 10]), seguidos muy de cerca por **República Checa** ($9.9\%$ en `V20`)[cite: 11], **Austria** ($9.4\%$)[cite: 9], **Estados Unidos** ($8.6\%$)[cite: 10, 11] y **Canadá** ($7.8\%$)[cite: 9]. En el extremo opuesto, **Bulgaria** ($13.6\%$ de sus estudiantes en `V1`)[cite: 9], **Malasia** ($11.3\%$ en `V1`)[cite: 10, 11], **Emiratos Árabes** ($10.6\%$ en `V1`)[cite: 10], **Arabia Saudita** ($11.0\%$ en `V2` y solo $0.2\%$ en `V20`)[cite: 9] y los países latinoamericanos (**Brasil, Perú y Costa Rica**) agrupan la mayor parte de su población en los primeros veintiles y casi no tienen presencia en `V20`.
 
-- **Países inclinados hacia los puntajes más altos vs. más bajos:** Por un lado, naciones como **Países Bajos** y **Bélgica** concentran más del doble de lo esperado en los tramos superiores, acumulando en `V19` y `V20` el $8.4\%$ y $11.4\%$ en Países Bajos\[cite: 10, 11\], y el $11.2\%$ y $10.8\%$ en Bélgica\[cite: 9\] (mientras que en `V1` apenas tienen $1.7\%$ y $1.0\%$\[cite: 9, 10\]), seguidos muy de cerca por **República Checa** ($9.9\%$ en `V20`)\[cite: 11\], **Austria** ($9.4\%$)\[cite: 9\], **Estados Unidos** ($8.6\%$)\[cite: 10, 11\] y **Canadá** ($7.8\%$)\[cite: 9\]. En el extremo opuesto, **Bulgaria** ($13.6\%$ de sus estudiantes en `V1`)\[cite: 9\], **Malasia** ($11.3\%$ en `V1`)\[cite: 10, 11\], **Emiratos Árabes** ($10.6\%$ en `V1`)\[cite: 10\], **Arabia Saudita** ($11.0\%$ en `V2` y solo $0.2\%$ en `V20`)\[cite: 9\] y los países latinoamericanos (**Brasil, Perú y Costa Rica**) agrupan la mayor parte de su población en los primeros veintiles y casi no tienen presencia en `V20`.
 
-- **Países concentrados en la mitad de la tabla:** Naciones como **España**, **Italia** y **Portugal** muestran pocos estudiantes tanto en el veintil más bajo (`V1`, entre $1.2\%$ y $2.4\%$) como en el más alto (`V20`, entre $2.1\%$ y $3.0\%$), pero superan claramente el $5.0\%$ promedio en los veintiles intermedios (`V10` a `V15`, llegando por ejemplo a $8.9\%$ en `V14` para España, $8.0\%$ en `V10` para Portugal y $7.5\%$ en `V14` para Italia), lo que refleja un desempeño medio muy marcado.
+* **Países concentrados en la mitad de la tabla:** Naciones como **España**, **Italia** y **Portugal** muestran pocos estudiantes tanto en el veintil más bajo (`V1`, entre $1.2\%$ y $2.4\%$) como en el más alto (`V20`, entre $2.1\%$ y $3.0\%$), pero superan claramente el $5.0\%$ promedio en los veintiles intermedios (`V10` a `V15`, llegando por ejemplo a $8.9\%$ en `V14` para España, $8.0\%$ en `V10` para Portugal y $7.5\%$ en `V14` para Italia), lo que refleja un desempeño medio muy marcado.
 
-------------------------------------------------------------------------
-
+---
+  
 ### 2. Tabla de Perfiles Columna (`tabs$perC`)
-
-De forma simétrica, los perfiles columna representan las probabilidades condicionales de pertenecer a cada uno de los 20 países dado que el estudiante se ubicó en un veintil de puntaje específico ($f_{ij} / f_{\cdot j}$)\[cite: 2, 4\]. En esta matriz cada columna suma verticalmente el $100\%$ (fila `Suma`) y la última columna (`marg`) contiene la distribución marginal de los países, la cual actúa como **centro de gravedad** de la nube de los veintiles\[cite: 2, 4\].
+  
+  De forma simétrica, los perfiles columna representan las probabilidades condicionales de pertenecer a cada uno de los 20 países dado que el estudiante se ubicó en un veintil de puntaje específico ($f_{ij} / f_{\cdot j}$)[cite: 2, 4]. En esta matriz cada columna suma verticalmente el $100\%$ (fila `Suma`) y la última columna (`marg`) contiene la distribución marginal de los países, la cual actúa como **centro de gravedad** de la nube de los veintiles.
 
 ```{r}
 #| label: tabla-perfiles-columna
@@ -1207,26 +1216,28 @@ kable(
   scroll_box(width = "100%", height = "420px")
 ```
 
-Mirando ahora cómo se reparte cada veintil por vertical (donde cada columna suma $100.0\%$) y comparándolo contra el peso de cada país en la muestra en la columna **`marg`**\[cite: 7, 8, 12\], se observan dos comportamientos clave:
+Mirando ahora cómo se reparte cada veintil por vertical (donde cada columna suma $100.0\%$) y comparándolo contra el peso de cada país en la muestra en la columna **`marg`**, se observan dos comportamientos clave:
+  
+  * **Cambio en la composición de países entre `V1` y `V20`:** El veintil de puntaje más bajo (`V1`) está compuesto principalmente por estudiantes de **Emiratos Árabes** ($31.6\%$, más del doble de su peso `marg` de $14.9\%$), **Brasil** ($12.0\%$ frente a $6.4\%$), **Bulgaria** ($10.4\%$ frente a $3.8\%$) y **Malasia** ($9.8\%$ frente a $4.3\%$), sumando entre los cuatro casi dos tercios ($63.8\%$) de todos los alumnos de ese primer tramo[cite: 7, 8]. En cambio, al llegar al veintil más alto (`V20`), el peso lo toman **Canadá** ($14.4\%$ frente a su $9.3\%$ en `marg`), **República Checa** ($10.0\%$ frente a $5.1\%$), **Austria** ($8.8\%$ frente a $4.7\%$), **Países Bajos** ($6.8\%$ frente a $3.0\%$) y **Bélgica** ($6.4\%$ frente a $2.9\%$).
 
-- **Cambio en la composición de países entre `V1` y `V20`:** El veintil de puntaje más bajo (`V1`) está compuesto principalmente por estudiantes de **Emiratos Árabes** ($31.6\%$, más del doble de su peso `marg` de $14.9\%$), **Brasil** ($12.0\%$ frente a $6.4\%$), **Bulgaria** ($10.4\%$ frente a $3.8\%$) y **Malasia** ($9.8\%$ frente a $4.3\%$), sumando entre los cuatro casi dos tercios ($63.8\%$) de todos los alumnos de ese primer tramo\[cite: 7, 8\]. En cambio, al llegar al veintil más alto (`V20`), el peso lo toman **Canadá** ($14.4\%$ frente a su $9.3\%$ en `marg`), **República Checa** ($10.0\%$ frente a $5.1\%$), **Austria** ($8.8\%$ frente a $4.7\%$), **Países Bajos** ($6.8\%$ frente a $3.0\%$) y **Bélgica** ($6.4\%$ frente a $2.9\%$).
+* **El caso particular de Emiratos Árabes en los extremos:** Aunque Emiratos Árabes reduce bastante su participación en los niveles medio-altos (bajando hasta $8.6\%$ en `V17`, muy por debajo de su $14.9\%$ marginal), en el último veintil (`V20`) vuelve a subir a $15.2\%$, igualando su peso en la muestra; esto deja ver que, aunque la mayoría de sus estudiantes se concentran en las notas más bajas, también cuenta con un grupo que alcanza los puntajes más altos.
 
-- **El caso particular de Emiratos Árabes en los extremos:** Aunque Emiratos Árabes reduce bastante su participación en los niveles medio-altos (bajando hasta $8.6\%$ en `V17`, muy por debajo de su $14.9\%$ marginal), en el último veintil (`V20`) vuelve a subir a $15.2\%$, igualando su peso en la muestra; esto deja ver que, aunque la mayoría de sus estudiantes se concentran en las notas más bajas, también cuenta con un grupo que alcanza los puntajes más altos.
+---
+  
+  
+## Frecuencias Esperadas bajo Independencia , Tabla de Diferencias e Inercia Total
+  
+  Si el país de origen y el veintil de puntaje fueran **estadísticamente independientes**, los perfiles fila y columna serían iguales a sus marginales respectivas (`marg`), y cada celda de la tabla de frecuencias relativas se obtendría simplemente multiplicando su marginal fila por su marginal columna:
+  
+  $$a_{ij} = f_{i\cdot} \, f_{\cdot j}$$
+  
+  Para ver qué tanto se alejan nuestros datos de ese escenario hipotético, primero construimos la **tabla de frecuencias relativas esperadas bajo independencia ($\mathbf{A}$)** y luego le restamos a la tabla observada ($\mathbf{F}$) esos valores esperados, obteniendo la **tabla de diferencias o desvíos ($\mathbf{F} - \mathbf{A}$)** en puntos porcentuales. Donde la resta da positiva ($f_{ij} - a_{ij} > 0$) hay más estudiantes de los que habría si no existiera relación entre el país y la nota; donde da negativa ($f_{ij} - a_{ij} < 0$), hay menos de los esperados.
 
-------------------------------------------------------------------------
+Para comparar estas matrices cómodamente sin bajar por toda la página, las agrupamos en las siguientes tres pestañas junto con el cálculo de la **inercia total ($\phi^2 = \chi^2 / k$)**:
+  
+::: {.panel-tabset}
 
-## Frecuencias Esperadas bajo Independencia ($\mathbf{A}$), Tabla de Diferencias ($\mathbf{F} - \mathbf{A}$) e Inercia Total
-
-Si el país de origen y el veintil de puntaje fueran **estadísticamente independientes**, los perfiles fila y columna serían iguales a sus marginales respectivas (`marg`), y cada celda de la tabla de frecuencias relativas se obtendría simplemente multiplicando su marginal fila por su marginal columna\[cite: 3, 4\]:
-
-$$a_{ij} = f_{i\cdot} \, f_{\cdot j}$$
-
-Para ver qué tanto se alejan nuestros datos de ese escenario hipotético, primero construimos la **tabla de frecuencias relativas esperadas bajo independencia (**$\mathbf{A}$) y luego le restamos a la tabla observada ($\mathbf{F}$) esos valores esperados, obteniendo la **tabla de diferencias o desvíos (**$\mathbf{F} - \mathbf{A}$) en puntos porcentuales\[cite: 3, 4\]. Donde la resta da positiva ($f_{ij} - a_{ij} > 0$) hay más estudiantes de los que habría si no existiera relación entre el país y la nota; donde da negativa ($f_{ij} - a_{ij} < 0$), hay menos de los esperados.
-
-Para comparar estas matrices cómodamente sin bajar por toda la página, las agrupamos en las siguientes tres pestañas junto con el cálculo de la **inercia total (**$\phi^2 = \chi^2 / k$)\[cite: 3, 4\]:
-
-::: panel-tabset
-### 1. Esperadas bajo Independencia
+### 1. Esperadas bajo Independencia 
 
 ```{r}
 #| label: tabla-esperada-independencia
@@ -1262,15 +1273,16 @@ kable(
   scroll_box(width = "100%", height = "420px")
 ```
 
-Al revisar cómo se vería la tabla si el país y el puntaje fueran totalmente independientes\[cite: 5, 6\], destacan dos puntos que sirven de base para las comparaciones siguientes:
+Al revisar cómo se vería la tabla si el país y el puntaje fueran totalmente independientes, destacan dos puntos que sirven de base para las comparaciones siguientes:
 
-- **Repartición pareja en 20 partes iguales por país:** Como cada veintil (`V1` a `V20`) concentra exactamente el $5.00\%$ de la muestra en la fila `Sum`, bajo independencia cada país simplemente divide su peso total (`Sum` horizontal) en 20 casillas idénticas\[cite: 5, 6\]. Por eso todas las celdas de **Emiratos Árabes** valen $0.75\%$ (sumando su $14.94\%$), las de **Canadá** valen $0.46\%$ (sumando su $9.26\%$), y las de los países con menor muestra como **Bélgica** y **Países Bajos** valen apenas $0.15\%$ en cada tramo (sumando $2.95\%$ y $2.97\%$).
+**Repartición pareja en 20 partes iguales por país:** Como cada veintil (`V1` a `V20`) concentra exactamente el $5.00\%$ de la muestra en la fila `Sum`, bajo independencia cada país simplemente divide su peso total (`Sum` horizontal) en 20 casillas idénticas[cite: 5, 6]. Por eso todas las celdas de **Emiratos Árabes** valen $0.75\%$ (sumando su $14.94\%$), las de **Canadá** valen $0.46\%$ (sumando su $9.26\%$), y las de los países con menor muestra como **Bélgica** y **Países Bajos** valen apenas $0.15\%$ en cada tramo (sumando $2.95\%$ y $2.97\%$)                                                                                                                                                                                                                                                   **Importancia del peso muestral al comparar:** Esta tabla deja claro que el punto de partida de cada país depende directamente de su participación en los $10\,000$ estudiantes[cite: 5, 6]; por lo tanto, tener un $0.30\%$ en una celda sería muy alto para Bélgica (el doble de su $0.15\%$ esperado), pero muy bajo para Emiratos Árabes (menos de la mitad de su $0.75\%$ esperado).
+                                                                                                                                                  
+---
 
-- **Importancia del peso muestral al comparar:** Esta tabla deja claro que el punto de partida de cada país depende directamente de su participación en los $10\,000$ estudiantes\[cite: 5, 6\]; por lo tanto, tener un $0.30\%$ en una celda sería muy alto para Bélgica (el doble de su $0.15\%$ esperado), pero muy bajo para Emiratos Árabes (menos de la mitad de su $0.75\%$ esperado).
-
-### 2. Tabla de Diferencias
+### Tabla de Diferencias 
 
 ```{r}
+
 #| label: tabla-diferencias-desvios
 #| echo: true
 #| message: false
@@ -1279,10 +1291,542 @@ Al revisar cómo se vería la tabla si el país y el puntaje fueran totalmente i
 # Resta entre las frecuencias relativas observadas (F) y las esperadas bajo independencia (A)
 F_mat <- (K / k) * 100
 Dif_FA <- F_mat - A_mat
-
 kable(
   round(Dif_FA, 2),
-  caption = "Tabla 8. Tabla de diferencias (desvíos F - A) entre frecuencias relativas observadas y esperadas bajo independencia, en puntos porcentuales"
+caption = "Tabla 8. Tabla de diferencias (desvíos F - A) entre frecuencias relativas observadas y esperadas bajo independencia, en puntos porcentuales"
+ ) %>%
+kable_styling(
+full_width = FALSE,
+bootstrap_options = c("striped", "hover", "condensed")) %>%scroll_box(width = "100%", height = "420px")
+```
+
+Al restar los porcentajes observados menos los esperados bajo independencia, se distinguen claramente dos aspectos:
+
+* **Efecto de los pesos y valores más extremos de la tabla:** Como estas diferencias están en puntos porcentuales del total de la muestra, los países con mayor participación alcanzan las restas más grandes en valor absoluto. El desvío positivo más alto de toda la tabla lo tiene **Emiratos Árabes** en `V1` con **$+0.83$** (seguido de $+0.47$ en `V2`), mientras que su desvío negativo más fuerte llega a **$-0.32$** en `V17; por su parte, **Canadá** muestra un comportamiento totalmente simétrico entre las dos puntas, con **$-0.26$** en `V1` (menos estudiantes de los esperados en nota muy baja) y **$+0.26$** en `V20` (más estudiantes de los esperados en nota excelente).
+
+
+* **Contraste de signos entre bloques de países:** Mirando los signos de izquierda a derecha, países como **Brasil** ($+0.28$ en `V1` y $-0.28$ en `V20`), **Bulgaria** ($+0.33$ en `V1`), **Malasia** ($+0.27$ en `V1` y $-0.20$ en `V20`), **Arabia Saudita**, **Perú** y **Costa Rica** mantienen signos positivos en los primeros veintiles y negativos al final; al revés de **Canadá**, **República Checa** ($-0.17$ en `V1` y $+0.25$ en `V20`), **Austria** ($+0.21$ en `V20`), **Países Bajos** ($+0.19$ en `V20`) y **Bélgica**, que pasan de valores negativos en los veintiles bajos a positivos en los altos.
+
+
+### 3. Inercia Total  y Estadístico $\chi^2$
+                                                                                          
+```{r}
+#| label: inercia-total-chi2'
+#| echo: true
+#| message: false
+#| warning: false
+
+# La inercia total (phi^2) coincide con el estadístico Chi^2 dividido por el total k
+                                                                                           prueba_chi <- chisq.test(K, correct = FALSE)
+                                                                                    inercia_total <- as.numeric(prueba_chi$statistic) / k
+                                                                                        resumen_inercia <- data.frame( Inercia_Phi2    = inercia_total, Estadistico_Chi = as.numeric(prueba_chi$statistic),Grados_Libertad = as.numeric(prueba_chi$parameter), Chi2_Critico_95 = qchisq(0.95, df = prueba_chi$parameter),Valor_p         = ifelse(prueba_chi$p.value < 0.0001, "< 0.0001", round(prueba_chi$p.value, 4)))
+                                                                                           kable( resumen_inercia,digits = 4, col.names = c("Inercia Total (phi^2 = Chi^2 / k)", "Estadístico Chi^2","Grados de Libertad (gl)", "Valor Crítico (95%)", "Valor p"),align = c("r", "r", "c", "r", "c"),caption = "Tabla 9. Inercia total (phi^2) y contraste de independencia de la tabla de contingencia" ) %>%
+kable_styling(full_width = FALSE,bootstrap_options = c("striped", "hover", "condensed"))
+
+```
+  
+* **Confirmación de dependencia entre país y puntaje:** El estadístico $\chi^2 = 1826$ supera de lejos el valor crítico de $406$ (con $361$ grados de libertad y un valor $p < 0.0001$), lo que confirma que las diferencias vistas en las tablas anteriores no se deben al azar y que el nivel de alfabetización financiera sí depende del país en esta muestra.
+                                                                                                                                                                                      * **Magnitud de la Inercia Total ($\phi^2 = 0.183$):** Al dividir el estadístico $\chi^2$ entre los $10\,000$ estudiantes obtenemos una inercia total de **$0.183$**, que resume qué tanto se alejan en conjunto los perfiles de los países respecto al centro de gravedad (`marg`) y es el valor total que pasaremos a descomponer en los ejes factoriales del ACS.
+                                                                                           El ACS va más allá de la simple prueba de hipótesis de independencia que se suele hacer en las tablas de contingencia, porque nos permite describir dónde están las dependencias comparando los perfiles fila y . Aquí la **inercia total ($\phi^2 = \chi^2 / k$)** resume qué tanto se alejan en conjunto los países y veintiles de esa tabla de independencia ($\mathbf{A}$). Como el estadístico $\chi^2$ calculado está muy por encima del valor crítico teórico con $361$ grados de libertad ($p < 0.0001$), queda claro que el puntaje en alfabetización financiera sí depende del país en esta muestra.
+                                                                                           
+                                                                                           
+                                                                                           
+## Ejecución del ACS, Valores Propios y Reducción de Dimensión. 
+                                                                                                                                                                                    Como vimos en las tablas de perfiles fila y columna, las proporciones dentro de cada país y dentro de cada veintil suman exactamente $100\%$ ($1$). Esto hace que la última categoría quede determinada como combinación lineal de las demás y se pierda una dimensión al ubicar el perfil promedio (`marg`) en el origen `(0,0)` como centro de gravedad. Por esta razón, al cruzar $20$ países con $20$ veintiles, el espacio tiene como máximo $\min(20 - 1, 20 - 1) = 19$ dimensiones o ejes factoriales posibles, y todos sus valores propios cumplen con ser menores que uno ($\lambda_s < 1$).
+                                                                                            Para reducir esta dimensión sin perder la estructura principal de los datos, ejecutamos el Análisis de Correspondencias Simples mediante la función `dudi.coa()` y calculamos la descomposición de la inercia con `inertia()` de los paquetes `ade4` y `FactoClass`, apoyándonos también en `factoextra` para visualizar el porcentaje de inercia que retiene cada eje:
+ 
+::: {.panel-tabset}  
+
+### 1. Histograma de Valores Propios
+
+```{r}
+
+#| label: acs-ejecucion-screeplot
+#| echo: true
+#| message: false
+#| warning: false
+#| fig-width: 8.5
+#| fig-height: 4.6
+#| fig-cap: "Figura 2. Histograma de valores propios y porcentaje de inercia explicada por eje"
+
+# 1. Ejecución del ACS sobre la matriz K reteniendo los primeros 3 ejes factoriales
+                                                                                                                                                                                       acs <- dudi.coa(K, scannf = FALSE, nf = 3)
+                                                                                           # 2. Cálculo de las inercias y ayudas para la interpretación (filas y columnas)
+iner <- inertia(acs, row.inertia = TRUE, col.inertia = TRUE)
+                                                                                          
+# 3. Histograma de valores propios con factoextra y línea de inercia promedio (100/19 = 5.26%)
+fviz_screeplot(acs,addlabels = TRUE,
+     ncp       = 19,
+     barfill   = "#219EBC",
+     barcolor  = "#023047",
+     linecolor = "#023047",
+     ylim      = c(0, 85),
+     main      = "Histograma de Valores Propios (% de Inercia Explicada)",
+     xlab      = "Ejes Factoriales (Dimensiones 1 a 19)",
+     ylab      = "Porcentaje de inercia explicada (%)" ) +
+      geom_hline(
+      yintercept = 100 / 19,linetype   = "dashed",color = "#D62828",linewidth  = 0.8)
+                    
+```
+                                                                                           
+### 2. Tabla de Valores Propios ($\lambda_s$)
+
+
+```{r}
+#| label: tabla-valores-propios-acs
+#| echo: true
+#| message: false
+#| warning: false
+
+# Extracción de la tabla de valores propios e inercia acumulada desde inertia() de ade4/FactoClass
+# Mostramos los primeros 10 ejes (de los 19 posibles) cumpliendo el límite tabular
+                                                                                           tabla_eig <- data.frame(
+    Eje        = paste0("Eje ", 1:nrow(iner$tot.inertia)),
+    Inercia    = iner$tot.inertia[, 1],
+    Acumulado  = iner$tot.inertia[, 2],
+    Porcentaje = iner$tot.inertia[, 3], row.names  = NULL ) %>% mutate(Porc_Individual = round((acs$eig / sum(acs$eig)) * 100, 2)) %>%
+     select(Eje, Inercia, Porc_Individual, Acumulado, Porcentaje)
+kable(head(tabla_eig, 10),digits = 3,col.names = c("Eje Factorial", "Valor Propio (lambda_s)","Inercia del Eje (%)", "Inercia Acumulada", "Porcentaje Acumulado (%)"),
+align = c("c", "r", "r", "r", "r"),caption = "Tabla 10. Primeros 10 valores propios y descomposición de la inercia total (phi^2 = 0.183)") %>%
+ kable_styling(full_width = FALSE,bootstrap_options = c("striped", "hover", "condensed")
+ ) %>% row_spec(1:2, bold = TRUE)
+
+```
+
+### 3. Inercia por País (Criterio de Categorías Activas)
+
+
+```{r}
+
+#| label: tabla-inercia-paises-activos
+#| echo: true
+#| message: false
+#| warning: false
+
+# Calculamos la distancia Chi^2 al centro de gravedad (d^2) y la inercia exacta de los 20 países
+# Nota: iner$row.contrib viene en escala de 0 a 1000 (por mil) o 0 a 100 según la versión,
+# por lo que la calculamos directamente desde las coordenadas factoriales completas de dudi.coa
+                                                                                           acs_full <- dudi.coa(K, scannf = FALSE, nf = 19)
+dist2_chi_pais   <- rowSums(acs_full$li^2)
+inercia_pais_abs <- acs_full$lw * dist2_chi_pais
+inercia_pais_por <- (inercia_pais_abs / sum(inercia_pais_abs)) * 100
+tabla_diagnostico_filas <- data.frame(Pais = rownames(K),Peso_Marginal_Por = round(acs_full$lw * 100, 2),Distancia_Chi2    = round(dist2_chi_pais, 3),Inercia_Absoluta  = round(inercia_pais_abs, 4),Porc_Inercia_Tot  = round(inercia_pais_por, 2),row.names         = NULL ) %>% arrange(desc(Porc_Inercia_Tot))
+
+kable(tabla_diagnostico_filas,digits = 3, col.names = c( "País", "Peso Marginal Fila (%)", "Distancia Chi^2 al Centro (d^2)","Inercia Aportada", "% de la Inercia Total (0.183)" ),
+align = c("l", "r", "r", "r", "r"),caption = "Tabla 11. Participación de los 20 países en la inercia total del sistema") %>% kable_styling( full_width = FALSE,bootstrap_options = c("striped", "hover", "condensed") ) %>% scroll_box(width = "100%", height = "360px")
+
+```
+  
+  
+  Al observar el histograma de valores propios (**Figura 2**) y los resultados de las **Tablas 10 y 11**, podemos guiar los siguientes pasos de esta exploración a partir de dos puntos principales:
+                                                                                            * **Retención de los dos primeros ejes para resumir la información ($83.7\%$ de la inercia):** Vemos que el **Eje 1** ($\lambda_1 = 0.134$) recoge por sí solo el **$73.23\%$** de la inercia total y el **Eje 2** ($\lambda_2 = 0.019$) suma otro **$10.50\%$**, siendo los dos únicos ejes que superan el promedio esperado por dimensión ($100\% / 19 = 5.26\%$, línea roja punteada). Como a partir del **Eje 3** ($\lambda_3 = 0.006$, $3.22\%$) las barras caen de forma notoria, parece bastante razonable reducir la dimensión de los 19 ejes originales a solo **2 ejes (el primer plano factorial)**, ya que con ellos logramos visualizar de forma exploratoria el **$83.7\%$** del comportamiento de la tabla sin perder casi detalle.
+                                                                                           * **Papel de los países activos y propósito de las pruebas con suplementarias:** Mirando la **Tabla 11**, notamos que todos los países superan el mínimo recomendado del $2\%$ de participación en la muestra (el menor es Bélgica con $2.95\%$) y que la inercia total ($0.183$) se reparte de forma gradual sin que un solo país acapare casi toda la varianza: los valores más altos aparecen en **Emiratos Árabes** ($10.44\%$, impulsado en buena parte por tener la muestra más grande con $14.94\%$ y por tener estudiantes tanto en `V1` como en `V20`) y en **Malasia** ($9.61\%$), seguidos por **Brasil** ($7.47\%$), **Arabia Saudita** ($7.26\%$), **Bulgaria** ($6.72\%$), **Costa Rica** ($6.45\%$) y **Bélgica** ($5.83\%$). Por este motivo, tiene sentido dejar inicialmente a los **20 países y 20 veintiles como activos** para ver el panorama completo. Sin embargo, para cumplir con una exploración más profunda, más adelante dedicaremos un apartado a las **categorías suplementarias/ilustrativas** con dos objetivos concretos: primero, poner a prueba qué tan estable es el mapa si pasamos como filas suplementarias (`suprow`) a los países que más jalan la inercia (**Emiratos Árabes y Malasia**, siguiendo la idea del ejemplo del Chocó en el libro guía); y segundo, proyectar filas suplementarias armadas dentro de la misma matriz $\mathbf{K}$ que agrupen a los países por **bloques culturales y económicos** (separando por ejemplo a EE. UU. y Canadá de Latinoamérica, y dividiendo Europa y Medio Oriente/Asia) junto con los niveles de desempeño PISA como columnas ilustrativas (`supcol`), para explorar si se forman patrones regionales claros sin alterar los ejes originales.
+
+  
+## Análisis de los Perfiles Fila (Nube de los 20 Países)
+  
+  En este primer subespacio del ACS analizamos la nube de los **20 perfiles fila (países)**, donde cada país tiene un peso igual a su frecuencia marginal ($f_{i\cdot}$) y las distancias entre ellos se miden con la métrica $\chi^2$ (la cual pondera cada columna por la inversa del peso del veintil, $1/f_{\cdot j}$). Al proyectar la nube sobre los ejes principales, el origen de coordenadas `(0,0)` representa el **centro de gravedad (`marg`)**, es decir, cómo se vería un país hipotético que tuviera exactamente el $5.0\%$ de sus estudiantes en cada uno de los 20 veintiles.
+
+Siguiendo la recomendación metodológica de revisar en paralelo las ayudas numéricas y el plano factorial para evitar lecturas engañosas por efectos de proyección, presentamos en las siguientes cuatro pestañas el primer plano factorial de los países, sus coordenadas y contribuciones absolutas a los ejes, la tabla de calidades de representación ($\cos^2$) a lo largo de los primeros 5 ejes, y la tabla de perfiles fila ordenada según el primer factor para facilitar las comparaciones directas.
+
+::: {.panel-tabset}
+
+### 1. Primer Plano Factorial (Países)
+
+```{r}
+#| label: plano-factorial-filas-paises
+#| echo: true
+#| message: false
+#| warning: false
+#| fig-width: 8.5
+#| fig-height: 7.5
+#| fig-cap: "Figura 3. Primer plano factorial (Ejes 1 y 2) de los perfiles fila (20 países)"
+
+# Aseguramos que acs tenga al menos 5 ejes retenidos para todas las tablas y gráficas
+acs <- dudi.coa(K, scannf = FALSE, nf = 5);
+
+# Gráfico cuadrado de los perfiles fila siguiendo la sintaxis de FactoClass vista en clase
+plot(
+  acs,
+  ex     = 1,
+  ey     = 2,
+  Tcol   = FALSE,
+  asp    = 1,
+  cframe = 1,
+  gg     = TRUE
+)
+```
+
+### 2. Coordenadas y Contribuciones Absolutas
+
+```{r}
+#| label: tabla-coordenadas-contribuciones-filas
+#| echo: true
+#| message: false
+#| warning: false
+
+# Calculamos las contribuciones absolutas en porcentaje (0 a 100%) para los primeros 3 ejes:
+# Ca_s(i) = (f_i. * F_s(i)^2 / lambda_s) * 100
+ctr_fila_1 <- (acs$lw * (acs$li[, 1]^2) / acs$eig[1]) * 100;
+ctr_fila_2 <- (acs$lw * (acs$li[, 2]^2) / acs$eig[2]) * 100; ctr_fila_3 <- (acs$lw * (acs$li[, 3]^2) / acs$eig[3]) * 100;
+
+tabla_coord_ctr_filas <- data.frame(
+  Pais   = rownames(K),
+  Peso   = round(acs$lw * 100, 2),
+  F1     = round(acs$li[, 1], 3),
+  F2     = round(acs$li[, 2], 3),
+  F3     = round(acs$li[, 3], 3),
+  Ctr_E1 = round(ctr_fila_1, 2),
+  Ctr_E2 = round(ctr_fila_2, 2),
+  Ctr_E3 = round(ctr_fila_3, 2),
+  row.names = NULL
+) %>%
+  arrange(F1);
+
+kable(
+  tabla_coord_ctr_filas,
+  digits = 3,
+  col.names = c(
+    "País", "Peso (%)", "Coord. Eje 1", "Coord. Eje 2", "Coord. Eje 3",
+    "Contribución Eje 1 (%)", "Contribución Eje 2 (%)", "Contribución Eje 3 (%)"
+  ),
+  align = c("l", "r", "r", "r", "r", "r", "r", "r"),
+  caption = "Tabla 12. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 países en los tres primeros ejes (ordenados por el Eje 1)"
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  column_spec(c(3, 6), bold = TRUE) %>%
+  scroll_box(width = "100%", height = "420px")
+```
+
+### 3. Cosenos Cuadrados ($\cos^2$) en 5 Ejes
+
+```{r}
+#| label: tabla-cosenos-cuadrados-filas
+#| echo: true
+#| message: false
+#| warning: false
+
+# Calculamos el coseno cuadrado (calidad de representación en %) de cada país en los primeros 5 ejes:
+# Cos^2_s(i) = (F_s(i)^2 / d^2(i, g)) * 100
+acs_full <- dudi.coa(K, scannf = FALSE, nf = 19);
+d2_filas <- rowSums(acs_full$li^2);
+
+cos2_f1 <- (acs_full$li[, 1]^2 / d2_filas) * 100;
+cos2_f2 <- (acs_full$li[, 2]^2 / d2_filas) * 100;
+cos2_f3 <- (acs_full$li[, 3]^2 / d2_filas) * 100;
+cos2_f4 <- (acs_full$li[, 4]^2 / d2_filas) * 100;
+cos2_f5 <- (acs_full$li[, 5]^2 / d2_filas) * 100;
+
+tabla_cos2_filas <- data.frame(
+  Pais         = rownames(K),
+  Dist_Chi2    = round(d2_filas, 3),
+  Cos2_E1      = round(cos2_f1, 1),
+  Cos2_E2      = round(cos2_f2, 1),
+  Cos2_Plano12 = round(cos2_f1 + cos2_f2, 1),
+  Cos2_E3      = round(cos2_f3, 1),
+  Cos2_E4      = round(cos2_f4, 1),
+  Cos2_E5      = round(cos2_f5, 1),
+  row.names    = NULL
+) %>%
+  arrange(desc(Cos2_Plano12));
+
+kable(
+  tabla_cos2_filas,
+  digits = 2,
+  col.names = c(
+    "País", "Dist. Chi^2 (d^2)", "Cos2 Eje 1 (%)", "Cos2 Eje 2 (%)",
+    "Calidad Plano 1-2 (%)", "Cos2 Eje 3 (%)", "Cos2 Eje 4 (%)", "Cos2 Eje 5 (%)"
+  ),
+  align = c("l", "r", "r", "r", "r", "r", "r", "r"),
+  caption = "Tabla 13. Cosenos cuadrados (calidad de representación en %) de los 20 países en los primeros 5 ejes y en el Plano 1-2"
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  column_spec(5, bold = TRUE, color = "#023047") %>%
+  scroll_box(width = "100%", height = "420px")
+```
+
+### 4. Perfiles Fila Ordenados (Consulta Rápida)
+
+```{r}
+#| label: perfiles-fila-ordenados-consulta
+#| echo: true
+#| message: false
+#| warning: false
+
+# Presentamos la tabla de perfiles fila ordenada según la coordenada del Eje 1
+# junto con el centro de gravedad (marg) al final para contrastar sin subir la página
+orden_eje1 <- order(acs$li[, 1]);
+perR_ordenado <- rbind(perR_exacto[orden_eje1, ], `Promedio Marginal (marg)` = marg_fila);
+perR_ordenado <- cbind(perR_ordenado, Suma = rowSums(perR_ordenado));
+
+kable(
+  round(perR_ordenado, 1),
+  caption = "Tabla 5B. Perfiles fila (%) ordenados según su posición en el Eje 1 para contraste directo con el plano factorial"
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(nrow(perR_ordenado), bold = TRUE) %>%
+  column_spec(ncol(perR_ordenado) + 1, bold = TRUE) %>%
+  scroll_box(width = "100%", height = "420px")
+```
+
+:::
+  
+  
+  Al revisar primero las ayudas numéricas (**Tablas 12, 13 y 5B**) y contrastarlas luego con la ubicación de los países en el primer plano factorial (**Figura 3**), encontramos tres patrones exploratorios muy claros:
+  
+  * **Lo que separa el Eje 1 ($73.23\%$ de la inercia — ordenamiento de menor a mayor puntaje):** Mirando en la **Tabla 12** los países que superan la contribución promedio ($100\% / 20 = 5.0\%$), vemos que el lado izquierdo del eje (coordenadas negativas) está jalado por siete países que concentran buena parte de sus estudiantes en los primeros veintiles (`V1` a `V6` en la **Tabla 5B**): **Malasia** ($F_1 = -0.615$, aportando el $12.29\%$ del eje), **Brasil** ($9.28\%$), **Emiratos Árabes** ($8.54\%$), **Arabia Saudita** ($7.58\%$), **Bulgaria** ($7.51\%$), **Costa Rica** ($7.34\%$) y **Perú** ($5.51\%$). En oposición, hacia el lado derecho (coordenadas positivas) se ubican los países cuyos perfiles crecen en los veintiles altos (`V16` a `V20`), liderados en contribución por **Bélgica** ($F_1 = +0.544$, contribución de $6.53\%$) y **República Checa** ($+0.373$, $5.28\%$), seguidos de cerca por **Austria** ($4.55\%$), **Polonia** ($4.13\%$), **Dinamarca** ($3.77\%$), **Canadá** ($3.68\%$) y **Países Bajos** ($3.13\%$).
+
+* **Lo que separa el Eje 2 ($10.50\%$ de la inercia — países en los extremos vs. países en puntajes medios, Efecto Guttman):** En la columna de contribuciones al segundo eje (**Tabla 12**), resaltan dos polos opuestos que le dan forma de parábola o "U" a la nube en la **Figura 3**. Hacia arriba (coordenadas positivas) jalan principalmente **Emiratos Árabes** (que por sí solo aporta el **$33.55\%$** del Eje 2, con $F_2 = +0.208$) y **Bélgica** ($6.07\%$, con $F_2 = +0.199$), acompañados por **Países Bajos** ($4.07\%$); como vimos en la **Tabla 5B**, estos países coinciden en acumular porcentajes altos en las puntas extremas de la escala (Bélgica y Países Bajos en `V19`–`V20`, y Emiratos Árabes repartido entre el extremo más bajo `V1`–`V2` y un repunte en `V20`). En cambio, hacia abajo (coordenadas negativas) jalan fuerte **Italia** ($15.00\%$ de contribución, $F_2 = -0.214$), **Portugal** ($12.89\%$, $F_2 = -0.241$) y **España** ($10.44\%$, $F_2 = -0.229$), que son justamente los países concentrados en los veintiles intermedios (`V10` a `V15`) y con poca presencia en ambos extremos.
+
+* **Calidad de representación en los cinco primeros ejes ($\cos^2$, Tabla 13):** La columna de calidad en el **Plano 1-2** muestra que los 20 países quedan bien representados en este primer mapa, con valores que van desde **$57.5\%$ en Noruega** hasta **$93.8\%$ en Malasia** (y 16 países por encima del $73\%$). Además, la tabla permite ver por qué era necesario incluir el segundo eje: mientras la mayoría de países tienen su representación casi completa en el Eje 1 (como Malasia con $93.6\%$, Brasil con $91.0\%$ o Polonia con $88.7\%$), países como **Italia**, **España** y **Portugal** tienen un $\cos^2$ bajo o moderado en el Eje 1 ($18.7\%$, $35.7\%$ y $43.2\%$), pero alcanzan buena representación gracias al **Eje 2** ($57.7\%$, $38.9\%$ y $35.3\%$). Los ejes siguientes (Ejes 3 a 5) solo recogen detalles menores, como un $8.4\%$ a $9.9\%$ en el Eje 3 para España, Arabia Saudita y Costa Rica (donde Arabia Saudita y Costa Rica se oponen a Bulgaria según la Tabla 12), un $16.4\%$ para Italia en el Eje 4, y un $19.4\%$ para Noruega en el Eje 5, lo que sugiere que no hace falta retener ejes adicionales para describir el panorama general.
+
+
+
+---
+  
+  ## Análisis de los Perfiles Columna (Nube de los 20 Veintiles en $\mathbb{R}^{20}$) {#sec-perfiles-columna}
+  
+  De manera simétrica al análisis de las filas[cite: 16, 17], estudiamos ahora la nube de los **20 perfiles columna (`V1` a `V20`)**, donde cada veintil tiene una masa marginal idéntica ($f_{\cdot j} = 5.0\%$)[cite: 3, 5] y las distancias entre ellos se ponderan por la inversa del peso de cada país ($1/f_{i\cdot}$). En este espacio, el origen `(0,0)` representa el perfil marginal columna (`marg`), es decir, la distribución porcentual de los 20 países en el total de la muestra[cite: 1, 2, 18].
+
+A continuación, presentamos en cuatro pestañas el primer plano factorial de los veintiles (`Trow = FALSE`)[cite: 17], la tabla de coordenadas y contribuciones absolutas a los tres primeros ejes, la tabla de calidades de representación ($\cos^2$) en los primeros cinco ejes, y la tabla de perfiles columna como referencia rápida:
+  
+  ::: {.panel-tabset}
+
+### 1. Primer Plano Factorial (Veintiles)
+
+```{r}
+#| label: plano-factorial-columnas-veintiles
+#| echo: true
+#| message: false
+#| warning: false
+#| fig-width: 8.5
+#| fig-height: 7.5
+#| fig-cap: "Figura 4. Primer plano factorial (Ejes 1 y 2) de los perfiles columna (20 veintiles de puntaje)"
+
+# Gráfico cuadrado de los perfiles columna siguiendo la sintaxis de FactoClass del profesor
+plot(
+  acs,
+  ex     = 1,
+  ey     = 2,
+  Trow   = FALSE,
+  asp    = 1,
+  cframe = 1,
+  gg     = TRUE
+)
+```
+
+### 2. Coordenadas y Contribuciones Absolutas
+
+```{r}
+#| label: tabla-coordenadas-contribuciones-columnas
+#| echo: true
+#| message: false
+#| warning: false
+
+# Calculamos las contribuciones absolutas de cada veintil en porcentaje (0 a 100%) para los primeros 3 ejes:
+# Ca_s(j) = (f_.j * G_s(j)^2 / lambda_s) * 100
+ctr_col_1 <- (acs$cw * (acs$co[, 1]^2) / acs$eig[1]) * 100;
+ctr_col_2 <- (acs$cw * (acs$co[, 2]^2) / acs$eig[2]) * 100; ctr_col_3 <- (acs$cw * (acs$co[, 3]^2) / acs$eig[3]) * 100;
+
+tabla_coord_ctr_cols <- data.frame(
+  Veintil = colnames(K),
+  Peso    = round(acs$cw * 100, 2),
+  G1      = round(acs$co[, 1], 3),
+  G2      = round(acs$co[, 2], 3),
+  G3      = round(acs$co[, 3], 3),
+  Ctr_E1  = round(ctr_col_1, 2),
+  Ctr_E2  = round(ctr_col_2, 2),
+  Ctr_E3  = round(ctr_col_3, 2),
+  row.names = NULL
+);
+
+kable(
+  tabla_coord_ctr_cols,
+  digits = 3,
+  col.names = c(
+    "Veintil", "Peso (%)", "Coord. Eje 1", "Coord. Eje 2", "Coord. Eje 3",
+    "Contribución Eje 1 (%)", "Contribución Eje 2 (%)", "Contribución Eje 3 (%)"
+  ),
+  align = c("c", "r", "r", "r", "r", "r", "r", "r"),
+  caption = "Tabla 14. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 veintiles en los tres primeros ejes (en orden de V1 a V20)"
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  column_spec(c(3, 6), bold = TRUE) %>%
+  scroll_box(width = "100%", height = "420px")
+```
+
+
+Las coordenadas en el **Eje 1** muestran un ordenamiento progresivo desde valores negativos en los veintiles más bajos (`V1` con $-0.746$ y `V2` con $-0.574$) hasta valores positivos en los más altos (`V19` con $+0.509$ y `V20` con $+0.547$), cambiando de signo justo en la mitad de la escala, entre **`V9` ($-0.079$)** y **`V10` ($+0.027$)**. Se nota además que entre `V10` y `V13` las coordenadas cambian muy poco (llegando a $+0.072$ en `V13`), pero dan un salto grande al pasar a **`V14` ($+0.266$)**. Mirando las contribuciones que superan el promedio ($100\% / 20 = 5.0\%$), vemos que el **Eje 1** se forma en un **$81.32\%$** por la oposición entre los cuatro veintiles inferiores (**`V1` con $20.81\%$**, **`V2` con $12.33\%$**, **`V4` con $7.09\%$** y **`V3` con $6.68\%$**) y los cuatro superiores (**`V20` con $11.24\%$**, **`V19` con $9.73\%$**, **`V18` con $7.39\%$** y **`V17` con $6.05\%$**); mientras que en el **Eje 2** los mayores aportes hacia el lado positivo provienen de los extremos **`V20` ($37.22\%$)**, **`V1` ($21.45\%$)** y **`V19` ($5.98\%$)**, en contraste con veintiles intermedios como **`V10` ($6.67\%$)**, **`V14`**, **`V9`** y **`V6`** en el lado negativo.
+
+
+### 3. Cosenos Cuadrados ($\cos^2$) en 5 Ejes
+
+```{r}
+#| label: tabla-cosenos-cuadrados-columnas
+#| echo: true
+#| message: false
+#| warning: false
+
+# Calculamos el coseno cuadrado (calidad de representación en %) de cada veintil en los primeros 5 ejes:
+# Cos^2_s(j) = (G_s(j)^2 / d^2(j, g)) * 100
+acs_full <- dudi.coa(K, scannf = FALSE, nf = 19);
+d2_cols  <- rowSums(acs_full$co^2);
+
+cos2_c1 <- (acs_full$co[, 1]^2 / d2_cols) * 100;
+cos2_c2 <- (acs_full$co[, 2]^2 / d2_cols) * 100;
+cos2_c3 <- (acs_full$co[, 3]^2 / d2_cols) * 100;
+cos2_c4 <- (acs_full$co[, 4]^2 / d2_cols) * 100;
+cos2_c5 <- (acs_full$co[, 5]^2 / d2_cols) * 100;
+
+tabla_cos2_cols <- data.frame(
+  Veintil      = colnames(K),
+  Dist_Chi2    = round(d2_cols, 3),
+  Cos2_E1      = round(cos2_c1, 1),
+  Cos2_E2      = round(cos2_c2, 1),
+  Cos2_Plano12 = round(cos2_c1 + cos2_c2, 1),
+  Cos2_E3      = round(cos2_c3, 1),
+  Cos2_E4      = round(cos2_c4, 1),
+  Cos2_E5      = round(cos2_c5, 1),
+  row.names    = NULL
+) %>%
+  arrange(desc(Cos2_Plano12));
+
+kable(
+  tabla_cos2_cols,
+  digits = 2,
+  col.names = c(
+    "Veintil", "Dist. Chi^2 (d^2)", "Cos2 Eje 1 (%)", "Cos2 Eje 2 (%)",
+    "Calidad Plano 1-2 (%)", "Cos2 Eje 3 (%)", "Cos2 Eje 4 (%)", "Cos2 Eje 5 (%)"
+  ),
+  align = c("c", "r", "r", "r", "r", "r", "r", "r"),
+  caption = "Tabla 15. Cosenos cuadrados (calidad de representación en %) de los 20 veintiles en los primeros 5 ejes y en el Plano 1-2"
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  column_spec(5, bold = TRUE, color = "#023047") %>%
+  scroll_box(width = "100%", height = "420px")
+```
+
+La calidad de representación en el **Plano 1-2** es muy alta para los veintiles de los extremos, liderados por **`V19` ($95.9\%$)**, **`V20` ($95.1\%$)**, **`V1` ($92.6\%$)** y **`V2` ($92.1\%$)**, los cuales se explican principalmente por el Eje 1 (con $\cos^2$ de $91.0\%$ en `V2`, $89.5\%$ en `V3` y $88.2\%$ en `V19`). En cambio, veintiles centrales como **`V10`** y **`V9`** muestran una representación muy baja en el Eje 1 ($1.1\%$ en `V10`), pero alcanzan su mayor representación en el **Eje 2** ($40.6\%$ en `V10` y $38.4\%$ en `V9`). Por su parte, los veintiles con menor calidad acumulada en el plano, como **`V13` ($16.1\%$)** y **`V12`**, presentan distancias $\chi^2$ al origen casi nulas (**$d^2 = 0.04$** y **$0.05$**), lo que sugiere que su perfil es muy parecido al promedio general (`marg`) y por eso se ubican prácticamente en el centro `(0,0)`.
+
+
+### 4. Perfiles Columna (Consulta Rápida)
+
+```{r}
+#| label: perfiles-columna-consulta-rapida
+#| echo: true
+#| message: false
+#| warning: false
+
+# Calculamos los perfiles columna exactos desde K y ordenamos las filas de los países
+# según su coordenada en el Eje 1 (de menor a mayor puntaje) para ver la diagonal de asociación
+orden_paises_e1 <- order(acs$li[, 1]);
+perC_exacto     <- prop.table(K, 2) * 100;
+marg_col_pais   <- (rowSums(K) / sum(K)) * 100;
+
+perC_ordenado <- cbind(
+  perC_exacto[orden_paises_e1, ],
+  `marg` = marg_col_pais[orden_paises_e1]
+);
+perC_ordenado <- rbind(
+  perC_ordenado,
+  `Suma` = colSums(perC_ordenado)
+);
+
+kable(
+  round(perC_ordenado, 1),
+  caption = "Tabla 6B. Perfiles columna (%) con los países ordenados por el Eje 1 y perfil promedio (marg)"
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  row_spec(nrow(perC_ordenado), bold = TRUE) %>%
+  column_spec(ncol(perC_ordenado) + 1, bold = TRUE) %>%
+  scroll_box(width = "100%", height = "420px")
+```
+
+Al ordenar las filas de los países según el Eje 1 en la **Tabla 6B**, se observa cómo la composición de los veintiles explica la forma de parábola o "U" (**Efecto Guttman**) que se ve en la **Figura 4**: los primeros veintiles (`V1`–`V4`, arriba a la izquierda en el gráfico) concentran porcentajes por encima de `marg` en las filas superiores (Emiratos Árabes con $31.6\%$ en `V1`, Brasil con $12.0\%$, Bulgaria con $10.4\%$ y Malasia con $9.8\%$); los veintiles medios (`V9`–`V15`, en la parte baja de la curva) aumentan su participación en las filas centrales correspondientes a Italia, España y Portugal; y los veintiles más altos (`V17`–`V20`, arriba a la derecha) concentran su peso en las filas inferiores de Europa Occidental y Norteamérica (Canadá, Rep. Checa, Austria, Países Bajos y Bélgica), junto con el repunte de Emiratos Árabes en `V20` ($15.2\%$).
+
+
+:::
+  
+  
+  ## Representación Simultánea (Países y Veintiles) y Retorno a los Datos {#sec-simultanea}
+  
+  Gracias a las relaciones de transición (propiedad cuasibaricéntrica) entre el espacio de las filas y el de las columnas, cada país se ubica en el promedio ponderado de las coordenadas de los veintiles según su perfil condicional, estirado por el factor $1/\sqrt{\lambda_s}$ (y de forma simétrica cada veintil es atraído por los países que tienen mayor presencia relativa en él). Esto nos permite superponer ambas nubes en un mismo plano factorial para explorar qué países se asocian con qué tramos de puntaje PISA.
+
+Presentamos en las siguientes tres pestañas la representación simultánea en el primer plano factorial, la guía de rangos de puntaje PISA (`V1` a `V20`) para traducir las asociaciones a niveles de desempeño, y el gráfico de perfiles fila ordenados según el primer eje (`plotct`) como retorno visual a los datos:
+  
+  ::: {.panel-tabset}
+
+### 1. Representación Simultánea (Plano 1-2)
+
+```{r}
+#| label: plano-simultaneo-filas-columnas
+#| echo: true
+#| message: false
+#| warning: false
+#| fig-width: 9.0
+#| fig-height: 7.8
+#| fig-cap: "Figura 5. Representación simultánea de los 20 países (puntos negros) y los 20 veintiles de puntaje (triángulos azules) en el primer plano factorial"
+
+# Representación simultánea de perfiles fila y columna siguiendo la sintaxis de FactoClass
+plot(
+  acs,
+  ex     = 1,
+  ey     = 2,
+  asp    = 1,
+  cframe = 1,
+  gg     = TRUE
+)
+```
+
+### 2. Guía de Rangos PISA (Consulta Rápida)
+
+```{r}
+#| label: tabla-guia-rangos-simultanea
+#| echo: true
+#| message: false
+#| warning: false
+
+# Buscamos automáticamente la columna PV1FLIT en el dataframe cargado en el entorno
+objs_df <- Filter(function(x) is.data.frame(get(x)) && "PV1FLIT" %in% names(get(x)), ls());
+df_pisa <- get(objs_df[1]);
+
+# Calculamos los 21 puntos de corte y extraemos los 20 inicios y los 20 finales con head() y tail()
+Cortes_num <- as.numeric(quantile(df_pisa$PV1FLIT, probs = seq(0, 1, by = 0.05), na.rm = TRUE));
+r_ini      <- round(head(Cortes_num, 20), 1);
+r_fin      <- round(tail(Cortes_num, 20), 1);
+
+tabla_guia_sim <- data.frame(
+  Veintil       = paste0("V", 1:20),
+  Rango_Inicial = r_ini,
+  Rango_Final   = r_fin,
+  Amplitud_Pts  = round(r_fin - r_ini, 1),
+  Masa_Porc     = round(as.numeric(colSums(K) / sum(K)) * 100, 1),
+  row.names     = NULL
+);
+
+kable(
+  tabla_guia_sim,
+  col.names = c("Código Veintil", "Puntaje Inicial", "Puntaje Final", "Amplitud (Puntos)", "% Muestra"),
+  align = c("c", "r", "r", "r", "r"),
+  caption = "Tabla 1B. Guía de lectura de los 20 veintiles en puntajes reales de alfabetización financiera PISA 2022"
 ) %>%
   kable_styling(
     full_width = FALSE,
@@ -1291,49 +1835,41 @@ kable(
   scroll_box(width = "100%", height = "420px")
 ```
 
-Al restar los porcentajes observados menos los esperados bajo independencia, se distinguen claramente dos aspectos:
-
-- **Efecto de los pesos y valores más extremos de la tabla:** Como estas diferencias están en puntos porcentuales del total de la muestra, los países con mayor participación alcanzan las restas más grandes en valor absoluto. El desvío positivo más alto de toda la tabla lo tiene **Emiratos Árabes** en `V1` con $+0.83$ (seguido de $+0.47$ en `V2`), mientras que su desvío negativo más fuerte llega a $-0.32$ en `V17; por su parte, **Canadá** muestra un comportamiento totalmente simétrico entre las dos puntas, con **$-0.26$** en`V1`(menos estudiantes de los esperados en nota muy baja) y **$+0.26$** en`V20\` (más estudiantes de los esperados en nota excelente).
-
-- **Contraste de signos entre bloques de países:** Mirando los signos de izquierda a derecha, países como **Brasil** ($+0.28$ en `V1` y $-0.28$ en `V20`), **Bulgaria** ($+0.33$ en `V1`), **Malasia** ($+0.27$ en `V1` y $-0.20$ en `V20`), **Arabia Saudita**, **Perú** y **Costa Rica** mantienen signos positivos en los primeros veintiles y negativos al final; al revés de **Canadá**, **República Checa** ($-0.17$ en `V1` y $+0.25$ en `V20`), **Austria** ($+0.21$ en `V20`), **Países Bajos** ($+0.19$ en `V20`) y **Bélgica**, que pasan de valores negativos en los veintiles bajos a positivos en los altos.
-
-### 3. Inercia Total y Estadístico $\chi^2$
+### 3. Perfiles Ordenados por el Eje 1 (`plotct`)
 
 ```{r}
-#| label: inercia-total-chi2
+#| label: grafico-perfiles-ordenados-eje1
 #| echo: true
 #| message: false
 #| warning: false
+#| fig-width: 11.0
+#| fig-height: 7.5
+#| fig-cap: "Figura 6. Perfiles fila de los 20 países ordenados según el Eje 1 y perfil promedio (marg), con subtonos pastel en degradé (naranja: V1-V6, azul: V7-V14, verde: V15-V20)"
 
-# La inercia total (phi^2) coincide con el estadístico Chi^2 dividido por el total k
-prueba_chi <- chisq.test(K, correct = FALSE)
-inercia_total <- as.numeric(prueba_chi$statistic) / k
+# Ordenamos las filas de K según la coordenada de los países en el Eje 1
+orden_e1 <- order(acs$li[, 1]);
+K_ord    <- as.table(as.matrix(K)[orden_e1, ]);
 
-resumen_inercia <- data.frame(
-  Inercia_Phi2    = inercia_total,
-  Estadistico_Chi = as.numeric(prueba_chi$statistic),
-  Grados_Libertad = as.numeric(prueba_chi$parameter), Chi2_Critico_95 = qchisq(0.95, df = prueba_chi$parameter),
-  Valor_p         = ifelse(prueba_chi$p.value < 0.0001, "< 0.0001", round(prueba_chi$p.value, 4))
+# Creamos 20 subtonos pastel distintos en 3 familias con degradé hacia la derecha:
+# V1 a V6: gama naranja pastel (de más fuertecito a más suave)
+# V7 a V14: gama azul pastel (de más fuertecito a más suave)
+# V15 a V20: gama verde menta pastel (de más fuertecito a más suave)
+gama_naranja_bajo <- colorRampPalette(c("#F4A261", "#FDE4CF"))(6);
+gama_azul_medio   <- colorRampPalette(c("#72B5E8", "#E3F2FD"))(8);
+gama_verde_alto   <- colorRampPalette(c("#74C69D", "#E8F8F0"))(6);
+
+colores_20_pastel <- c(gama_naranja_bajo, gama_azul_medio, gama_verde_alto);
+
+# Ajustamos el margen izquierdo (7.5 líneas) para que no se corten los nombres largos
+# manteniendo la leyenda original a la derecha con los 20 veintiles (V1 a V20)
+par(mar = c(3.5, 7.5, 2.5, 0.5), cex = 0.78);
+
+plotct(
+  K_ord,
+  "row",
+  col  = colores_20_pastel,
+  main = "Perfiles Fila Ordenados por el Eje 1 y Perfil Marginal (marg)"
 )
-
-kable(
-  resumen_inercia,
-  digits = 4,
-  col.names = c(
-    "Inercia Total (phi^2 = Chi^2 / k)", "Estadístico Chi^2",
-    "Grados de Libertad (gl)", "Valor Crítico (95%)", "Valor p"
-  ),
-  align = c("r", "r", "c", "r", "c"),
-  caption = "Tabla 9. Inercia total (phi^2) y contraste de independencia de la tabla de contingencia"
-) %>%
-  kable_styling(
-    full_width = FALSE,
-    bootstrap_options = c("striped", "hover", "condensed")
-  )
 ```
-:::
 
-- **Confirmación de dependencia entre país y puntaje:** El estadístico $\chi^2 = 1826$ supera de lejos el valor crítico de $406$ (con $361$ grados de libertad y un valor $p < 0.0001$), lo que confirma que las diferencias vistas en las tablas anteriores no se deben al azar y que el nivel de alfabetización financiera sí depende del país en esta muestra.
-- **Magnitud de la Inercia Total (**$\phi^2 = 0.183$): Al dividir el estadístico $\chi^2$ entre los $10\,000$ estudiantes obtenemos una inercia total de $0.183$, que resume qué tanto se alejan en conjunto los perfiles de los países respecto al centro de gravedad (`marg`) y es el valor total que pasaremos a descomponer en los ejes factoriales del ACS.
 
-El ACS va más allá de la simple prueba de hipótesis de independencia que se suele hacer en las tablas de contingencia, porque nos permite describir dónde están las dependencias comparando los perfiles fila y columna\[cite: 4\]. Aquí la **inercia total (**$\phi^2 = \chi^2 / k$) resume qué tanto se alejan en conjunto los países y veintiles de esa tabla de independencia ($\mathbf{A}$)\[cite: 3, 4\]. Como el estadístico $\chi^2$ calculado está muy por encima del valor crítico teórico con $361$ grados de libertad ($p < 0.0001$), queda claro que el puntaje en alfabetización financiera sí depende del país en esta muestra\[cite: 3, 5\].
