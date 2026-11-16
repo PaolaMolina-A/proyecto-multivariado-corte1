@@ -429,7 +429,7 @@ kable(
 La tabla comparativa evidencia la utilidad técnica de la auditoría de datos faltantes. Si se hubiese aplicado una eliminación por listas estándar (ACP Sin tratamiento de NAs) sobre las 15 variables originales, el choque de datos faltantes en las preguntas opcionales habría provocado la eliminación automática del 100% de los estudiantes de 5 países (Estados Unidos, Dinamarca, Noruega, República Checa y Costa Rica), reduciendo la muestra utilizable a una fracción muy baja. Por el contrario, la estrategia metodológica de tratamiento de datos faltantes por medio de la identificación de Patrones Estructurales, permitió rescatar la totalidad de las observaciones de 4 países al retirar únicamente las 2 variables opcionales con mayor volumen de omisión (FAMSUPSL y CREATSCH). Esto incrementó la retención final de observaciones al 70.1% (7.006 estudiantes) conservando 19 de los 20 países en el análisis.
 
 | Elemento en el ACP | Rol Asignado | Cantidad | Justificación Metodológica |
-|:-----------------|:-----------------|:------------------:|:-----------------|
+|:-----------------|:-----------------|:-----------------:|:-----------------|
 | **Estudiantes completos** | Filas Activas | $7.006$ | Observaciones sin valores faltantes en las 13 variables activas tras depurar el diseño muestral. |
 | **Indicadores cognitivos y contextuales** | Columnas Activas | $13$ variables | Variables cuantitativas continuas que definen la geometría de los ejes factoriales bajo el ACP normado. |
 | **País (`CNT`), `Region` y `Genero`** | Columnas Suplementarias | $3$ variables ($26$ categorías) | Variables cualitativas ilustrativas; se proyectan sobre el plano sin intervenir en el cálculo de la inercia. |
@@ -790,7 +790,16 @@ fviz_pca_ind(
     axis.title = element_text(face = "bold"),
     legend.position = "right"
   )
+
 ```
+
+La proyección de las elipses de concentración al 95% y los centroides regionales sobre el primer plano factorial ($Dim 1 \times Dim 2$) permite identificar tres patrones estructurales entre los bloques geográficos:
+
+- **Brecha horizontal en capital socioeducativo y rendimiento (Dimensión 1 — 30.8%):** Se observa un contraste marcado a lo largo del eje horizontal. **Norteamérica** y **Europa Occidental** desplazan sus centroides hacia el semieje positivo (derecha), evidenciando mayores niveles socioeconómicos (`ESCS`, `HISEI`) y puntajes superiores en las competencias evaluadas. En el extremo opuesto, **América Latina** ubica su centroide y gran parte de su elipse en el cuadrante inferior izquierdo ($Dim 1 < 0$), lo que refleja una desventaja estructural en recursos del hogar y desempeño académico frente al promedio internacional. Por su parte, **Europa Oriental** se sitúa prácticamente sobre el origen $(0,0)$, representando el perfil promedio de la muestra.
+
+- **Diferenciación vertical en socialización financiera práctica (Dimensión 2 — 17%):** La región de **Asia / Medio Oriente** es la única cuyo centroide y límite superior de elipse se desplazan de manera notable hacia el polo positivo del eje vertical ($Dim 2 > 0$). Esto indica que, aunque su rendimiento académico se ubica ligeramente por debajo de la media global, sus estudiantes reportan una mayor exposición a educación financiera en la escuela (`FLSCHOOL`), involucramiento familiar (`FLFAMILY`) y acceso a productos financieros (`ACCESSFP`).
+
+- **Variabilidad intra-regional y traslape de elipses:** El amplio solapamiento entre las cinco elipses demuestra que la heterogeneidad *interna* entre los estudiantes dentro de cada región es elevada; es decir, en todos los bloques geográficos coexisten estudiantes con desempeños altos y bajos, aun cuando los promedios regionales (centroides) marquen diferencias claras entre territorios.
 
 3.  Indicadores Factoriales de los Centroides por Género
 
