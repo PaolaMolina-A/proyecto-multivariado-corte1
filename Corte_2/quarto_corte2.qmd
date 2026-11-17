@@ -1327,8 +1327,9 @@ kable_styling(full_width = FALSE,bootstrap_options = c("striped", "hover", "cond
 ```
   
 * **Confirmación de dependencia entre país y puntaje:** El estadístico $\chi^2 = 1826$ supera de lejos el valor crítico de $406$ (con $361$ grados de libertad y un valor $p < 0.0001$), lo que confirma que las diferencias vistas en las tablas anteriores no se deben al azar y que el nivel de alfabetización financiera sí depende del país en esta muestra.
-                                                                                                                  * **Magnitud de la Inercia Total ($\phi^2 = 0.183$):** Al dividir el estadístico $\chi^2$ entre los $10\,000$ estudiantes obtenemos una inercia total de **$0.183$**, que resume qué tanto se alejan en conjunto los perfiles de los países respecto al centro de gravedad (`marg`) y es el valor total que pasaremos a descomponer en los ejes factoriales del ACS.
-                                                                                           El ACS va más allá de la simple prueba de hipótesis de independencia que se suele hacer en las tablas de contingencia, porque nos permite describir dónde están las dependencias comparando los perfiles fila y . Aquí la **inercia total ($\phi^2 = \chi^2 / k$)** resume qué tanto se alejan en conjunto los países y veintiles de esa tabla de independencia ($\mathbf{A}$). Como el estadístico $\chi^2$ calculado está muy por encima del valor crítico teórico con $361$ grados de libertad ($p < 0.0001$), queda claro que el puntaje en alfabetización financiera sí depende del país en esta muestra.
+                                                                                                          * **Magnitud de la Inercia Total ($\phi^2 = 0.183$):** Al dividir el estadístico $\chi^2$ entre los $10\,000$ estudiantes obtenemos una inercia total de **$0.183$**, que resume qué tanto se alejan en conjunto los perfiles de los países respecto al centro de gravedad (`marg`) y es el valor total que pasaremos a descomponer en los ejes factoriales del ACS.
+
+ El ACS va más allá de la simple prueba de hipótesis de independencia que se suele hacer en las tablas de contingencia, porque nos permite describir dónde están las dependencias comparando los perfiles fila y . Aquí la **inercia total ($\phi^2 = \chi^2 / k$)** resume qué tanto se alejan en conjunto los países y veintiles de esa tabla de independencia ($\mathbf{A}$). Como el estadístico $\chi^2$ calculado está muy por encima del valor crítico teórico con $361$ grados de libertad ($p < 0.0001$), queda claro que el puntaje en alfabetización financiera sí depende del país en esta muestra.
                                                                                            
 :::
 
@@ -2272,39 +2273,39 @@ Al igual que con las regiones, estas nuevas columnas no alterarán la inercia de
 #| warning: false
 #| fig-width: 9.0
 #| fig-height: 7.8
-#| fig-cap: "Figura 9. Proyección de los 5 niveles de desempeño PISA como columnas suplementarias (cuadrados naranjas) sobre el primer plano factorial de los 20 países activos"
+#| fig-cap: "Figura 9. Proyección de los 5 niveles de desempeño PISA como columnas suplementarias (cuadrados naranjas) sobre el primer plano factorial de los 20 países activos (puntos negros)"
 
-# 1. Agrupamos los 20 veintiles (columnas de K) en 5 Niveles PISA (Quintiles)
-K_t <- as.data.frame(t(K));
+# 1. Agrupamos los 20 veintiles (columnas de K) en 5 Niveles PISA (Quintiles de 20%)
+K_t <- as.data.frame(t(K))
 K_t$Nivel_PISA <- factor(
   rep(c("Inferior", "Bajo", "Medio", "Alto", "Superior"), each = 4),
   levels = c("Inferior", "Bajo", "Medio", "Alto", "Superior")
-);
+)
 
-# Colapsamos sumando las frecuencias
-K_niveles_t <- aggregate(. ~ Nivel_PISA, data = K_t, sum);
-rownames(K_niveles_t) <- K_niveles_t$Nivel_PISA;
-K_niveles_t$Nivel_PISA <- NULL;
+# Colapsamos sumando las frecuencias de cada bloque de 4 veintiles
+K_niveles_t <- aggregate(. ~ Nivel_PISA, data = K_t, sum)
+rownames(K_niveles_t) <- K_niveles_t$Nivel_PISA
+K_niveles_t$Nivel_PISA <- NULL
 
-# Transponemos de nuevo para obtener la tabla (Países x Niveles PISA)
-K_niveles <- t(K_niveles_t);
+# Transponemos de nuevo para obtener la tabla suplementaria (20 Países x 5 Niveles PISA)
+K_niveles <- t(K_niveles_t)
 
 # 2. Proyectamos los Niveles PISA como columnas suplementarias sobre el ACS original
-sup_niveles <- supcol(acs, K_niveles);
+sup_niveles <- supcol(acs, K_niveles)
 
-# 3. Conservamos la orientación natural de 'acs' (Inferior a la izquierda, Superior a la derecha)
-coord_niv <- as.data.frame(sup_niveles$cosup[, 1:2]);
-colnames(coord_niv) <- c("Axis1", "Axis2");
+# 3. Extraemos las coordenadas de los 5 niveles conservando la orientación natural de 'acs'
+coord_niv <- as.data.frame(sup_niveles$cosup[, 1:2])
+colnames(coord_niv) <- c("Axis1", "Axis2")
 
-# 4. Generamos el plano base con FactoClass y superponemos los Niveles PISA en naranja
-graf_base_niv <- plot(acs, ex = 1, ey = 2, Trow = FALSE, asp = 1, cframe = 1, gg = TRUE);
+# 4. Generamos el plano base de los 20 PAÍSES (Tcol = FALSE) y superponemos los Niveles PISA en naranja
+graf_base_niv <- plot(acs, ex = 1, ey = 2, Tcol = FALSE, asp = 1, cframe = 1, gg = TRUE)
 
 graf_niveles_final <- graf_base_niv +
   ggplot2::geom_point(data = coord_niv, ggplot2::aes(x = Axis1, y = Axis2), color = "darkorange", shape = 15, size = 3.5, inherit.aes = FALSE) +
   ggrepel::geom_text_repel(data = coord_niv, ggplot2::aes(x = Axis1, y = Axis2, label = rownames(coord_niv)), color = "darkorange", fontface = "bold", size = 4.0, box.padding = 0.5, inherit.aes = FALSE) +
-  ggplot2::coord_fixed(ratio = 1, xlim = c(-0.85, 0.60), ylim = c(-0.35, 0.45));
+  ggplot2::coord_fixed(ratio = 1, xlim = c(-0.80, 0.58), ylim = c(-0.32, 0.42))
 
-print(graf_niveles_final);
+print(graf_niveles_final)
 
 ```
 
@@ -2316,29 +2317,28 @@ print(graf_niveles_final);
 #| warning: false
 
 # 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen, cos2 y v-test de cada nivel
-N_total      <- sum(K_niveles);
-peso_rel_niv <- colSums(K_niveles) / N_total;
-peso_niv     <- peso_rel_niv * 100;
+N_total       <- sum(K_niveles)
+peso_rel_niv  <- colSums(K_niveles) / N_total
+peso_niv      <- peso_rel_niv * 100
 
-perf_niv      <- sweep(K_niveles, 2, colSums(K_niveles), "/");
-cent_orig_row <- acs$lw;
+perf_niv      <- sweep(K_niveles, 2, colSums(K_niveles), "/")
+cent_orig_row <- acs$lw
 
-# d2 para columnas suplementarias
-d2_niv <- colSums(sweep(sweep(perf_niv, 1, cent_orig_row, "-")^2, 1, cent_orig_row, "/"));
+# Distancia Chi-cuadrado (d2) para columnas suplementarias
+d2_niv <- colSums(sweep(sweep(perf_niv, 1, cent_orig_row, "-")^2, 1, cent_orig_row, "/"))
 
-# Conservamos el signo natural de 'acs' para alinear con Figura 9 y todas las tablas previas
-f1_niv <- sup_niveles$cosup[, 1];
-f2_niv <- sup_niveles$cosup[, 2];
+f1_niv <- sup_niveles$cosup[, 1]
+f2_niv <- sup_niveles$cosup[, 2]
 
-cos1_niv  <- (f1_niv^2 / d2_niv) * 100;
-cos2_niv  <- (f2_niv^2 / d2_niv) * 100;
-plano_niv <- cos1_niv + cos2_niv;
+cos1_niv  <- (f1_niv^2 / d2_niv) * 100
+cos2_niv  <- (f2_niv^2 / d2_niv) * 100
+plano_niv <- cos1_niv + cos2_niv
 
 # Valores test (v-test) para las columnas suplementarias en los 2 ejes retenidos
-vtest_niv_1 <- f1_niv * sqrt(((N_total - 1) * peso_rel_niv) / ((1 - peso_rel_niv) * acs$eig[1])); vtest_niv_2 <- f2_niv * sqrt(((N_total - 1) * peso_rel_niv) / ((1 - peso_rel_niv) * acs$eig[2]));
+vtest_niv_1 <- f1_niv * sqrt(((N_total - 1) * peso_rel_niv) / ((1 - peso_rel_niv) * acs$eig[1])); vtest_niv_2 <- f2_niv * sqrt(((N_total - 1) * peso_rel_niv) / ((1 - peso_rel_niv) * acs$eig[2]))
 
 # 2. Ordenamos los niveles de menor a mayor coordenada en el Eje 1 (de Inferior a Superior)
-ord_niv <- order(f1_niv);
+ord_niv <- order(f1_niv)
 
 tabla_niveles_sup <- data.frame(
   Nivel_PISA   = colnames(K_niveles)[ord_niv],
@@ -2352,7 +2352,7 @@ tabla_niveles_sup <- data.frame(
   Vtest_Eje1   = round(vtest_niv_1[ord_niv], 2),
   Vtest_Eje2   = round(vtest_niv_2[ord_niv], 2),
   row.names    = NULL
-);
+)
 
 kable(
   tabla_niveles_sup,
@@ -2371,7 +2371,6 @@ kable(
   ) %>%
   column_spec(c(9, 10), bold = TRUE) %>%
   scroll_box(width = "100%")
-  
 ```
 
 :::
@@ -2379,24 +2378,23 @@ kable(
 
 **Organización de los niveles de rendimiento sobre el Eje 1**
 
-La Figura 9 y la Tabla 18 muestran que el Análisis de Correspondencias permite identificar una organización clara de los niveles de rendimiento en alfabetización financiera. Al incorporar los cinco niveles PISA como categorías suplementarias, cada uno con un peso del $20%$, se observa que estos quedan ordenados de manera progresiva de izquierda a derecha sobre el Eje 1. La secuencia comienza con el nivel Inferior ($F_1 = -0.545$, $v\text{-test} = -74.47$), continúa con Bajo ($-0.208$, $v\text{-test} = -28.43$), Medio ($+0.025$, $v\text{-test} = +3.46$) y Alto ($+0.251$, $v\text{-test} = +34.32$), hasta llegar al nivel Superior ($+0.476$, $v\text{-test} = +65.12$). Todos presentan valores de significancia superiores al umbral de referencia de $1.96$ en valor absoluto.
+La Figura 9 y la Tabla 18 muestran que el Análisis de Correspondencias permite identificar una organización clara de los niveles de rendimiento en alfabetización financiera. Al incorporar los cinco niveles PISA como categorías suplementarias, cada uno con un peso del $20\%$, se observa que estos quedan ordenados de manera progresiva de izquierda a derecha sobre el Eje 1[cite: 38, 39]. La secuencia comienza con el nivel Inferior ($F_1 = -0.545$, $\text{v-test} = -74.47$)[cite: 38, 39], continúa con Bajo ($-0.208$, $\text{v-test} = -28.43$)[cite: 38, 39], Medio ($+0.025$, $\text{v-test} = +3.46$)[cite: 39] y Alto ($+0.251$, $\text{v-test} = +34.32$)[cite: 39], hasta llegar al nivel Superior ($+0.476$, $\text{v-test} = +65.12$)[cite: 39]. Todos presentan valores de significancia superiores al umbral de referencia de $1.96$ en valor absoluto[cite: 39].
 
-La Tabla 18 también muestra que los niveles más alejados del centro tienen una buena representación sobre este primer eje, con valores de $\cos^2$ superiores al $83.9%$. En particular, el nivel Inferior alcanza un $96.7%$ y el nivel Superior un $90.4%$. Además, todos los niveles presentan una representación superior al $99%$ en el primer plano factorial. Estos resultados indican que el Eje 1 representa principalmente las diferencias en el rendimiento en alfabetización financiera, ubicando los niveles más bajos en un extremo y los más altos en el otro.
+La Tabla 18 también muestra que los niveles más alejados del centro tienen una buena representación sobre este primer eje, con valores de $\cos^2$ superiores al $83.9\%$[cite: 38, 39]. En particular, el nivel Inferior alcanza un $96.7\%$ y el nivel Superior un $90.4\%$ en el Eje 1, superando ambos el $99\%$ de calidad de representación acumulada en el primer plano factorial ($99.3\%$ y $99.0\%$, respectivamente)[cite: 38, 39]. Estos resultados indican que el Eje 1 representa principalmente las diferencias en el rendimiento en alfabetización financiera, ubicando los niveles más bajos en un extremo y los más altos en el otro[cite: 38, 39].
 
 **Relación entre los niveles de rendimiento y los países**
 
-La distribución de los elementos en el plano factorial permite observar asociaciones entre los niveles de rendimiento y determinados países. En particular, los niveles extremos se encuentran en posiciones opuestas y ayudan a comprender las diferencias entre los perfiles de los países. Esta distribución también guarda relación con la forma de parábola observada en el plano, junto con las categorías ubicadas en sus extremos (V1–V2 a la izquierda y V18–V20 a la derecha).
+La distribución de los elementos en la Figura 9 permite observar directamente las asociaciones entre los cinco niveles de rendimiento y los 20 países activos. En particular, los niveles extremos se encuentran en posiciones opuestas y sintetizan la forma de parábola del plano factorial al agrupar los veintiles de los extremos ($V_1$ a $V_4$ a la izquierda y $V_{17}$ a $V_{20}$ a la derecha).
 
-En la parte superior izquierda, el nivel Inferior presenta una asociación marcada con el segundo eje ($v\text{-test}_2 = +32.2$) y una posición muy negativa en el primero ($v\text{-test}_1 = -74.47$). Esta ubicación coincide con la de países como Malasia, Brasil, Costa Rica y Perú, cuyos perfiles se encuentran más próximos a esta zona del plano. Por otro lado, el nivel Superior presenta valores positivos en ambos ejes ($v\text{-test}_1 = +65.12$ y $v\text{-test}_2 = +52.9$), y se ubica cerca de Bélgica, Países Bajos y Canadá.
+En la parte superior izquierda, el nivel Inferior presenta una asociación positiva con el segundo eje ($\text{v-test}_2 = +32.2$) y una posición muy negativa en el primero ($\text{v-test}_1 = -74.47$)[cite: 38, 39]. Esta ubicación coincide con la de países como Bulgaria, Malasia, Brasil, Costa Rica, Perú y Arabia Saudita, cuyos perfiles se encuentran próximos a esta zona del plano. Por otro lado, el nivel Alto ($F_1 = +0.251$) se sitúa junto a Canadá, Estados Unidos, Noruega, Dinamarca y Hungría, mientras que el nivel Superior presenta valores positivos en ambos ejes ($\text{v-test}_1 = +65.12$ y $\text{v-test}_2 = +52.9$) y se ubica arriba a la derecha junto a Bélgica, Países Bajos, Austria, República Checa y Polonia[cite: 36, 39].
 
-En conjunto, estas posiciones muestran que existen diferencias entre los países en cuanto a la distribución de sus estudiantes según los niveles de rendimiento. Mientras algunos presentan perfiles más relacionados con los niveles inferiores, otros se encuentran más próximos a los niveles superiores. De esta manera, el plano factorial permite identificar cómo se distribuyen estas diferencias entre los países analizados.
+En conjunto, estas posiciones muestran que existen diferencias claras entre los países según los niveles de rendimiento donde se concentran sus estudiantes: mientras algunos presentan perfiles asociados a los niveles Inferior y Bajo, otros se encuentran próximos a los niveles Alto y Superior[cite: 38, 39].
 
 **Comportamiento particular del nivel Medio**
 
-El nivel Medio presenta un comportamiento diferente al de los demás niveles. Su distancia al origen es la menor de todas ($d^2 = 0.019$), su coordenada sobre el Eje 1 está muy cerca de cero ($F_1 = +0.025$) y su valor de $\cos^2$ en este eje es de apenas $3.4%$. Asimismo, registra el menor valor del $v\text{-test}$ sobre el primer factor ($+3.46$). Esto indica que su posición sobre el Eje 1 es muy cercana al centro del plano y que no presenta una asociación tan marcada con los extremos del rendimiento.
+El nivel Medio presenta un comportamiento diferente al de los demás niveles[cite: 39]. Su distancia al origen es la menor de todas ($d^2 = 0.019$), su coordenada sobre el Eje 1 está muy cerca de cero ($F_1 = +0.025$) y su valor de $\cos^2$ en este eje es de apenas $3.4\%$[cite: 39]. Asimismo, registra el menor valor del $\text{v-test}$ sobre el primer factor ($+3.46$)[cite: 39]. Esto indica que su posición sobre el Eje 1 es muy cercana al centro del plano y que no presenta una asociación marcada con los extremos del rendimiento[cite: 39].
 
-Sin embargo, su comportamiento sobre el Eje 2 es más destacado: este factor explica el $72.9%$ de su representación, con una coordenada de $F_2 = -0.117$ y un $v\text{-test} = -42.2$. Por esta razón, el nivel Medio se ubica en la parte inferior del plano factorial, cerca de las categorías V10–V12 y de países como España, Italia y Portugal. Esta distribución permite observar que, aunque el nivel Medio no presenta una posición diferenciada sobre el primer eje, sí tiene una relación importante con el segundo. Por tanto, su comportamiento no debe interpretarse únicamente a partir de las diferencias entre los niveles bajos y altos, sino también teniendo en cuenta la estructura que representa el Eje 2.
-
+Sin embargo, su comportamiento sobre el Eje 2 es más destacado: este factor explica el $72.9\%$ de su representación, con una coordenada de $F_2 = -0.117$ y un $\text{v-test} = -42.2$[cite: 39]. Por esta razón, el nivel Medio se ubica en la parte inferior del plano factorial, señalando hacia países como España, Italia y Portugal[cite: 36, 39]. Esta distribución permite observar que, aunque el nivel Medio no se aleja horizontalmente sobre el primer eje, sí tiene una relación importante con el segundo eje, caracterizando a los países donde la mayoría de los estudiantes obtiene calificaciones intermedias[cite: 32, 39].
 
 ### Conclusiones Generales del Análisis de Correspondencias Simples (ACS)
 
