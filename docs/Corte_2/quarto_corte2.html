@@ -256,8 +256,8 @@ window.Quarto = {
   <li><a href="#representación-simultánea-países-y-veintiles-y-retorno-a-los-datos" id="toc-representación-simultánea-países-y-veintiles-y-retorno-a-los-datos" class="nav-link" data-scroll-target="#representación-simultánea-países-y-veintiles-y-retorno-a-los-datos"><span class="header-section-number">3.11</span> Representación Simultánea (Países y Veintiles) y Retorno a los Datos</a>
   <ul class="collapse">
   <li><a href="#elementos-suplementarios-e-ilustrativos" id="toc-elementos-suplementarios-e-ilustrativos" class="nav-link" data-scroll-target="#elementos-suplementarios-e-ilustrativos"><span class="header-section-number">3.11.1</span> Elementos Suplementarios e Ilustrativos</a></li>
-  <li><a href="#conclusiones-generales-del-análisis-de-correspondencias-simples-acs" id="toc-conclusiones-generales-del-análisis-de-correspondencias-simples-acs" class="nav-link" data-scroll-target="#conclusiones-generales-del-análisis-de-correspondencias-simples-acs"><span class="header-section-number">3.11.2</span> Conclusiones Generales del Análisis de Correspondencias Simples (ACS)</a></li>
   </ul></li>
+  <li><a href="#conclusiones-generales-del-análisis-de-correspondencias-simples-acs" id="toc-conclusiones-generales-del-análisis-de-correspondencias-simples-acs" class="nav-link" data-scroll-target="#conclusiones-generales-del-análisis-de-correspondencias-simples-acs"><span class="header-section-number">3.12</span> Conclusiones Generales del Análisis de Correspondencias Simples (ACS)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -292,7 +292,9 @@ window.Quarto = {
 
 
 <p>Link a la página web:</p>
-<p><a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/" target="_blank">Proyecto Multivariado - Corte 1</a></p>
+<p><a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/Corte_2/quarto_corte2.html" target="_blank">Proyecto Multivariado - Corte 2</a></p>
+<p>Link al video de youtube:</p>
+<p><a href="https://youtu.be/igaB5haq_Aw">Video Presentación - segunda Entrega</a></p>
 <section id="método-de-reducción-de-observaciones" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Método de reducción de observaciones</h1>
 <p>Para esta segunda etapa, donde vamos a realizar análisis factoriales, decidimos hacer una reducción de la base de datos con 97983 observaciones, 31 variables de las cuales hay 15cualitativas, 15 cuantitativas, y una variable que tiene la función de identificar las observaciones del estudiante. Esta reducción no es sinónimo de imputación de datos, sino un muestreo, donde tomamos como población la totalidad de observaciones, lo que nos permite tener un marco de lista, y que las probabilidades de inclusión de cada unidad de muestreo del diseño original por parte de PISA sean del mismo valor para todos; cabe aclarar que el curso no se enfoca en el muestreo o inferencia estadística, por lo que no vemos necesario calcular valores propios del diseño muestral para medir el efecto de este, por lo que no necesitamos estimar el tamaño de muestra adecuado para el total de la población. De este modo, usaremos un muestreo aleatorio simple, con un tamaño de 10000 unidades estadísticas, con el fin de reducir la capacidad de cómputo para los análisis posteriores. A continuación, usaremos la función slice_sample() que tomara la muestra, mostraremos la proporción de estudiantes por país en relación al tamaño inicial en la columna “Original”, también la misma proporción, pero respecto al tamaño de la muestra en “Submuestra”; además en la columna “Diferencia” tenemos la diferencia entre las proporciones originales y las muestrales con el fin de mostrar que no se introdujo un sesgo o desproporción en la muestra tomada. Finalmente, anexamos una salida gráfica como ayuda visual, donde comprobamos que las proporciones de observaciones por país se mantuvieron.</p>
@@ -9925,8 +9927,9 @@ Perú
 <p>Sin embargo, su comportamiento sobre el Eje 2 es más destacado: este factor explica el <span class="math inline">\(72.9\%\)</span> de su representación, con una coordenada de <span class="math inline">\(F_2 = -0.117\)</span> y un <span class="math inline">\(\text{v-test} = -42.2\)</span>[cite: 39]. Por esta razón, el nivel Medio se ubica en la parte inferior del plano factorial, señalando hacia países como España, Italia y Portugal[cite: 36, 39]. Esta distribución permite observar que, aunque el nivel Medio no se aleja horizontalmente sobre el primer eje, sí tiene una relación importante con el segundo eje, caracterizando a los países donde la mayoría de los estudiantes obtiene calificaciones intermedias[cite: 32, 39].</p>
 </section>
 </section>
-<section id="conclusiones-generales-del-análisis-de-correspondencias-simples-acs" class="level3" data-number="3.11.2">
-<h3 data-number="3.11.2" class="anchored" data-anchor-id="conclusiones-generales-del-análisis-de-correspondencias-simples-acs"><span class="header-section-number">3.11.2</span> Conclusiones Generales del Análisis de Correspondencias Simples (ACS)</h3>
+</section>
+<section id="conclusiones-generales-del-análisis-de-correspondencias-simples-acs" class="level2" data-number="3.12">
+<h2 data-number="3.12" class="anchored" data-anchor-id="conclusiones-generales-del-análisis-de-correspondencias-simples-acs"><span class="header-section-number">3.12</span> Conclusiones Generales del Análisis de Correspondencias Simples (ACS)</h2>
 <p>A partir del Análisis de Correspondencias Simples realizado sobre los 10 000 estudiantes de los 20 países evaluados en alfabetización financiera en PISA 2022, resumimos los cuatro hallazgos principales del estudio:</p>
 <p><strong>1. El nivel de puntaje financiero sí depende del país y se puede resumir en un solo mapa (83.7% de la información)</strong></p>
 <p>Al dividir las notas de los estudiantes en 20 grupos del mismo tamaño (veintiles <span class="math inline">\(V_1\)</span> a <span class="math inline">\(V_{20}\)</span>, con 500 alumnos cada uno) y comparar los porcentajes internos de cada país para que las naciones con más encuestados no distorsionaran el análisis, la prueba estadística (<span class="math inline">\(\chi^2 = 1826, p &lt; 0.0001\)</span>) confirmó que existe una relación clara entre el país de origen y el puntaje obtenido. De las 19 dimensiones posibles, los dos primeros ejes resumen el <span class="math inline">\(83.7\%\)</span> de todas las diferencias entre países (<span class="math inline">\(73.2\%\)</span> en el Eje 1 y <span class="math inline">\(10.5\%\)</span> en el Eje 2), lo que permite leer casi toda la información de la tabla de 400 celdas en un solo plano bidimensional.</p>
@@ -9938,7 +9941,6 @@ Perú
 <p>Al hacer la prueba de validación sacando del cálculo a los dos países que más pesaban en el análisis (Emiratos Árabes por tener casi el <span class="math inline">\(15\%\)</span> de la muestra y Malasia por su alto peso en las notas bajas), los otros 18 países conservaron exactamente el mismo orden y el Eje 1 mantuvo el <span class="math inline">\(73.9\%\)</span> de la información, demostrando que los resultados son confiables. Finalmente, al agrupar los países en cinco regiones y cinco niveles PISA, comprobamos que regiones como Latinoamérica (asociada al nivel <em>Inferior</em>) y Norteamérica (asociada a los niveles <em>Alto</em> y <em>Superior</em>) son muy parejas por dentro, mientras que en Europa los promedios regionales mezclan realidades distintas: en Europa Occidental se promedian los puntajes altos de Bélgica y Países Bajos con las notas medias de España, Italia y Portugal; y en Europa Oriental los buenos resultados de República Checa y Polonia se compensan con los puntajes bajos de Bulgaria.</p>
 
 
-</section>
 </section>
 </section>
 

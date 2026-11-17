@@ -18,7 +18,12 @@ execute:
 
 Link a la página web:
 
-<a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/" target="_blank">Proyecto Multivariado - Corte 1</a>
+<a href="https://paolamolina-a.github.io/proyecto-multivariado-corte1/Corte_2/quarto_corte2.html" target="_blank">Proyecto Multivariado - Corte 2</a>
+
+
+Link al video de youtube:
+
+<a href="https://youtu.be/igaB5haq_Aw">Video Presentación - segunda Entrega</a>
 
 # Método de reducción de observaciones
 
@@ -2396,7 +2401,7 @@ El nivel Medio presenta un comportamiento diferente al de los demás niveles[cit
 
 Sin embargo, su comportamiento sobre el Eje 2 es más destacado: este factor explica el $72.9\%$ de su representación, con una coordenada de $F_2 = -0.117$ y un $\text{v-test} = -42.2$[cite: 39]. Por esta razón, el nivel Medio se ubica en la parte inferior del plano factorial, señalando hacia países como España, Italia y Portugal[cite: 36, 39]. Esta distribución permite observar que, aunque el nivel Medio no se aleja horizontalmente sobre el primer eje, sí tiene una relación importante con el segundo eje, caracterizando a los países donde la mayoría de los estudiantes obtiene calificaciones intermedias[cite: 32, 39].
 
-### Conclusiones Generales del Análisis de Correspondencias Simples (ACS)
+## Conclusiones Generales del Análisis de Correspondencias Simples (ACS)
 
 A partir del Análisis de Correspondencias Simples realizado sobre los 10 000 estudiantes de los 20 países evaluados en alfabetización financiera en PISA 2022, resumimos los cuatro hallazgos principales del estudio:
 
