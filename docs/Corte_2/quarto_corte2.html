@@ -6668,45 +6668,60 @@ Perú
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos las contribuciones absolutas en porcentaje (0 a 100%) para los primeros 3 ejes:</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ca_s(i) = (f_i. * F_s(i)^2 / lambda_s) * 100</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>ctr_fila_1 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>lw <span class="sc">*</span> (acs<span class="sc">$</span>li[, <span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>]) <span class="sc">*</span> <span class="dv">100</span>;</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>ctr_fila_2 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>lw <span class="sc">*</span> (acs<span class="sc">$</span>li[, <span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]) <span class="sc">*</span> <span class="dv">100</span>; ctr_fila_3 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>lw <span class="sc">*</span> (acs<span class="sc">$</span>li[, <span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">3</span>]) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tabla-coordenadas-contribuciones-filas</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>tabla_coord_ctr_filas <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pais   =</span> <span class="fu">rownames</span>(K),</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso   =</span> <span class="fu">round</span>(acs<span class="sc">$</span>lw <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">F1     =</span> <span class="fu">round</span>(acs<span class="sc">$</span>li[, <span class="dv">1</span>], <span class="dv">3</span>),</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2     =</span> <span class="fu">round</span>(acs<span class="sc">$</span>li[, <span class="dv">2</span>], <span class="dv">3</span>),</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">F3     =</span> <span class="fu">round</span>(acs<span class="sc">$</span>li[, <span class="dv">3</span>], <span class="dv">3</span>),</span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E1 =</span> <span class="fu">round</span>(ctr_fila_1, <span class="dv">2</span>),</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E2 =</span> <span class="fu">round</span>(ctr_fila_2, <span class="dv">2</span>),</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E3 =</span> <span class="fu">round</span>(ctr_fila_3, <span class="dv">2</span>),</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(F1);</span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  tabla_coord_ctr_filas,</span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>,</span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"País"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>, <span class="st">"Coord. Eje 3"</span>,</span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Contribución Eje 1 (%)"</span>, <span class="st">"Contribución Eje 2 (%)"</span>, <span class="st">"Contribución Eje 3 (%)"</span></span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>),</span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 12. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 países en los tres primeros ejes (ordenados por el Eje 1)"</span></span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
-<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>, <span class="at">height =</span> <span class="st">"420px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos las contribuciones absolutas en porcentaje (0 a 100%) para los primeros 3 ejes:</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Ca_s(i) = (f_i. * F_s(i)^2 / lambda_s) * 100</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>ctr_fila_1 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>lw <span class="sc">*</span> (acs<span class="sc">$</span>li[, <span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>]) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>ctr_fila_2 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>lw <span class="sc">*</span> (acs<span class="sc">$</span>li[, <span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>ctr_fila_3 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>lw <span class="sc">*</span> (acs<span class="sc">$</span>li[, <span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">3</span>]) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos los valores test (v-test) para los 2 ejes retenidos:</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="co"># v-test_s(i) = F_s(i) * sqrt(((N - 1) * f_i.) / ((1 - f_i.) * lambda_s))</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>N_total <span class="ot">&lt;-</span> <span class="fu">sum</span>(K)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>vtest_fila_1 <span class="ot">&lt;-</span> acs<span class="sc">$</span>li[, <span class="dv">1</span>] <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> acs<span class="sc">$</span>lw) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> acs<span class="sc">$</span>lw) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>]))</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>vtest_fila_2 <span class="ot">&lt;-</span> acs<span class="sc">$</span>li[, <span class="dv">2</span>] <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> acs<span class="sc">$</span>lw) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> acs<span class="sc">$</span>lw) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]))</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>tabla_coord_ctr_filas <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pais     =</span> <span class="fu">rownames</span>(K),</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso     =</span> <span class="fu">round</span>(acs<span class="sc">$</span>lw <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">F1       =</span> <span class="fu">round</span>(acs<span class="sc">$</span>li[, <span class="dv">1</span>], <span class="dv">3</span>),</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2       =</span> <span class="fu">round</span>(acs<span class="sc">$</span>li[, <span class="dv">2</span>], <span class="dv">3</span>),</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">F3       =</span> <span class="fu">round</span>(acs<span class="sc">$</span>li[, <span class="dv">3</span>], <span class="dv">3</span>),</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E1   =</span> <span class="fu">round</span>(ctr_fila_1, <span class="dv">2</span>),</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E2   =</span> <span class="fu">round</span>(ctr_fila_2, <span class="dv">2</span>),</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E3   =</span> <span class="fu">round</span>(ctr_fila_3, <span class="dv">2</span>),</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_E1 =</span> <span class="fu">round</span>(vtest_fila_1, <span class="dv">2</span>),</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_E2 =</span> <span class="fu">round</span>(vtest_fila_2, <span class="dv">2</span>),</span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(F1)</span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>  tabla_coord_ctr_filas,</span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"País"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>, <span class="st">"Coord. Eje 3"</span>,</span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Contribución Eje 1 (%)"</span>, <span class="st">"Contribución Eje 2 (%)"</span>, <span class="st">"Contribución Eje 3 (%)"</span>,</span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"v-test Eje 1"</span>, <span class="st">"v-test Eje 2"</span></span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">9</span>)),</span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 12. Pesos, coordenadas factoriales, contribuciones absolutas y valores test (v-test) de los 20 países en los primeros ejes (ordenados por el Eje 1)"</span></span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
+<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>, <span class="at">height =</span> <span class="st">"420px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:420px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover table-condensed caption-top table-sm small">
-<caption>Tabla 12. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 países en los tres primeros ejes (ordenados por el Eje 1)</caption>
+<caption>Tabla 12. Pesos, coordenadas factoriales, contribuciones absolutas y valores test (v-test) de los 20 países en los primeros ejes (ordenados por el Eje 1)</caption>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">País</th>
@@ -6717,6 +6732,8 @@ Perú
 <th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">Contribución Eje 1 (%)</th>
 <th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">Contribución Eje 2 (%)</th>
 <th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">Contribución Eje 3 (%)</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">v-test Eje 1</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">v-test Eje 2</th>
 </tr>
 </thead>
 <tbody>
@@ -6729,6 +6746,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">12.29</td>
 <td style="text-align: right;">0.21</td>
 <td style="text-align: right;">0.08</td>
+<td style="text-align: right; font-weight: bold;">-35.84</td>
+<td style="text-align: right;">-4.72</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Costa Rica</td>
@@ -6739,6 +6758,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">7.34</td>
 <td style="text-align: right;">2.61</td>
 <td style="text-align: right;">16.76</td>
+<td style="text-align: right; font-weight: bold;">-27.57</td>
+<td style="text-align: right;">-16.44</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Bulgaria</td>
@@ -6749,6 +6770,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">7.51</td>
 <td style="text-align: right;">1.15</td>
 <td style="text-align: right;">12.04</td>
+<td style="text-align: right; font-weight: bold;">-27.95</td>
+<td style="text-align: right;">10.95</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Arabia Saudita</td>
@@ -6759,6 +6782,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">7.58</td>
 <td style="text-align: right;">4.05</td>
 <td style="text-align: right;">21.79</td>
+<td style="text-align: right; font-weight: bold;">-28.10</td>
+<td style="text-align: right;">-20.53</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Brasil</td>
@@ -6769,6 +6794,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">9.28</td>
 <td style="text-align: right;">0.79</td>
 <td style="text-align: right;">0.04</td>
+<td style="text-align: right; font-weight: bold;">-31.49</td>
+<td style="text-align: right;">-9.19</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Perú</td>
@@ -6779,6 +6806,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">5.51</td>
 <td style="text-align: right;">2.00</td>
 <td style="text-align: right;">0.06</td>
+<td style="text-align: right; font-weight: bold;">-23.97</td>
+<td style="text-align: right;">-14.44</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Emiratos Árabes</td>
@@ -6789,6 +6818,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">8.54</td>
 <td style="text-align: right;">33.55</td>
 <td style="text-align: right;">9.86</td>
+<td style="text-align: right; font-weight: bold;">-31.68</td>
+<td style="text-align: right;">62.80</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Italia</td>
@@ -6799,6 +6830,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">0.70</td>
 <td style="text-align: right;">15.00</td>
 <td style="text-align: right;">2.59</td>
+<td style="text-align: right; font-weight: bold;">8.62</td>
+<td style="text-align: right;">-40.00</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">España</td>
@@ -6809,6 +6842,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">1.38</td>
 <td style="text-align: right;">10.44</td>
 <td style="text-align: right;">8.68</td>
+<td style="text-align: right; font-weight: bold;">11.96</td>
+<td style="text-align: right;">-32.94</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Canadá</td>
@@ -6819,6 +6854,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">3.68</td>
 <td style="text-align: right;">0.29</td>
 <td style="text-align: right;">6.05</td>
+<td style="text-align: right; font-weight: bold;">20.14</td>
+<td style="text-align: right;">5.63</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Noruega</td>
@@ -6829,6 +6866,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">2.03</td>
 <td style="text-align: right;">0.70</td>
 <td style="text-align: right;">0.38</td>
+<td style="text-align: right; font-weight: bold;">14.61</td>
+<td style="text-align: right;">-8.56</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Portugal</td>
@@ -6839,6 +6878,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">2.27</td>
 <td style="text-align: right;">12.89</td>
 <td style="text-align: right;">8.18</td>
+<td style="text-align: right; font-weight: bold;">15.38</td>
+<td style="text-align: right;">-36.69</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Estados Unidos</td>
@@ -6849,6 +6890,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">2.13</td>
 <td style="text-align: right;">0.09</td>
 <td style="text-align: right;">0.20</td>
+<td style="text-align: right; font-weight: bold;">14.83</td>
+<td style="text-align: right;">3.07</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Hungría</td>
@@ -6859,6 +6902,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">2.39</td>
 <td style="text-align: right;">1.77</td>
 <td style="text-align: right;">1.44</td>
+<td style="text-align: right; font-weight: bold;">15.75</td>
+<td style="text-align: right;">-13.57</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Austria</td>
@@ -6869,6 +6914,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">4.55</td>
 <td style="text-align: right;">2.83</td>
 <td style="text-align: right;">0.13</td>
+<td style="text-align: right; font-weight: bold;">21.84</td>
+<td style="text-align: right;">17.22</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Dinamarca</td>
@@ -6879,6 +6926,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">3.77</td>
 <td style="text-align: right;">0.04</td>
 <td style="text-align: right;">0.29</td>
+<td style="text-align: right; font-weight: bold;">19.80</td>
+<td style="text-align: right;">-1.99</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Rep. Checa</td>
@@ -6889,6 +6938,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">5.28</td>
 <td style="text-align: right;">1.30</td>
 <td style="text-align: right;">4.34</td>
+<td style="text-align: right; font-weight: bold;">23.59</td>
+<td style="text-align: right;">11.72</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Países Bajos</td>
@@ -6899,6 +6950,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">3.13</td>
 <td style="text-align: right;">4.07</td>
 <td style="text-align: right;">5.84</td>
+<td style="text-align: right; font-weight: bold;">17.97</td>
+<td style="text-align: right;">20.47</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Polonia</td>
@@ -6909,6 +6962,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">4.13</td>
 <td style="text-align: right;">0.16</td>
 <td style="text-align: right;">0.30</td>
+<td style="text-align: right; font-weight: bold;">20.69</td>
+<td style="text-align: right;">4.10</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Bélgica</td>
@@ -6919,6 +6974,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">6.53</td>
 <td style="text-align: right;">6.07</td>
 <td style="text-align: right;">0.95</td>
+<td style="text-align: right; font-weight: bold;">25.94</td>
+<td style="text-align: right;">25.00</td>
 </tr>
 </tbody>
 </table>
@@ -7759,10 +7816,10 @@ Perú
 </div>
 </div>
 </div>
-<p>Al revisar primero las ayudas numéricas (<strong>Tablas 12, 13 y 5B</strong>) y contrastarlas luego con la ubicación de los países en el primer plano factorial (<strong>Figura 3</strong>), encontramos tres patrones exploratorios muy claros:</p>
+<p>Al revisar primero las ayudas numéricas (<strong>Tablas 12, 13 y 5B</strong>) —incorporando los <strong>valores test (<span class="math inline">\(v\)</span>-test)</strong> para evaluar qué países difieren de forma estadísticamente significativa del centro de gravedad (<span class="math inline">\(|v\text{-test}| &gt; 1.96\)</span> al <span class="math inline">\(95\%\)</span> de confianza)— y contrastarlas luego con la ubicación de los países en el primer plano factorial (<strong>Figura 3</strong>), encontramos tres patrones exploratorios muy claros:</p>
 <ul>
-<li><p><strong>Lo que separa el Eje 1 (<span class="math inline">\(73.23\%\)</span> de la inercia — ordenamiento de menor a mayor puntaje):</strong> Mirando en la <strong>Tabla 12</strong> los países que superan la contribución promedio (<span class="math inline">\(100\% / 20 = 5.0\%\)</span>), vemos que el lado izquierdo del eje (coordenadas negativas) está jalado por siete países que concentran buena parte de sus estudiantes en los primeros veintiles (<code>V1</code> a <code>V6</code> en la <strong>Tabla 5B</strong>): <strong>Malasia</strong> (<span class="math inline">\(F_1 = -0.615\)</span>, aportando el <span class="math inline">\(12.29\%\)</span> del eje), <strong>Brasil</strong> (<span class="math inline">\(9.28\%\)</span>), <strong>Emiratos Árabes</strong> (<span class="math inline">\(8.54\%\)</span>), <strong>Arabia Saudita</strong> (<span class="math inline">\(7.58\%\)</span>), <strong>Bulgaria</strong> (<span class="math inline">\(7.51\%\)</span>), <strong>Costa Rica</strong> (<span class="math inline">\(7.34\%\)</span>) y <strong>Perú</strong> (<span class="math inline">\(5.51\%\)</span>). En oposición, hacia el lado derecho (coordenadas positivas) se ubican los países cuyos perfiles crecen en los veintiles altos (<code>V16</code> a <code>V20</code>), liderados en contribución por <strong>Bélgica</strong> (<span class="math inline">\(F_1 = +0.544\)</span>, contribución de <span class="math inline">\(6.53\%\)</span>) y <strong>República Checa</strong> (<span class="math inline">\(+0.373\)</span>, <span class="math inline">\(5.28\%\)</span>), seguidos de cerca por <strong>Austria</strong> (<span class="math inline">\(4.55\%\)</span>), <strong>Polonia</strong> (<span class="math inline">\(4.13\%\)</span>), <strong>Dinamarca</strong> (<span class="math inline">\(3.77\%\)</span>), <strong>Canadá</strong> (<span class="math inline">\(3.68\%\)</span>) y <strong>Países Bajos</strong> (<span class="math inline">\(3.13\%\)</span>).</p></li>
-<li><p><strong>Lo que separa el Eje 2 (<span class="math inline">\(10.50\%\)</span> de la inercia — países en los extremos vs.&nbsp;países en puntajes medios, Efecto Guttman):</strong> En la columna de contribuciones al segundo eje (<strong>Tabla 12</strong>), resaltan dos polos opuestos que le dan forma de parábola o “U” a la nube en la <strong>Figura 3</strong>. Hacia arriba (coordenadas positivas) jalan principalmente <strong>Emiratos Árabes</strong> (que por sí solo aporta el <strong><span class="math inline">\(33.55\%\)</span></strong> del Eje 2, con <span class="math inline">\(F_2 = +0.208\)</span>) y <strong>Bélgica</strong> (<span class="math inline">\(6.07\%\)</span>, con <span class="math inline">\(F_2 = +0.199\)</span>), acompañados por <strong>Países Bajos</strong> (<span class="math inline">\(4.07\%\)</span>); como vimos en la <strong>Tabla 5B</strong>, estos países coinciden en acumular porcentajes altos en las puntas extremas de la escala (Bélgica y Países Bajos en <code>V19</code>–<code>V20</code>, y Emiratos Árabes repartido entre el extremo más bajo <code>V1</code>–<code>V2</code> y un repunte en <code>V20</code>). En cambio, hacia abajo (coordenadas negativas) jalan fuerte <strong>Italia</strong> (<span class="math inline">\(15.00\%\)</span> de contribución, <span class="math inline">\(F_2 = -0.214\)</span>), <strong>Portugal</strong> (<span class="math inline">\(12.89\%\)</span>, <span class="math inline">\(F_2 = -0.241\)</span>) y <strong>España</strong> (<span class="math inline">\(10.44\%\)</span>, <span class="math inline">\(F_2 = -0.229\)</span>), que son justamente los países concentrados en los veintiles intermedios (<code>V10</code> a <code>V15</code>) y con poca presencia en ambos extremos.</p></li>
+<li><p><strong>Lo que separa el Eje 1 (<span class="math inline">\(73.23\%\)</span> de la inercia — ordenamiento significativo de menor a mayor puntaje):</strong> Mirando en la <strong>Tabla 12</strong> los países que superan la contribución promedio (<span class="math inline">\(100\% / 20 = 5.0\%\)</span>), vemos que el lado izquierdo del eje (coordenadas negativas) está jalado por siete países que concentran buena parte de sus estudiantes en los primeros veintiles (<code>V1</code> a <code>V6</code> en la <strong>Tabla 5B</strong>): <strong>Malasia</strong> (<span class="math inline">\(F_1 = -0.615\)</span>, aportando el <span class="math inline">\(12.29\%\)</span> del eje, <span class="math inline">\(v\text{-test} = -35.84\)</span>), <strong>Brasil</strong> (<span class="math inline">\(9.28\%\)</span>, <span class="math inline">\(v\text{-test} = -31.49\)</span>), <strong>Emiratos Árabes</strong> (<span class="math inline">\(8.54\%\)</span>, <span class="math inline">\(v\text{-test} = -31.68\)</span>), <strong>Arabia Saudita</strong> (<span class="math inline">\(7.58\%\)</span>, <span class="math inline">\(v\text{-test} = -28.10\)</span>), <strong>Bulgaria</strong> (<span class="math inline">\(7.51\%\)</span>, <span class="math inline">\(v\text{-test} = -27.95\)</span>), <strong>Costa Rica</strong> (<span class="math inline">\(7.34\%\)</span>, <span class="math inline">\(v\text{-test} = -27.57\)</span>) y <strong>Perú</strong> (<span class="math inline">\(5.51\%\)</span>, <span class="math inline">\(v\text{-test} = -23.97\)</span>). En oposición, hacia el lado derecho (coordenadas positivas) se ubican los países cuyos perfiles crecen en los veintiles altos (<code>V16</code> a <code>V20</code>), liderados en contribución por <strong>Bélgica</strong> (<span class="math inline">\(F_1 = +0.544\)</span>, contribución de <span class="math inline">\(6.53\%\)</span>, <span class="math inline">\(v\text{-test} = +25.94\)</span>) y <strong>República Checa</strong> (<span class="math inline">\(+0.373\)</span>, <span class="math inline">\(5.28\%\)</span>, <span class="math inline">\(v\text{-test} = +23.59\)</span>), seguidos de cerca por <strong>Austria</strong> (<span class="math inline">\(4.55\%\)</span>, <span class="math inline">\(v\text{-test} = +21.84\)</span>), <strong>Polonia</strong> (<span class="math inline">\(4.13\%\)</span>, <span class="math inline">\(v\text{-test} = +20.69\)</span>), <strong>Dinamarca</strong> (<span class="math inline">\(3.77\%\)</span>, <span class="math inline">\(v\text{-test} = +19.80\)</span>), <strong>Canadá</strong> (<span class="math inline">\(3.68\%\)</span>, <span class="math inline">\(v\text{-test} = +20.14\)</span>) y <strong>Países Bajos</strong> (<span class="math inline">\(3.13\%\)</span>, <span class="math inline">\(v\text{-test} = +17.97\)</span>). Notablemente, los 20 países presentan valores <span class="math inline">\(|v\text{-test}|\)</span> muy superiores a <span class="math inline">\(1.96\)</span> en el Eje 1 (desde <span class="math inline">\(+8.62\)</span> en Italia hasta <span class="math inline">\(-35.84\)</span> en Malasia), confirmando estadísticamente que ningún país de la muestra se comporta como el promedio global en este primer gradiente.</p></li>
+<li><p><strong>Lo que separa el Eje 2 (<span class="math inline">\(10.50\%\)</span> de la inercia — extremos significativos vs.&nbsp;neutralidad vertical en el Efecto Guttman):</strong> En las columnas de contribución y <span class="math inline">\(v\)</span>-test del segundo eje (<strong>Tabla 12</strong>), resaltan dos polos altamente significativos que le dan forma de parábola o “U” a la nube en la <strong>Figura 3</strong>. Hacia arriba (coordenadas positivas) jalan principalmente <strong>Emiratos Árabes</strong> (que por sí solo aporta el <strong><span class="math inline">\(33.55\%\)</span></strong> del Eje 2, con <span class="math inline">\(F_2 = +0.208\)</span> y un contundente <span class="math inline">\(v\text{-test} = +62.80\)</span>) y <strong>Bélgica</strong> (<span class="math inline">\(6.07\%\)</span>, <span class="math inline">\(F_2 = +0.199\)</span>, <span class="math inline">\(v\text{-test} = +25.00\)</span>), acompañados por <strong>Países Bajos</strong> (<span class="math inline">\(4.07\%\)</span>, <span class="math inline">\(v\text{-test} = +20.47\)</span>) y <strong>Austria</strong> (<span class="math inline">\(2.83\%\)</span>, <span class="math inline">\(v\text{-test} = +17.22\)</span>); como vimos en la <strong>Tabla 5B</strong>, estos países coinciden en acumular porcentajes altos en las puntas extremas de la escala (Bélgica y Países Bajos en <code>V19</code>–<code>V20</code>, y Emiratos Árabes repartido entre el extremo más bajo <code>V1</code>–<code>V2</code> y un repunte en <code>V20</code>). En cambio, hacia abajo (coordenadas negativas) jalan con alta significancia <strong>Italia</strong> (<span class="math inline">\(15.00\%\)</span> de contribución, <span class="math inline">\(F_2 = -0.214\)</span>, <span class="math inline">\(v\text{-test} = -40.00\)</span>), <strong>Portugal</strong> (<span class="math inline">\(12.89\%\)</span>, <span class="math inline">\(F_2 = -0.241\)</span>, <span class="math inline">\(v\text{-test} = -36.69\)</span>) y <strong>España</strong> (<span class="math inline">\(10.44\%\)</span>, <span class="math inline">\(F_2 = -0.229\)</span>, <span class="math inline">\(v\text{-test} = -32.94\)</span>), que son justamente los países concentrados en los veintiles intermedios (<code>V10</code> a <code>V15</code>) y con poca presencia en ambos extremos. Por el contrario, <strong>Dinamarca</strong> (<span class="math inline">\(F_2 = -0.014\)</span>, <span class="math inline">\(v\text{-test} = -1.99\)</span>) se sitúa justo en el umbral de no significancia (<span class="math inline">\(|v\text{-test}| \approx 1.96\)</span>), confirmando que su desviación vertical respecto al eje horizontal es prácticamente nula.</p></li>
 <li><p><strong>Calidad de representación en los cinco primeros ejes (<span class="math inline">\(\cos^2\)</span>, Tabla 13):</strong> La columna de calidad en el <strong>Plano 1-2</strong> muestra que los 20 países quedan bien representados en este primer mapa, con valores que van desde <strong><span class="math inline">\(57.5\%\)</span> en Noruega</strong> hasta <strong><span class="math inline">\(93.8\%\)</span> en Malasia</strong> (y 16 países por encima del <span class="math inline">\(73\%\)</span>). Además, la tabla permite ver por qué era necesario incluir el segundo eje: mientras la mayoría de países tienen su representación casi completa en el Eje 1 (como Malasia con <span class="math inline">\(93.6\%\)</span>, Brasil con <span class="math inline">\(91.0\%\)</span> o Polonia con <span class="math inline">\(88.7\%\)</span>), países como <strong>Italia</strong>, <strong>España</strong> y <strong>Portugal</strong> tienen un <span class="math inline">\(\cos^2\)</span> bajo o moderado en el Eje 1 (<span class="math inline">\(18.7\%\)</span>, <span class="math inline">\(35.7\%\)</span> y <span class="math inline">\(43.2\%\)</span>), pero alcanzan buena representación gracias al <strong>Eje 2</strong> (<span class="math inline">\(57.7\%\)</span>, <span class="math inline">\(38.9\%\)</span> y <span class="math inline">\(35.3\%\)</span>). Los ejes siguientes (Ejes 3 a 5) solo recogen detalles menores, como un <span class="math inline">\(8.4\%\)</span> a <span class="math inline">\(9.9\%\)</span> en el Eje 3 para España, Arabia Saudita y Costa Rica (donde Arabia Saudita y Costa Rica se oponen a Bulgaria según la Tabla 12), un <span class="math inline">\(16.4\%\)</span> para Italia en el Eje 4, y un <span class="math inline">\(19.4\%\)</span> para Noruega en el Eje 5, lo que sugiere que no hace falta retener ejes adicionales para describir el panorama general.</p></li>
 </ul>
 <hr>
@@ -7804,43 +7861,50 @@ Perú
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos las contribuciones absolutas de cada veintil en porcentaje (0 a 100%) para los primeros 3 ejes:</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ca_s(j) = (f_.j * G_s(j)^2 / lambda_s) * 100</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>ctr_col_1 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>cw <span class="sc">*</span> (acs<span class="sc">$</span>co[, <span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>]) <span class="sc">*</span> <span class="dv">100</span>;</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>ctr_col_2 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>cw <span class="sc">*</span> (acs<span class="sc">$</span>co[, <span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]) <span class="sc">*</span> <span class="dv">100</span>; ctr_col_3 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>cw <span class="sc">*</span> (acs<span class="sc">$</span>co[, <span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">3</span>]) <span class="sc">*</span> <span class="dv">100</span>;</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>tabla_coord_ctr_cols <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Veintil =</span> <span class="fu">colnames</span>(K),</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso    =</span> <span class="fu">round</span>(acs<span class="sc">$</span>cw <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">G1      =</span> <span class="fu">round</span>(acs<span class="sc">$</span>co[, <span class="dv">1</span>], <span class="dv">3</span>),</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">G2      =</span> <span class="fu">round</span>(acs<span class="sc">$</span>co[, <span class="dv">2</span>], <span class="dv">3</span>),</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">G3      =</span> <span class="fu">round</span>(acs<span class="sc">$</span>co[, <span class="dv">3</span>], <span class="dv">3</span>),</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E1  =</span> <span class="fu">round</span>(ctr_col_1, <span class="dv">2</span>),</span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E2  =</span> <span class="fu">round</span>(ctr_col_2, <span class="dv">2</span>),</span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E3  =</span> <span class="fu">round</span>(ctr_col_3, <span class="dv">2</span>),</span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>  tabla_coord_ctr_cols,</span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>,</span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Veintil"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>, <span class="st">"Coord. Eje 3"</span>,</span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Contribución Eje 1 (%)"</span>, <span class="st">"Contribución Eje 2 (%)"</span>, <span class="st">"Contribución Eje 3 (%)"</span></span>
-<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"c"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>),</span>
-<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 14. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 veintiles en los tres primeros ejes (en orden de V1 a V20)"</span></span>
-<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
-<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb40-33"><a href="#cb40-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>, <span class="at">height =</span> <span class="st">"420px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>ctr_col_1 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>cw <span class="sc">*</span> (acs<span class="sc">$</span>co[, <span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>]) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>ctr_col_2 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>cw <span class="sc">*</span> (acs<span class="sc">$</span>co[, <span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]) <span class="sc">*</span> <span class="dv">100</span>; ctr_col_3 <span class="ot">&lt;-</span> (acs<span class="sc">$</span>cw <span class="sc">*</span> (acs<span class="sc">$</span>co[, <span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> acs<span class="sc">$</span>eig[<span class="dv">3</span>]) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos los valores test (v-test) para los 2 ejes retenidos:</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>N_total <span class="ot">&lt;-</span> <span class="fu">sum</span>(K);</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>vtest_col_1 <span class="ot">&lt;-</span> acs<span class="sc">$</span>co[, <span class="dv">1</span>] <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> acs<span class="sc">$</span>cw) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> acs<span class="sc">$</span>cw) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>]));</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>vtest_col_2 <span class="ot">&lt;-</span> acs<span class="sc">$</span>co[, <span class="dv">2</span>] <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> acs<span class="sc">$</span>cw) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> acs<span class="sc">$</span>cw) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]));</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>tabla_coord_ctr_cols <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Veintil  =</span> <span class="fu">colnames</span>(K),</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso     =</span> <span class="fu">round</span>(acs<span class="sc">$</span>cw <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">G1       =</span> <span class="fu">round</span>(acs<span class="sc">$</span>co[, <span class="dv">1</span>], <span class="dv">3</span>),</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">G2       =</span> <span class="fu">round</span>(acs<span class="sc">$</span>co[, <span class="dv">2</span>], <span class="dv">3</span>),</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">G3       =</span> <span class="fu">round</span>(acs<span class="sc">$</span>co[, <span class="dv">3</span>], <span class="dv">3</span>),</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E1   =</span> <span class="fu">round</span>(ctr_col_1, <span class="dv">2</span>),</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E2   =</span> <span class="fu">round</span>(ctr_col_2, <span class="dv">2</span>),</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">Ctr_E3   =</span> <span class="fu">round</span>(ctr_col_3, <span class="dv">2</span>),</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_E1 =</span> <span class="fu">round</span>(vtest_col_1, <span class="dv">2</span>),</span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_E2 =</span> <span class="fu">round</span>(vtest_col_2, <span class="dv">2</span>),</span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">NULL</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>  tabla_coord_ctr_cols,</span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Veintil"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>, <span class="st">"Coord. Eje 3"</span>,</span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Contribución Eje 1 (%)"</span>, <span class="st">"Contribución Eje 2 (%)"</span>, <span class="st">"Contribución Eje 3 (%)"</span>,</span>
+<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"v-test Eje 1"</span>, <span class="st">"v-test Eje 2"</span></span>
+<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb40-32"><a href="#cb40-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"c"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">9</span>)),</span>
+<span id="cb40-33"><a href="#cb40-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 14. Pesos, coordenadas factoriales, contribuciones absolutas y valores test (v-test) de los 20 veintiles en los primeros ejes (en orden de V1 a V20)"</span></span>
+<span id="cb40-34"><a href="#cb40-34" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb40-35"><a href="#cb40-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb40-36"><a href="#cb40-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb40-37"><a href="#cb40-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
+<span id="cb40-38"><a href="#cb40-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb40-39"><a href="#cb40-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb40-40"><a href="#cb40-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>, <span class="at">height =</span> <span class="st">"420px"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:420px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover table-condensed caption-top table-sm small">
-<caption>Tabla 14. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 veintiles en los tres primeros ejes (en orden de V1 a V20)</caption>
+<caption>Tabla 14. Pesos, coordenadas factoriales, contribuciones absolutas y valores test (v-test) de los 20 veintiles en los primeros ejes (en orden de V1 a V20)</caption>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th" style="text-align: center; position: sticky; top: 0; background-color: #FFFFFF;">Veintil</th>
@@ -7851,6 +7915,8 @@ Perú
 <th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">Contribución Eje 1 (%)</th>
 <th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">Contribución Eje 2 (%)</th>
 <th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">Contribución Eje 3 (%)</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">v-test Eje 1</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">v-test Eje 2</th>
 </tr>
 </thead>
 <tbody>
@@ -7863,6 +7929,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">20.81</td>
 <td style="text-align: right;">21.45</td>
 <td style="text-align: right;">39.98</td>
+<td style="text-align: right; font-weight: bold;">-46.80</td>
+<td style="text-align: right;">47.51</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V2</td>
@@ -7873,6 +7941,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">12.33</td>
 <td style="text-align: right;">1.00</td>
 <td style="text-align: right;">1.65</td>
+<td style="text-align: right; font-weight: bold;">-36.03</td>
+<td style="text-align: right;">10.28</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V3</td>
@@ -7883,6 +7953,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">6.68</td>
 <td style="text-align: right;">0.08</td>
 <td style="text-align: right;">4.26</td>
+<td style="text-align: right; font-weight: bold;">-26.52</td>
+<td style="text-align: right;">2.87</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V4</td>
@@ -7893,6 +7965,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">7.09</td>
 <td style="text-align: right;">0.02</td>
 <td style="text-align: right;">5.99</td>
+<td style="text-align: right; font-weight: bold;">-27.32</td>
+<td style="text-align: right;">-1.53</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V5</td>
@@ -7903,6 +7977,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">2.91</td>
 <td style="text-align: right;">0.25</td>
 <td style="text-align: right;">0.91</td>
+<td style="text-align: right; font-weight: bold;">-17.52</td>
+<td style="text-align: right;">5.18</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V6</td>
@@ -7913,6 +7989,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">1.55</td>
 <td style="text-align: right;">4.47</td>
 <td style="text-align: right;">2.49</td>
+<td style="text-align: right; font-weight: bold;">-12.78</td>
+<td style="text-align: right;">-21.68</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V7</td>
@@ -7923,6 +8001,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">0.79</td>
 <td style="text-align: right;">0.15</td>
 <td style="text-align: right;">0.87</td>
+<td style="text-align: right; font-weight: bold;">-9.12</td>
+<td style="text-align: right;">-3.92</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V8</td>
@@ -7933,6 +8013,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">1.54</td>
 <td style="text-align: right;">0.57</td>
 <td style="text-align: right;">5.27</td>
+<td style="text-align: right; font-weight: bold;">-12.75</td>
+<td style="text-align: right;">-7.73</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V9</td>
@@ -7943,6 +8025,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">0.23</td>
 <td style="text-align: right;">4.37</td>
 <td style="text-align: right;">2.93</td>
+<td style="text-align: right; font-weight: bold;">-4.95</td>
+<td style="text-align: right;">-21.45</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V10</td>
@@ -7953,6 +8037,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">0.03</td>
 <td style="text-align: right;">6.67</td>
 <td style="text-align: right;">7.95</td>
+<td style="text-align: right; font-weight: bold;">1.67</td>
+<td style="text-align: right;">-26.50</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V11</td>
@@ -7963,6 +8049,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">0.26</td>
 <td style="text-align: right;">1.78</td>
 <td style="text-align: right;">0.00</td>
+<td style="text-align: right; font-weight: bold;">5.24</td>
+<td style="text-align: right;">-13.67</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V12</td>
@@ -7973,6 +8061,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">0.18</td>
 <td style="text-align: right;">2.40</td>
 <td style="text-align: right;">1.03</td>
+<td style="text-align: right; font-weight: bold;">4.40</td>
+<td style="text-align: right;">-15.88</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V13</td>
@@ -7983,6 +8073,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">0.19</td>
 <td style="text-align: right;">0.15</td>
 <td style="text-align: right;">0.82</td>
+<td style="text-align: right; font-weight: bold;">4.53</td>
+<td style="text-align: right;">-3.93</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V14</td>
@@ -7993,6 +8085,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">2.65</td>
 <td style="text-align: right;">7.84</td>
 <td style="text-align: right;">2.56</td>
+<td style="text-align: right; font-weight: bold;">16.69</td>
+<td style="text-align: right;">-28.73</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V15</td>
@@ -8003,6 +8097,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">3.61</td>
 <td style="text-align: right;">2.85</td>
 <td style="text-align: right;">8.57</td>
+<td style="text-align: right; font-weight: bold;">19.50</td>
+<td style="text-align: right;">-17.33</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V16</td>
@@ -8013,6 +8109,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">4.71</td>
 <td style="text-align: right;">0.00</td>
 <td style="text-align: right;">2.67</td>
+<td style="text-align: right; font-weight: bold;">22.26</td>
+<td style="text-align: right;">-0.64</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V17</td>
@@ -8023,6 +8121,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">6.05</td>
 <td style="text-align: right;">0.38</td>
 <td style="text-align: right;">0.00</td>
+<td style="text-align: right; font-weight: bold;">25.24</td>
+<td style="text-align: right;">-6.30</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V18</td>
@@ -8033,6 +8133,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">7.39</td>
 <td style="text-align: right;">2.36</td>
 <td style="text-align: right;">1.22</td>
+<td style="text-align: right; font-weight: bold;">27.88</td>
+<td style="text-align: right;">15.78</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">V19</td>
@@ -8043,6 +8145,8 @@ Perú
 <td style="text-align: right; font-weight: bold;">9.73</td>
 <td style="text-align: right;">5.98</td>
 <td style="text-align: right;">0.00</td>
+<td style="text-align: right; font-weight: bold;">32.01</td>
+<td style="text-align: right;">25.09</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">V20</td>
@@ -8053,13 +8157,19 @@ Perú
 <td style="text-align: right; font-weight: bold;">11.24</td>
 <td style="text-align: right;">37.22</td>
 <td style="text-align: right;">10.81</td>
+<td style="text-align: right; font-weight: bold;">34.39</td>
+<td style="text-align: right;">62.59</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<p>Las coordenadas en el <strong>Eje 1</strong> muestran un ordenamiento progresivo desde valores negativos en los veintiles más bajos (<code>V1</code> con <span class="math inline">\(-0.746\)</span> y <code>V2</code> con <span class="math inline">\(-0.574\)</span>) hasta valores positivos en los más altos (<code>V19</code> con <span class="math inline">\(+0.509\)</span> y <code>V20</code> con <span class="math inline">\(+0.547\)</span>), cambiando de signo justo en la mitad de la escala, entre <strong><code>V9</code> (<span class="math inline">\(-0.079\)</span>)</strong> y <strong><code>V10</code> (<span class="math inline">\(+0.027\)</span>)</strong>. Se nota además que entre <code>V10</code> y <code>V13</code> las coordenadas cambian muy poco (llegando a <span class="math inline">\(+0.072\)</span> en <code>V13</code>), pero dan un salto grande al pasar a <strong><code>V14</code> (<span class="math inline">\(+0.266\)</span>)</strong>. Mirando las contribuciones que superan el promedio (<span class="math inline">\(100\% / 20 = 5.0\%\)</span>), vemos que el <strong>Eje 1</strong> se forma en un <strong><span class="math inline">\(81.32\%\)</span></strong> por la oposición entre los cuatro veintiles inferiores (<strong><code>V1</code> con <span class="math inline">\(20.81\%\)</span></strong>, <strong><code>V2</code> con <span class="math inline">\(12.33\%\)</span></strong>, <strong><code>V4</code> con <span class="math inline">\(7.09\%\)</span></strong> y <strong><code>V3</code> con <span class="math inline">\(6.68\%\)</span></strong>) y los cuatro superiores (<strong><code>V20</code> con <span class="math inline">\(11.24\%\)</span></strong>, <strong><code>V19</code> con <span class="math inline">\(9.73\%\)</span></strong>, <strong><code>V18</code> con <span class="math inline">\(7.39\%\)</span></strong> y <strong><code>V17</code> con <span class="math inline">\(6.05\%\)</span></strong>); mientras que en el <strong>Eje 2</strong> los mayores aportes hacia el lado positivo provienen de los extremos <strong><code>V20</code> (<span class="math inline">\(37.22\%\)</span>)</strong>, <strong><code>V1</code> (<span class="math inline">\(21.45\%\)</span>)</strong> y <strong><code>V19</code> (<span class="math inline">\(5.98\%\)</span>)</strong>, en contraste con veintiles intermedios como <strong><code>V10</code> (<span class="math inline">\(6.67\%\)</span>)</strong>, <strong><code>V14</code></strong>, <strong><code>V9</code></strong> y <strong><code>V6</code></strong> en el lado negativo.</p>
+<ul>
+<li><p><strong>Ordenamiento progresivo y salto en el Eje 1:</strong> Las coordenadas avanzan de forma continua desde los puntajes más bajos (<strong><code>V1</code></strong> con <span class="math inline">\(-0.746\)</span> y <strong><code>V2</code></strong> con <span class="math inline">\(-0.574\)</span>) hasta los más altos (<strong><code>V19</code></strong> con <span class="math inline">\(+0.510\)</span> y <strong><code>V20</code></strong> con <span class="math inline">\(+0.548\)</span>), cruzando el origen justo entre <strong><code>V9</code></strong> (<span class="math inline">\(-0.079\)</span>, <span class="math inline">\(v\text{-test} = -4.95\)</span>) y <strong><code>V10</code></strong> (<span class="math inline">\(+0.027\)</span>, <span class="math inline">\(v\text{-test} = +1.67\)</span>). De hecho, <strong><code>V10</code> es el único veintil no significativo en este eje</strong> (<span class="math inline">\(|v\text{-test}| &lt; 1.96\)</span>), comportamiento que se mantiene casi estancado hasta <strong><code>V13</code></strong> (<span class="math inline">\(+0.072\)</span>, <span class="math inline">\(v\text{-test} = +4.53\)</span>) antes de dar un salto abrupto en <strong><code>V14</code></strong> (<span class="math inline">\(+0.266\)</span>, <span class="math inline">\(v\text{-test} = +16.69\)</span>).</p></li>
+<li><p><strong>Polos que sostienen el Eje 1 (<span class="math inline">\(81.32\%\)</span> de la inercia del factor):</strong> Considerando los tramos que superan la contribución promedio (<span class="math inline">\(5.0\%\)</span>), el eje se construye por la oposición significativa entre los cuatro veintiles inferiores —<strong><code>V1</code></strong> (<span class="math inline">\(20.81\%\)</span>, <span class="math inline">\(v\text{-test} = -46.80\)</span>), <strong><code>V2</code></strong> (<span class="math inline">\(12.33\%\)</span>, <span class="math inline">\(v\text{-test} = -36.03\)</span>), <strong><code>V4</code></strong> (<span class="math inline">\(7.09\%\)</span>, <span class="math inline">\(v\text{-test} = -27.32\)</span>) y <strong><code>V3</code></strong> (<span class="math inline">\(6.68\%\)</span>, <span class="math inline">\(v\text{-test} = -26.52\)</span>)— frente a los cuatro superiores —<strong><code>V20</code></strong> (<span class="math inline">\(11.24\%\)</span>, <span class="math inline">\(v\text{-test} = +34.39\)</span>), <strong><code>V19</code></strong> (<span class="math inline">\(9.73\%\)</span>, <span class="math inline">\(v\text{-test} = +32.01\)</span>), <strong><code>V18</code></strong> (<span class="math inline">\(7.39\%\)</span>, <span class="math inline">\(v\text{-test} = +27.88\)</span>) y <strong><code>V17</code></strong> (<span class="math inline">\(6.05\%\)</span>, <span class="math inline">\(v\text{-test} = +25.24\)</span>).</p></li>
+<li><p><strong>Curvatura en “U” en el Eje 2 (Efecto Guttman):</strong> Hacia el polo positivo tiran con alta significancia los extremos <strong><code>V20</code></strong> (<span class="math inline">\(37.22\%\)</span>, <span class="math inline">\(v\text{-test} = +62.59\)</span>), <strong><code>V1</code></strong> (<span class="math inline">\(21.45\%\)</span>, <span class="math inline">\(v\text{-test} = +47.51\)</span>) y <strong><code>V19</code></strong> (<span class="math inline">\(5.98\%\)</span>, <span class="math inline">\(v\text{-test} = +25.09\)</span>), oponiéndose a los veintiles intermedios en el polo negativo, liderados por <strong><code>V14</code></strong> (<span class="math inline">\(7.84\%\)</span>, <span class="math inline">\(v\text{-test} = -28.73\)</span>), <strong><code>V10</code></strong> (<span class="math inline">\(6.67\%\)</span>, <span class="math inline">\(v\text{-test} = -26.50\)</span>), <strong><code>V6</code></strong> (<span class="math inline">\(4.47\%\)</span>, <span class="math inline">\(v\text{-test} = -21.68\)</span>) y <strong><code>V9</code></strong> (<span class="math inline">\(4.37\%\)</span>, <span class="math inline">\(v\text{-test} = -21.45\)</span>). Por su parte, <strong><code>V4</code></strong> (<span class="math inline">\(v\text{-test} = -1.53\)</span>) y <strong><code>V16</code></strong> (<span class="math inline">\(v\text{-test} = -0.64\)</span>) no resultan significativos en este eje, marcando los puntos exactos donde la parábola cruza la línea horizontal.</p></li>
+</ul>
 </div>
 <div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
 <div class="cell">
@@ -9236,60 +9346,71 @@ Perú
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Extraemos las ayudas originales de Emiratos Árabes y Malasia cuando eran activos</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>iner_orig <span class="ot">&lt;-</span> <span class="fu">inertia.dudi</span>(acs, <span class="at">row.inertia =</span> <span class="cn">TRUE</span>, <span class="at">col.inertia =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>f1_act    <span class="ot">&lt;-</span> acs<span class="sc">$</span>li[paises_atipicos, <span class="dv">1</span>]</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>f2_act    <span class="ot">&lt;-</span> acs<span class="sc">$</span>li[paises_atipicos, <span class="dv">2</span>]</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>cos1_act  <span class="ot">&lt;-</span> <span class="fu">abs</span>(iner_orig<span class="sc">$</span>row.rel[paises_atipicos, <span class="dv">1</span>])</span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>cos2_act  <span class="ot">&lt;-</span> <span class="fu">abs</span>(iner_orig<span class="sc">$</span>row.rel[paises_atipicos, <span class="dv">2</span>])</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>plano_act <span class="ot">&lt;-</span> cos1_act <span class="sc">+</span> cos2_act</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>iner_orig <span class="ot">&lt;-</span> <span class="fu">inertia.dudi</span>(acs, <span class="at">row.inertia =</span> <span class="cn">TRUE</span>, <span class="at">col.inertia =</span> <span class="cn">TRUE</span>);</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>f1_act    <span class="ot">&lt;-</span> acs<span class="sc">$</span>li[paises_atipicos, <span class="dv">1</span>];</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>f2_act    <span class="ot">&lt;-</span> acs<span class="sc">$</span>li[paises_atipicos, <span class="dv">2</span>];</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>cos1_act  <span class="ot">&lt;-</span> <span class="fu">abs</span>(iner_orig<span class="sc">$</span>row.rel[paises_atipicos, <span class="dv">1</span>]);</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>cos2_act  <span class="ot">&lt;-</span> <span class="fu">abs</span>(iner_orig<span class="sc">$</span>row.rel[paises_atipicos, <span class="dv">2</span>]);</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>plano_act <span class="ot">&lt;-</span> cos1_act <span class="sc">+</span> cos2_act;</span>
 <span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Calculamos la distancia Chi-cuadrado al origen y los cos2 como filas suplementarias</span></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>perf_sup <span class="ot">&lt;-</span> <span class="fu">sweep</span>(K_sup, <span class="dv">1</span>, <span class="fu">rowSums</span>(K_sup), <span class="st">"/"</span>)</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>cent_est <span class="ot">&lt;-</span> acs_estab<span class="sc">$</span>cw</span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>d2_sup   <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">sweep</span>(<span class="fu">sweep</span>(perf_sup, <span class="dv">2</span>, cent_est, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span>, cent_est, <span class="st">"/"</span>))</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Calculamos la distancia Chi-cuadrado al origen, los cos2 y los v-test como filas suplementarias</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>perf_sup <span class="ot">&lt;-</span> <span class="fu">sweep</span>(K_sup, <span class="dv">1</span>, <span class="fu">rowSums</span>(K_sup), <span class="st">"/"</span>);</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>cent_est <span class="ot">&lt;-</span> acs_estab<span class="sc">$</span>cw;</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>d2_sup   <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">sweep</span>(<span class="fu">sweep</span>(perf_sup, <span class="dv">2</span>, cent_est, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span>, cent_est, <span class="st">"/"</span>));</span>
 <span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>f1_sup    <span class="ot">&lt;-</span> coord_sup[paises_atipicos, <span class="st">"Axis1"</span>]</span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>f2_sup    <span class="ot">&lt;-</span> coord_sup[paises_atipicos, <span class="st">"Axis2"</span>]</span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>cos1_sup  <span class="ot">&lt;-</span> (f1_sup<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_sup) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>cos2_sup  <span class="ot">&lt;-</span> (f2_sup<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_sup) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>plano_sup <span class="ot">&lt;-</span> cos1_sup <span class="sc">+</span> cos2_sup</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>f1_sup    <span class="ot">&lt;-</span> coord_sup[paises_atipicos, <span class="st">"Axis1"</span>];</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>f2_sup    <span class="ot">&lt;-</span> coord_sup[paises_atipicos, <span class="st">"Axis2"</span>];</span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>cos1_sup  <span class="ot">&lt;-</span> (f1_sup<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_sup) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>cos2_sup  <span class="ot">&lt;-</span> (f2_sup<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_sup) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>plano_sup <span class="ot">&lt;-</span> cos1_sup <span class="sc">+</span> cos2_sup;</span>
 <span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Construimos la tabla comparativa Activo vs. Suplementario</span></span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>tabla_comp_estab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pais          =</span> paises_atipicos,</span>
-<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">F1_Activo     =</span> <span class="fu">round</span>(f1_act, <span class="dv">3</span>),</span>
-<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">F1_Suplem     =</span> <span class="fu">round</span>(f1_sup, <span class="dv">3</span>),</span>
-<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2_Activo     =</span> <span class="fu">round</span>(f2_act, <span class="dv">3</span>),</span>
-<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2_Suplem     =</span> <span class="fu">round</span>(f2_sup, <span class="dv">3</span>),</span>
-<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">d2_Suplem     =</span> <span class="fu">round</span>(d2_sup, <span class="dv">3</span>),</span>
-<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_E1_Sup   =</span> <span class="fu">round</span>(cos1_sup, <span class="dv">1</span>),</span>
-<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_E2_Sup   =</span> <span class="fu">round</span>(cos2_sup, <span class="dv">1</span>),</span>
-<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">Plano_Act_Por =</span> <span class="fu">round</span>(plano_act, <span class="dv">1</span>),</span>
-<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">Plano_Sup_Por =</span> <span class="fu">round</span>(plano_sup, <span class="dv">1</span>),</span>
-<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names     =</span> <span class="cn">NULL</span></span>
-<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
-<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a>  tabla_comp_estab,</span>
-<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
-<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"País Evaluado"</span>,</span>
-<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Eje 1 (Act.)"</span>, <span class="st">"Eje 1 (Sup.)"</span>,</span>
-<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Eje 2 (Act.)"</span>, <span class="st">"Eje 2 (Sup.)"</span>,</span>
-<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"d² (Sup.)"</span>,</span>
-<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cos² Eje 1 (%)"</span>, <span class="st">"cos² Eje 2 (%)"</span>,</span>
-<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Plano 1-2 Act. (%)"</span>, <span class="st">"Plano 1-2 Sup. (%)"</span></span>
-<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">align   =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">9</span>)),</span>
-<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 16. Comparación de coordenadas factoriales y calidad de representación (cos²) de Emiratos Árabes y Malasia como países activos frente a su proyección como filas suplementarias"</span></span>
-<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width        =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
-<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Valores test (v-test) para las filas suplementarias en el espacio de 18 países activos</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>N_total     <span class="ot">&lt;-</span> <span class="fu">sum</span>(K);</span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>peso_sup    <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(K_sup) <span class="sc">/</span> N_total;</span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>vtest_sup_1 <span class="ot">&lt;-</span> f1_sup <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> peso_sup) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> peso_sup) <span class="sc">*</span> acs_estab<span class="sc">$</span>eig[<span class="dv">1</span>])); vtest_sup_2 <span class="ot">&lt;-</span> f2_sup <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> peso_sup) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> peso_sup) <span class="sc">*</span> acs_estab<span class="sc">$</span>eig[<span class="dv">2</span>]));</span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Construimos la tabla comparativa Activo vs. Suplementario</span></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>tabla_comp_estab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pais          =</span> paises_atipicos,</span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">F1_Activo     =</span> <span class="fu">round</span>(f1_act, <span class="dv">3</span>),</span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">F1_Suplem     =</span> <span class="fu">round</span>(f1_sup, <span class="dv">3</span>),</span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2_Activo     =</span> <span class="fu">round</span>(f2_act, <span class="dv">3</span>),</span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">F2_Suplem     =</span> <span class="fu">round</span>(f2_sup, <span class="dv">3</span>),</span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">d2_Suplem     =</span> <span class="fu">round</span>(d2_sup, <span class="dv">3</span>),</span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_E1_Sup   =</span> <span class="fu">round</span>(cos1_sup, <span class="dv">1</span>),</span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_E2_Sup   =</span> <span class="fu">round</span>(cos2_sup, <span class="dv">1</span>),</span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">Plano_Act_Por =</span> <span class="fu">round</span>(plano_act, <span class="dv">1</span>),</span>
+<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">Plano_Sup_Por =</span> <span class="fu">round</span>(plano_sup, <span class="dv">1</span>),</span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_E1_Sup  =</span> <span class="fu">round</span>(vtest_sup_1, <span class="dv">2</span>),</span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_E2_Sup  =</span> <span class="fu">round</span>(vtest_sup_2, <span class="dv">2</span>),</span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names     =</span> <span class="cn">NULL</span></span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a>  tabla_comp_estab,</span>
+<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
+<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"País Evaluado"</span>,</span>
+<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Eje 1 (Act.)"</span>, <span class="st">"Eje 1 (Sup.)"</span>,</span>
+<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Eje 2 (Act.)"</span>, <span class="st">"Eje 2 (Sup.)"</span>,</span>
+<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"d² (Sup.)"</span>,</span>
+<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cos² Eje 1 (%)"</span>, <span class="st">"cos² Eje 2 (%)"</span>,</span>
+<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Plano 1-2 Act. (%)"</span>, <span class="st">"Plano 1-2 Sup. (%)"</span>,</span>
+<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"v-test Eje 1 (Sup.)"</span>, <span class="st">"v-test Eje 2 (Sup.)"</span></span>
+<span id="cb47-52"><a href="#cb47-52" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb47-53"><a href="#cb47-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">align   =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">11</span>)),</span>
+<span id="cb47-54"><a href="#cb47-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 16. Comparación de coordenadas factoriales, calidad de representación (cos²) y valores test (v-test) de Emiratos Árabes y Malasia como activos frente a su proyección como filas suplementarias"</span></span>
+<span id="cb47-55"><a href="#cb47-55" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb47-56"><a href="#cb47-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb47-57"><a href="#cb47-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width        =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb47-58"><a href="#cb47-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
+<span id="cb47-59"><a href="#cb47-59" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb47-60"><a href="#cb47-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">12</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb47-61"><a href="#cb47-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover table-condensed caption-top table-sm small">
-<caption>Tabla 16. Comparación de coordenadas factoriales y calidad de representación (cos²) de Emiratos Árabes y Malasia como países activos frente a su proyección como filas suplementarias</caption>
+<caption>Tabla 16. Comparación de coordenadas factoriales, calidad de representación (cos²) y valores test (v-test) de Emiratos Árabes y Malasia como activos frente a su proyección como filas suplementarias</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">País Evaluado</th>
@@ -9302,6 +9423,8 @@ Perú
 <th style="text-align: right;" data-quarto-table-cell-role="th">cos² Eje 2 (%)</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Plano 1-2 Act. (%)</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Plano 1-2 Sup. (%)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">v-test Eje 1 (Sup.)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">v-test Eje 2 (Sup.)</th>
 </tr>
 </thead>
 <tbody>
@@ -9316,6 +9439,8 @@ Perú
 <td style="text-align: right;">22.6</td>
 <td style="text-align: right;">93.7</td>
 <td style="text-align: right;">80.0</td>
+<td style="text-align: right; font-weight: bold;">-42.5</td>
+<td style="text-align: right; font-weight: bold;">80.2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Malasia</td>
@@ -9328,9 +9453,12 @@ Perú
 <td style="text-align: right;">1.1</td>
 <td style="text-align: right;">93.8</td>
 <td style="text-align: right;">93.1</td>
+<td style="text-align: right; font-weight: bold;">-41.9</td>
+<td style="text-align: right; font-weight: bold;">13.6</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 <p><strong>Invarianza y robustez del Eje 1 ante la exclusión de los países de mayor inercia</strong></p>
@@ -9343,11 +9471,11 @@ Perú
 <p><strong>Conservación del Efecto Guttman en el Eje 2 y reacomodo controlado de inercia</strong></p>
 <p>En el eje vertical se evidencia el impacto directo, pero controlado, de retirar a <strong>Emiratos Árabes</strong> del grupo activo: dado que este país aportaba por sí solo el <strong><span class="math inline">\(33.55\%\)</span></strong> de la inercia de dicho factor en el análisis original, al pasarlo a suplementario el <strong>Eje 2</strong> reduce levemente su porcentaje de inercia explicada (del <strong><span class="math inline">\(10.5\%\)</span> al <span class="math inline">\(8.2\%\)</span></strong>).</p>
 <p>Sin embargo, la geometría parabólica del <strong>Efecto Guttman</strong> permanece intacta, sostenida por los 18 países restantes: en el vértice inferior de la curva continúan anclados <strong>Portugal (<span class="math inline">\(-0.23\)</span>)</strong>, <strong>España (<span class="math inline">\(-0.22\)</span>)</strong> e <strong>Italia (<span class="math inline">\(-0.18\)</span>)</strong> por concentrar a sus estudiantes en las calificaciones promedio, oponiéndose en los extremos superiores a los países europeos de desempeño sobresaliente (<strong>Países Bajos</strong> y <strong>Bélgica</strong>) en la derecha, y a <strong>Bulgaria</strong> en la izquierda.</p>
-<p><strong>Calidad de representación suplementaria (<span class="math inline">\(\cos^2\)</span>) en la Tabla 16</strong></p>
-<p>La confirmación definitiva se observa en la <strong>Tabla 16</strong>. Al reasignar a <strong>Emiratos Árabes</strong> y <strong>Malasia</strong> como elementos suplementarios (retirándoles su capacidad de tracción sobre los ejes al aportar <strong><span class="math inline">\(0\%\)</span></strong> a la inercia), comprobamos que se proyectan exactamente en las mismas regiones que ocupaban originalmente, exhibiendo valores de <strong><span class="math inline">\(\cos^2\)</span></strong> sobresalientes:</p>
+<p><strong>Calidad de representación (<span class="math inline">\(\cos^2\)</span>) y significancia suplementaria en la Tabla 16</strong></p>
+<p>La confirmación definitiva se observa en la <strong>Tabla 16</strong>. Al reasignar a <strong>Emiratos Árabes</strong> y <strong>Malasia</strong> como elementos suplementarios (retirándoles su capacidad de tracción sobre los ejes al aportar <strong><span class="math inline">\(0\%\)</span></strong> a la inercia), comprobamos que se proyectan exactamente en las mismas regiones que ocupaban originalmente, exhibiendo valores de <strong><span class="math inline">\(\cos^2\)</span></strong> sobresalientes y valores test que superan ampliamente el umbral crítico de significancia (<span class="math inline">\(|v\text{-test}| &gt; 1.96\)</span>):</p>
 <ul>
-<li><strong>Malasia:</strong> Mantiene su anclaje en el sector izquierdo, desplazándose levemente de <strong><span class="math inline">\(-0.615\)</span> a <span class="math inline">\(-0.718\)</span></strong> en el Eje 1 y conservando una calidad de representación del <strong><span class="math inline">\(93.1\%\)</span></strong> en el plano factorial (<strong><span class="math inline">\(92.0\%\)</span></strong> explicado por el Eje 1).</li>
-<li><strong>Emiratos Árabes:</strong> Ajusta ligeramente su coordenada en el Eje 1 a <strong><span class="math inline">\(-0.371\)</span></strong>, pero conserva su posición en el Eje 2 en <strong><span class="math inline">\(+0.233\)</span></strong>, alcanzando una excelente representación del <strong><span class="math inline">\(80.0\%\)</span></strong> en el plano (descompuesta en <strong><span class="math inline">\(57.4\%\)</span></strong> en el Eje 1 y <strong><span class="math inline">\(22.6\%\)</span></strong> en el Eje 2).</li>
+<li><strong>Malasia:</strong> Mantiene su anclaje en el sector izquierdo, desplazándose levemente de <strong><span class="math inline">\(-0.615\)</span> a <span class="math inline">\(-0.718\)</span></strong> en el Eje 1 (<span class="math inline">\(v\text{-test} = -41.9\)</span> y <span class="math inline">\(+13.6\)</span> en los Ejes 1 y 2, respectivamente), conservando una calidad de representación del <strong><span class="math inline">\(93.1\%\)</span></strong> en el plano factorial (<strong><span class="math inline">\(92.0\%\)</span></strong> explicado por el Eje 1).</li>
+<li><strong>Emiratos Árabes:</strong> Ajusta ligeramente su coordenada en el Eje 1 a <strong><span class="math inline">\(-0.371\)</span></strong> (<span class="math inline">\(v\text{-test} = -42.5\)</span>) y conserva su posición en el Eje 2 en <strong><span class="math inline">\(+0.233\)</span></strong> (<span class="math inline">\(v\text{-test} = +80.2\)</span>), ratificando estadísticamente su doble polarización con una excelente representación del <strong><span class="math inline">\(80.0\%\)</span></strong> en el plano (descompuesta en <strong><span class="math inline">\(57.4\%\)</span></strong> en el Eje 1 y <strong><span class="math inline">\(22.6\%\)</span></strong> en el Eje 2).</li>
 </ul>
 <p>Al verificarse estadísticamente que su inclusión original no distorsiona la estructura geométrica de los otros 18 países, queda <strong>plenamente justificado y blindado mantener a los 20 países como activos</strong> en nuestro análisis oficial.</p>
 </section>
@@ -9421,55 +9549,67 @@ Perú
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen y cos2 de cada región</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>peso_reg <span class="ot">&lt;-</span> (<span class="fu">rowSums</span>(K_regiones) <span class="sc">/</span> <span class="fu">sum</span>(K_regiones)) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>perf_reg <span class="ot">&lt;-</span> <span class="fu">sweep</span>(K_regiones, <span class="dv">1</span>, <span class="fu">rowSums</span>(K_regiones), <span class="st">"/"</span>)</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>cent_orig <span class="ot">&lt;-</span> acs<span class="sc">$</span>cw</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>d2_reg   <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">sweep</span>(<span class="fu">sweep</span>(perf_reg, <span class="dv">2</span>, cent_orig, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span>, cent_orig, <span class="st">"/"</span>))</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>f1_reg <span class="ot">&lt;-</span> sup_regiones<span class="sc">$</span>lisup[, <span class="dv">1</span>]</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>f2_reg <span class="ot">&lt;-</span> sup_regiones<span class="sc">$</span>lisup[, <span class="dv">2</span>]</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>f3_reg <span class="ot">&lt;-</span> sup_regiones<span class="sc">$</span>lisup[, <span class="dv">3</span>]</span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>cos1_reg  <span class="ot">&lt;-</span> (f1_reg<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_reg) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>cos2_reg  <span class="ot">&lt;-</span> (f2_reg<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_reg) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>cos3_reg  <span class="ot">&lt;-</span> (f3_reg<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_reg) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>plano_reg <span class="ot">&lt;-</span> cos1_reg <span class="sc">+</span> cos2_reg</span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ordenamos los bloques de menor a mayor coordenada en el Eje 1</span></span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>ord_reg <span class="ot">&lt;-</span> <span class="fu">order</span>(f1_reg)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen, cos2 y v-test de cada región</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>N_total      <span class="ot">&lt;-</span> <span class="fu">sum</span>(K);</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>peso_rel_reg <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(K_regiones) <span class="sc">/</span> N_total;</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>peso_reg     <span class="ot">&lt;-</span> peso_rel_reg <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>perf_reg  <span class="ot">&lt;-</span> <span class="fu">sweep</span>(K_regiones, <span class="dv">1</span>, <span class="fu">rowSums</span>(K_regiones), <span class="st">"/"</span>);</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>cent_orig <span class="ot">&lt;-</span> acs<span class="sc">$</span>cw;</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>d2_reg    <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">sweep</span>(<span class="fu">sweep</span>(perf_reg, <span class="dv">2</span>, cent_orig, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span>, cent_orig, <span class="st">"/"</span>));</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>f1_reg <span class="ot">&lt;-</span> sup_regiones<span class="sc">$</span>lisup[, <span class="dv">1</span>];</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>f2_reg <span class="ot">&lt;-</span> sup_regiones<span class="sc">$</span>lisup[, <span class="dv">2</span>];</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>f3_reg <span class="ot">&lt;-</span> sup_regiones<span class="sc">$</span>lisup[, <span class="dv">3</span>];</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>cos1_reg  <span class="ot">&lt;-</span> (f1_reg<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_reg) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>cos2_reg  <span class="ot">&lt;-</span> (f2_reg<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_reg) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>cos3_reg  <span class="ot">&lt;-</span> (f3_reg<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_reg) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>plano_reg <span class="ot">&lt;-</span> cos1_reg <span class="sc">+</span> cos2_reg;</span>
 <span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>tabla_regiones_sup <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">Bloque_Regional =</span> <span class="fu">rownames</span>(K_regiones)[ord_reg],</span>
-<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso_Porc       =</span> <span class="fu">round</span>(peso_reg[ord_reg], <span class="dv">2</span>),</span>
-<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Dist_d2         =</span> <span class="fu">round</span>(d2_reg[ord_reg], <span class="dv">3</span>),</span>
-<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_1           =</span> <span class="fu">round</span>(f1_reg[ord_reg], <span class="dv">3</span>),</span>
-<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_2           =</span> <span class="fu">round</span>(f2_reg[ord_reg], <span class="dv">3</span>),</span>
-<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_3           =</span> <span class="fu">round</span>(f3_reg[ord_reg], <span class="dv">3</span>),</span>
-<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje1       =</span> <span class="fu">round</span>(cos1_reg[ord_reg], <span class="dv">1</span>),</span>
-<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje2       =</span> <span class="fu">round</span>(cos2_reg[ord_reg], <span class="dv">1</span>),</span>
-<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Plano12    =</span> <span class="fu">round</span>(plano_reg[ord_reg], <span class="dv">1</span>),</span>
-<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names       =</span> <span class="cn">NULL</span></span>
-<span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
-<span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a>  tabla_regiones_sup,</span>
-<span id="cb49-34"><a href="#cb49-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
-<span id="cb49-35"><a href="#cb49-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bloque Regional (Suplem.)"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"d² Origen"</span>,</span>
-<span id="cb49-36"><a href="#cb49-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>, <span class="st">"Coord. Eje 3"</span>,</span>
-<span id="cb49-37"><a href="#cb49-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cos² Eje 1 (%)"</span>, <span class="st">"cos² Eje 2 (%)"</span>, <span class="st">"Calidad Plano 1-2 (%)"</span></span>
-<span id="cb49-38"><a href="#cb49-38" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb49-39"><a href="#cb49-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">align   =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">8</span>)),</span>
-<span id="cb49-40"><a href="#cb49-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 17. Pesos relativos, distancias al origen, coordenadas factoriales y cosenos cuadrados (cos²) de los cinco bloques regionales proyectados como filas suplementarias"</span></span>
-<span id="cb49-41"><a href="#cb49-41" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb49-42"><a href="#cb49-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb49-43"><a href="#cb49-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width        =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb49-44"><a href="#cb49-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
-<span id="cb49-45"><a href="#cb49-45" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Valores test (v-test) para las filas suplementarias en los 2 ejes retenidos</span></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>vtest_reg_1 <span class="ot">&lt;-</span> f1_reg <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> peso_rel_reg) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> peso_rel_reg) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>])); vtest_reg_2 <span class="ot">&lt;-</span> f2_reg <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> peso_rel_reg) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> peso_rel_reg) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]));</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ordenamos los bloques de menor a mayor coordenada en el Eje 1</span></span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>ord_reg <span class="ot">&lt;-</span> <span class="fu">order</span>(f1_reg);</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>tabla_regiones_sup <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">Bloque_Regional =</span> <span class="fu">rownames</span>(K_regiones)[ord_reg],</span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso_Porc       =</span> <span class="fu">round</span>(peso_reg[ord_reg], <span class="dv">2</span>),</span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">Dist_d2         =</span> <span class="fu">round</span>(d2_reg[ord_reg], <span class="dv">3</span>),</span>
+<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_1           =</span> <span class="fu">round</span>(f1_reg[ord_reg], <span class="dv">3</span>),</span>
+<span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_2           =</span> <span class="fu">round</span>(f2_reg[ord_reg], <span class="dv">3</span>),</span>
+<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_3           =</span> <span class="fu">round</span>(f3_reg[ord_reg], <span class="dv">3</span>),</span>
+<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje1       =</span> <span class="fu">round</span>(cos1_reg[ord_reg], <span class="dv">1</span>),</span>
+<span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje2       =</span> <span class="fu">round</span>(cos2_reg[ord_reg], <span class="dv">1</span>),</span>
+<span id="cb49-34"><a href="#cb49-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Plano12    =</span> <span class="fu">round</span>(plano_reg[ord_reg], <span class="dv">1</span>),</span>
+<span id="cb49-35"><a href="#cb49-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_Eje1      =</span> <span class="fu">round</span>(vtest_reg_1[ord_reg], <span class="dv">2</span>),</span>
+<span id="cb49-36"><a href="#cb49-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_Eje2      =</span> <span class="fu">round</span>(vtest_reg_2[ord_reg], <span class="dv">2</span>),</span>
+<span id="cb49-37"><a href="#cb49-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names       =</span> <span class="cn">NULL</span></span>
+<span id="cb49-38"><a href="#cb49-38" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb49-39"><a href="#cb49-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-40"><a href="#cb49-40" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb49-41"><a href="#cb49-41" aria-hidden="true" tabindex="-1"></a>  tabla_regiones_sup,</span>
+<span id="cb49-42"><a href="#cb49-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
+<span id="cb49-43"><a href="#cb49-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bloque Regional (Suplem.)"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"d² Origen"</span>,</span>
+<span id="cb49-44"><a href="#cb49-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>, <span class="st">"Coord. Eje 3"</span>,</span>
+<span id="cb49-45"><a href="#cb49-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cos² Eje 1 (%)"</span>, <span class="st">"cos² Eje 2 (%)"</span>, <span class="st">"Calidad Plano 1-2 (%)"</span>,</span>
+<span id="cb49-46"><a href="#cb49-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"v-test Eje 1"</span>, <span class="st">"v-test Eje 2"</span></span>
+<span id="cb49-47"><a href="#cb49-47" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb49-48"><a href="#cb49-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">align   =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">10</span>)),</span>
+<span id="cb49-49"><a href="#cb49-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 17. Pesos relativos, distancias al origen, coordenadas factoriales, cosenos cuadrados (cos²) y valores test (v-test) de los cinco bloques regionales proyectados como filas suplementarias"</span></span>
+<span id="cb49-50"><a href="#cb49-50" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-51"><a href="#cb49-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb49-52"><a href="#cb49-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width        =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb49-53"><a href="#cb49-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
+<span id="cb49-54"><a href="#cb49-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb49-55"><a href="#cb49-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">11</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-56"><a href="#cb49-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover table-condensed caption-top table-sm small">
-<caption>Tabla 17. Pesos relativos, distancias al origen, coordenadas factoriales y cosenos cuadrados (cos²) de los cinco bloques regionales proyectados como filas suplementarias</caption>
+<caption>Tabla 17. Pesos relativos, distancias al origen, coordenadas factoriales, cosenos cuadrados (cos²) y valores test (v-test) de los cinco bloques regionales proyectados como filas suplementarias</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Bloque Regional (Suplem.)</th>
@@ -9481,6 +9621,8 @@ Perú
 <th style="text-align: right;" data-quarto-table-cell-role="th">cos² Eje 1 (%)</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">cos² Eje 2 (%)</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Calidad Plano 1-2 (%)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">v-test Eje 1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">v-test Eje 2</th>
 </tr>
 </thead>
 <tbody>
@@ -9494,6 +9636,8 @@ Perú
 <td style="text-align: right;">91.7</td>
 <td style="text-align: right;">2.8</td>
 <td style="text-align: right;">94.5</td>
+<td style="text-align: right; font-weight: bold;">-50.5</td>
+<td style="text-align: right; font-weight: bold;">-23.45</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Medio Oriente / Asia</td>
@@ -9505,6 +9649,8 @@ Perú
 <td style="text-align: right;">91.0</td>
 <td style="text-align: right;">6.8</td>
 <td style="text-align: right;">97.8</td>
+<td style="text-align: right; font-weight: bold;">-57.0</td>
+<td style="text-align: right; font-weight: bold;">41.17</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Eur. Oriental</td>
@@ -9516,6 +9662,8 @@ Perú
 <td style="text-align: right;">78.3</td>
 <td style="text-align: right;">2.1</td>
 <td style="text-align: right;">80.4</td>
+<td style="text-align: right; font-weight: bold;">18.1</td>
+<td style="text-align: right; font-weight: bold;">7.88</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Norteamérica</td>
@@ -9527,6 +9675,8 @@ Perú
 <td style="text-align: right;">85.3</td>
 <td style="text-align: right;">0.8</td>
 <td style="text-align: right;">86.1</td>
+<td style="text-align: right; font-weight: bold;">25.6</td>
+<td style="text-align: right; font-weight: bold;">6.58</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Eur. Occidental</td>
@@ -9538,6 +9688,8 @@ Perú
 <td style="text-align: right;">94.4</td>
 <td style="text-align: right;">4.0</td>
 <td style="text-align: right;">98.3</td>
+<td style="text-align: right; font-weight: bold;">56.1</td>
+<td style="text-align: right; font-weight: bold;">-30.30</td>
 </tr>
 </tbody>
 </table>
@@ -9546,9 +9698,13 @@ Perú
 </div>
 </div>
 </div>
-<p><strong>Confirmación macro-regional de la brecha académica (Eje 1)</strong> Al proyectar los cinco bloques como filas ilustrativas (puntos azules en la Figura 8), el Eje 1 revela un ordenamiento horizontal nítido que comprueba que la polarización en alfabetización financiera es un fenómeno estructural por regiones. En el extremo negativo se consolidan los bloques asociados al rezago académico: <strong>Latinoamérica</strong> (<span class="math inline">\(-0.456\)</span>) y <strong>Medio Oriente / Asia</strong> (<span class="math inline">\(-0.379\)</span>); mientras que en el lado positivo, dominando los veintiles de excelencia, se alinean <strong>Europa Oriental</strong> (<span class="math inline">\(+0.150\)</span>), <strong>Norteamérica</strong> (<span class="math inline">\(+0.247\)</span>) y <strong>Europa Occidental</strong> (<span class="math inline">\(+0.287\)</span>). La Tabla 17 respalda esta lectura, mostrando que la calidad de representación (<span class="math inline">\(\cos^2\)</span>) en el primer plano supera el <span class="math inline">\(80\%\)</span> para todas las regiones, alcanzando niveles casi perfectos en Europa Occidental (<span class="math inline">\(98.3\%\)</span>) y Medio Oriente/Asia (<span class="math inline">\(97.8\%\)</span>).</p>
-<p><strong>Bloques compactos vs.&nbsp;jalonamiento por peso poblacional</strong> Gracias a la propiedad de equivalencia distribucional, cada bloque suplementario se ubica en el centro de gravedad de sus países integrantes, ponderado por su tamaño muestral. Bloques como <strong>Latinoamérica</strong> y <strong>Norteamérica</strong> son sumamente compactos: el punto azul cae justo en el medio geométrico de sus países, revelando perfiles de puntaje muy homogéneos (Brasil, Perú y Costa Rica por un lado; Canadá y Estados Unidos por el otro). En contraste, el bloque <strong>Medio Oriente / Asia</strong> sufre un “jalonamiento gravitacional”: aunque incluye a Malasia y Arabia Saudita (muy a la izquierda), el punto regional queda anclado casi encima de Emiratos Árabes, dado que este último país aporta una masa poblacional desproporcionadamente mayor dentro de la muestra global.</p>
-<p><strong>El espejismo del promedio: compensaciones internas en Europa</strong> El cruce entre la gráfica y la Tabla 17 expone cómo los promedios regionales pueden enmascarar fuertes polarizaciones internas. <strong>Europa Occidental</strong>, el bloque más pesado (<span class="math inline">\(33.8\%\)</span>), lidera el Eje 1 (<span class="math inline">\(+0.287\)</span>) pero es jalado hacia abajo en el Eje 2 (<span class="math inline">\(-0.059\)</span>) por los países mediterráneos (España, Italia, Portugal), que actúan como contrapeso de la excelencia de Bélgica y Países Bajos. El caso más extremo es el de <strong>Europa Oriental</strong>, que registra la distancia al origen (<span class="math inline">\(d^2\)</span>) más pequeña de todos los bloques (<span class="math inline">\(0.029\)</span>). Esta cercanía al centro <span class="math inline">\((0,0)\)</span> no significa que sus estudiantes sean mediocres, sino que existe una cancelación interna perfecta: los altos puntajes de República Checa y Polonia a la derecha son neutralizados por el fuerte rezago de Bulgaria a la izquierda, dejando el promedio del bloque estancado en el perfil marginal global.</p>
+</div>
+<p><strong>Confirmación macro-regional de la brecha académica (Eje 1)</strong></p>
+<p>Al proyectar los cinco bloques como filas ilustrativas (<strong>Figura 8</strong> y <strong>Tabla 17</strong>), el <strong>Eje 1</strong> ordena las regiones en dos polos estadísticamente significativos (<span class="math inline">\(|v\text{-test}| &gt; 1.96\)</span> en todos los casos). En el extremo negativo se consolidan <strong>Latinoamérica</strong> (<span class="math inline">\(F_1 = -0.456\)</span>, <span class="math inline">\(v\text{-test} = -50.5\)</span>) y <strong>Medio Oriente / Asia</strong> (<span class="math inline">\(F_1 = -0.379\)</span>, <span class="math inline">\(v\text{-test} = -57.0\)</span>), mientras que en el lado positivo lideran <strong>Europa Oriental</strong> (<span class="math inline">\(+0.150\)</span>, <span class="math inline">\(v\text{-test} = +18.1\)</span>), <strong>Norteamérica</strong> (<span class="math inline">\(+0.247\)</span>, <span class="math inline">\(v\text{-test} = +25.6\)</span>) y <strong>Europa Occidental</strong> (<span class="math inline">\(+0.287\)</span>, <span class="math inline">\(v\text{-test} = +56.1\)</span>). Todos los bloques superan el <span class="math inline">\(80\%\)</span> de calidad de representación (<span class="math inline">\(\cos^2\)</span>) en el primer plano —alcanzando <span class="math inline">\(98.3\%\)</span> en Europa Occidental y <span class="math inline">\(97.8\%\)</span> en Medio Oriente / Asia—, lo que confirma que la brecha en alfabetización financiera responde a una estructura macro-regional bien definida.</p>
+<p><strong>Bloques compactos vs.&nbsp;jalonamiento por peso poblacional</strong></p>
+<p>Por equivalencia distribucional, cada bloque se ubica en el centro de gravedad ponderado de sus países integrantes. <strong>Latinoamérica</strong> y <strong>Norteamérica</strong> forman grupos altamente compactos cuyo punto regional cae justo en el centro geométrico de sus países (Brasil, Perú y Costa Rica por un lado; Canadá y Estados Unidos por el otro). En cambio, <strong>Medio Oriente / Asia</strong> (<span class="math inline">\(23.3\%\)</span> del peso muestral) sufre un fuerte jalonamiento gravitacional hacia <strong>Emiratos Árabes</strong>, anclándose casi encima de este país y heredando su marcada desviación positiva en el <strong>Eje 2</strong> (<span class="math inline">\(F_2 = +0.103\)</span>, <span class="math inline">\(v\text{-test} = +41.17\)</span>) debido a su mayor tamaño muestral relativo.</p>
+<p><strong>El espejismo del promedio: compensaciones internas en Europa</strong></p>
+<p>Los agregados regionales también evidencian cómo los promedios pueden ocultar contrastes internos. <strong>Europa Occidental</strong> (<span class="math inline">\(33.8\%\)</span> de la muestra) encabeza el Eje 1 (<span class="math inline">\(+0.287\)</span>), pero presenta una atracción negativa significativa en el <strong>Eje 2</strong> (<span class="math inline">\(F_2 = -0.059\)</span>, <span class="math inline">\(v\text{-test} = -30.30\)</span>) por el contrapeso de los países mediterráneos (España, Italia y Portugal) frente a Bélgica y Países Bajos. Más notorio aún es <strong>Europa Oriental</strong>, que registra la menor distancia al origen (<span class="math inline">\(d^2 = 0.029\)</span>) y el menor <span class="math inline">\(v\)</span>-test horizontal (<span class="math inline">\(+18.1\)</span> frente a <span class="math inline">\(+56.1\)</span> en Europa Occidental): aunque sigue siendo estadísticamente positivo, su cercanía al centro <span class="math inline">\((0,0)\)</span> no indica uniformidad promedio, sino la neutralización interna entre los altos puntajes de República Checa y Polonia y el rezago de Bulgaria.</p>
 </section>
 <section id="proyección-de-niveles-de-desempeño-pisa-como-columnas-suplementarias" class="level4" data-number="3.11.1.3">
 <h4 data-number="3.11.1.3" class="anchored" data-anchor-id="proyección-de-niveles-de-desempeño-pisa-como-columnas-suplementarias"><span class="header-section-number">3.11.1.3</span> Proyección de Niveles de Desempeño PISA como Columnas Suplementarias</h4>
@@ -9561,47 +9717,50 @@ Perú
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Agrupamos los 20 veintiles (columnas de K) en 5 Niveles PISA (Quintiles)</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>K_t <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(K))</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>K_t<span class="sc">$</span>Nivel_PISA <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Inferior"</span>, <span class="st">"Bajo"</span>, <span class="st">"Medio"</span>, <span class="st">"Alto"</span>, <span class="st">"Superior"</span>), <span class="at">each =</span> <span class="dv">4</span>),</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Inferior"</span>, <span class="st">"Bajo"</span>, <span class="st">"Medio"</span>, <span class="st">"Alto"</span>, <span class="st">"Superior"</span>)</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Colapsamos sumando las frecuencias</span></span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>K_niveles_t <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(. <span class="sc">~</span> Nivel_PISA, <span class="at">data =</span> K_t, sum)</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(K_niveles_t) <span class="ot">&lt;-</span> K_niveles_t<span class="sc">$</span>Nivel_PISA</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>K_niveles_t<span class="sc">$</span>Nivel_PISA <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Transponemos de nuevo para obtener la tabla (Países x Niveles PISA)</span></span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>K_niveles <span class="ot">&lt;-</span> <span class="fu">t</span>(K_niveles_t)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: proyeccion-niveles-pisa-supcol</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9.0</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 7.8</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Figura 9. Proyección de los 5 niveles de desempeño PISA como columnas suplementarias (cuadrados naranjas) sobre el primer plano factorial de los 20 países activos"</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Agrupamos los 20 veintiles (columnas de K) en 5 Niveles PISA (Quintiles)</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>K_t <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(K));</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>K_t<span class="sc">$</span>Nivel_PISA <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Inferior"</span>, <span class="st">"Bajo"</span>, <span class="st">"Medio"</span>, <span class="st">"Alto"</span>, <span class="st">"Superior"</span>), <span class="at">each =</span> <span class="dv">4</span>),</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Inferior"</span>, <span class="st">"Bajo"</span>, <span class="st">"Medio"</span>, <span class="st">"Alto"</span>, <span class="st">"Superior"</span>)</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>);</span>
 <span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Proyectamos los Niveles PISA como columnas suplementarias sobre el ACS original</span></span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>sup_niveles <span class="ot">&lt;-</span> <span class="fu">supcol</span>(acs, K_niveles)</span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Ajustamos la orientación del Eje 1 de los suplementarios (Efecto espejo)</span></span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>coord_niv <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sup_niveles<span class="sc">$</span>cosup[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coord_niv) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Axis1"</span>, <span class="st">"Axis2"</span>)</span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Conservamos el signo del Eje 1 que traíamos del análisis de estabilidad</span></span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>coord_niv<span class="sc">$</span>Axis1 <span class="ot">&lt;-</span> coord_niv<span class="sc">$</span>Axis1 <span class="sc">*</span> signo1 </span>
-<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>coord_niv<span class="sc">$</span>Axis2 <span class="ot">&lt;-</span> coord_niv<span class="sc">$</span>Axis2 <span class="sc">*</span> <span class="dv">1</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Colapsamos sumando las frecuencias</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>K_niveles_t <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(. <span class="sc">~</span> Nivel_PISA, <span class="at">data =</span> K_t, sum);</span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(K_niveles_t) <span class="ot">&lt;-</span> K_niveles_t<span class="sc">$</span>Nivel_PISA;</span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>K_niveles_t<span class="sc">$</span>Nivel_PISA <span class="ot">&lt;-</span> <span class="cn">NULL</span>;</span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Transponemos de nuevo para obtener la tabla (Países x Niveles PISA)</span></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>K_niveles <span class="ot">&lt;-</span> <span class="fu">t</span>(K_niveles_t);</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Proyectamos los Niveles PISA como columnas suplementarias sobre el ACS original</span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>sup_niveles <span class="ot">&lt;-</span> <span class="fu">supcol</span>(acs, K_niveles);</span>
 <span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Generamos el plano base con FactoClass y superponemos los Niveles PISA en naranja</span></span>
-<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>graf_base_niv <span class="ot">&lt;-</span> <span class="fu">plot</span>(acs, <span class="at">ex =</span> <span class="dv">1</span>, <span class="at">ey =</span> <span class="dv">2</span>, <span class="at">Trow =</span> <span class="cn">FALSE</span>, <span class="at">asp =</span> <span class="dv">1</span>, <span class="at">cframe =</span> <span class="dv">1</span>, <span class="at">gg =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>graf_niveles_final <span class="ot">&lt;-</span> graf_base_niv <span class="sc">+</span></span>
-<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(<span class="at">data =</span> coord_niv, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> Axis1, <span class="at">y =</span> Axis2), <span class="at">color =</span> <span class="st">"darkorange"</span>, <span class="at">shape =</span> <span class="dv">15</span>, <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="at">data =</span> coord_niv, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> Axis1, <span class="at">y =</span> Axis2, <span class="at">label =</span> <span class="fu">rownames</span>(coord_niv)), <span class="at">color =</span> <span class="st">"darkorange"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="fl">4.0</span>, <span class="at">box.padding =</span> <span class="fl">0.5</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.85</span>, <span class="fl">0.60</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.35</span>, <span class="fl">0.45</span>))</span>
-<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(graf_niveles_final)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Conservamos la orientación natural de 'acs' (Inferior a la izquierda, Superior a la derecha)</span></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>coord_niv <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sup_niveles<span class="sc">$</span>cosup[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]);</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coord_niv) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Axis1"</span>, <span class="st">"Axis2"</span>);</span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Generamos el plano base con FactoClass y superponemos los Niveles PISA en naranja</span></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>graf_base_niv <span class="ot">&lt;-</span> <span class="fu">plot</span>(acs, <span class="at">ex =</span> <span class="dv">1</span>, <span class="at">ey =</span> <span class="dv">2</span>, <span class="at">Trow =</span> <span class="cn">FALSE</span>, <span class="at">asp =</span> <span class="dv">1</span>, <span class="at">cframe =</span> <span class="dv">1</span>, <span class="at">gg =</span> <span class="cn">TRUE</span>);</span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a>graf_niveles_final <span class="ot">&lt;-</span> graf_base_niv <span class="sc">+</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(<span class="at">data =</span> coord_niv, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> Axis1, <span class="at">y =</span> Axis2), <span class="at">color =</span> <span class="st">"darkorange"</span>, <span class="at">shape =</span> <span class="dv">15</span>, <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="at">data =</span> coord_niv, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> Axis1, <span class="at">y =</span> Axis2, <span class="at">label =</span> <span class="fu">rownames</span>(coord_niv)), <span class="at">color =</span> <span class="st">"darkorange"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="fl">4.0</span>, <span class="at">box.padding =</span> <span class="fl">0.5</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">coord_fixed</span>(<span class="at">ratio =</span> <span class="dv">1</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.85</span>, <span class="fl">0.60</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.35</span>, <span class="fl">0.45</span>));</span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(graf_niveles_final);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
+<div>
 <figure class="figure">
-<p><img src="quarto_corte2_files/figure-html/proyeccion-niveles-pisa-supcol-1.png" class="img-fluid figure-img" width="864"></p>
-<figcaption>Figura 9. Proyección de los 5 niveles de desempeño PISA como columnas suplementarias (cuadrados naranjas) sobre el primer plano factorial de los 20 países activos</figcaption>
+<p><img src="quarto_corte2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -9609,54 +9768,67 @@ Perú
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen y cos2 de cada nivel</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>peso_niv <span class="ot">&lt;-</span> (<span class="fu">colSums</span>(K_niveles) <span class="sc">/</span> <span class="fu">sum</span>(K_niveles)) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>perf_niv <span class="ot">&lt;-</span> <span class="fu">sweep</span>(K_niveles, <span class="dv">2</span>, <span class="fu">colSums</span>(K_niveles), <span class="st">"/"</span>)</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>cent_orig_row <span class="ot">&lt;-</span> acs<span class="sc">$</span>lw</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen, cos2 y v-test de cada nivel</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>N_total      <span class="ot">&lt;-</span> <span class="fu">sum</span>(K_niveles);</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>peso_rel_niv <span class="ot">&lt;-</span> <span class="fu">colSums</span>(K_niveles) <span class="sc">/</span> N_total;</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>peso_niv     <span class="ot">&lt;-</span> peso_rel_niv <span class="sc">*</span> <span class="dv">100</span>;</span>
 <span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="co"># d2 para columnas suplementarias</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>d2_niv <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">sweep</span>(<span class="fu">sweep</span>(perf_niv, <span class="dv">1</span>, cent_orig_row, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">1</span>, cent_orig_row, <span class="st">"/"</span>))</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>perf_niv      <span class="ot">&lt;-</span> <span class="fu">sweep</span>(K_niveles, <span class="dv">2</span>, <span class="fu">colSums</span>(K_niveles), <span class="st">"/"</span>);</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>cent_orig_row <span class="ot">&lt;-</span> acs<span class="sc">$</span>lw;</span>
 <span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>f1_niv <span class="ot">&lt;-</span> sup_niveles<span class="sc">$</span>cosup[, <span class="dv">1</span>] <span class="sc">*</span> signo1</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>f2_niv <span class="ot">&lt;-</span> sup_niveles<span class="sc">$</span>cosup[, <span class="dv">2</span>]</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="co"># d2 para columnas suplementarias</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>d2_niv <span class="ot">&lt;-</span> <span class="fu">colSums</span>(<span class="fu">sweep</span>(<span class="fu">sweep</span>(perf_niv, <span class="dv">1</span>, cent_orig_row, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>, <span class="dv">1</span>, cent_orig_row, <span class="st">"/"</span>));</span>
 <span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>cos1_niv  <span class="ot">&lt;-</span> (f1_niv<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_niv) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>cos2_niv  <span class="ot">&lt;-</span> (f2_niv<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_niv) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>plano_niv <span class="ot">&lt;-</span> cos1_niv <span class="sc">+</span> cos2_niv</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Conservamos el signo natural de 'acs' para alinear con Figura 9 y todas las tablas previas</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>f1_niv <span class="ot">&lt;-</span> sup_niveles<span class="sc">$</span>cosup[, <span class="dv">1</span>];</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>f2_niv <span class="ot">&lt;-</span> sup_niveles<span class="sc">$</span>cosup[, <span class="dv">2</span>];</span>
 <span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ordenamos los niveles de menor a mayor coordenada en el Eje 1</span></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>ord_niv <span class="ot">&lt;-</span> <span class="fu">order</span>(f1_niv)</span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>tabla_niveles_sup <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">Nivel_PISA   =</span> <span class="fu">colnames</span>(K_niveles)[ord_niv],</span>
-<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso_Porc    =</span> <span class="fu">round</span>(peso_niv[ord_niv], <span class="dv">2</span>),</span>
-<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Dist_d2      =</span> <span class="fu">round</span>(d2_niv[ord_niv], <span class="dv">3</span>),</span>
-<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_1        =</span> <span class="fu">round</span>(f1_niv[ord_niv], <span class="dv">3</span>),</span>
-<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_2        =</span> <span class="fu">round</span>(f2_niv[ord_niv], <span class="dv">3</span>),</span>
-<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje1    =</span> <span class="fu">round</span>(cos1_niv[ord_niv], <span class="dv">1</span>),</span>
-<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje2    =</span> <span class="fu">round</span>(cos2_niv[ord_niv], <span class="dv">1</span>),</span>
-<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Plano12 =</span> <span class="fu">round</span>(plano_niv[ord_niv], <span class="dv">1</span>),</span>
-<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names    =</span> <span class="cn">NULL</span></span>
-<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
-<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>  tabla_niveles_sup,</span>
-<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
-<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nivel PISA (Suplem.)"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"d² Origen"</span>,</span>
-<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>,</span>
-<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cos² Eje 1 (%)"</span>, <span class="st">"cos² Eje 2 (%)"</span>, <span class="st">"Calidad Plano 1-2 (%)"</span></span>
-<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">align   =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">7</span>)),</span>
-<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 18. Pesos relativos, distancias al origen, coordenadas factoriales y cosenos cuadrados (cos²) de los cinco niveles de desempeño PISA proyectados como columnas suplementarias"</span></span>
-<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width        =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
-<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>cos1_niv  <span class="ot">&lt;-</span> (f1_niv<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_niv) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>cos2_niv  <span class="ot">&lt;-</span> (f2_niv<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> d2_niv) <span class="sc">*</span> <span class="dv">100</span>;</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>plano_niv <span class="ot">&lt;-</span> cos1_niv <span class="sc">+</span> cos2_niv;</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Valores test (v-test) para las columnas suplementarias en los 2 ejes retenidos</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>vtest_niv_1 <span class="ot">&lt;-</span> f1_niv <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> peso_rel_niv) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> peso_rel_niv) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">1</span>])); vtest_niv_2 <span class="ot">&lt;-</span> f2_niv <span class="sc">*</span> <span class="fu">sqrt</span>(((N_total <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> peso_rel_niv) <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> peso_rel_niv) <span class="sc">*</span> acs<span class="sc">$</span>eig[<span class="dv">2</span>]));</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ordenamos los niveles de menor a mayor coordenada en el Eje 1 (de Inferior a Superior)</span></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>ord_niv <span class="ot">&lt;-</span> <span class="fu">order</span>(f1_niv);</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>tabla_niveles_sup <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">Nivel_PISA   =</span> <span class="fu">colnames</span>(K_niveles)[ord_niv],</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">Peso_Porc    =</span> <span class="fu">round</span>(peso_niv[ord_niv], <span class="dv">2</span>),</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">Dist_d2      =</span> <span class="fu">round</span>(d2_niv[ord_niv], <span class="dv">3</span>),</span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_1        =</span> <span class="fu">round</span>(f1_niv[ord_niv], <span class="dv">3</span>),</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">Eje_2        =</span> <span class="fu">round</span>(f2_niv[ord_niv], <span class="dv">3</span>),</span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje1    =</span> <span class="fu">round</span>(cos1_niv[ord_niv], <span class="dv">1</span>),</span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Eje2    =</span> <span class="fu">round</span>(cos2_niv[ord_niv], <span class="dv">1</span>),</span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cos2_Plano12 =</span> <span class="fu">round</span>(plano_niv[ord_niv], <span class="dv">1</span>),</span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_Eje1   =</span> <span class="fu">round</span>(vtest_niv_1[ord_niv], <span class="dv">2</span>),</span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vtest_Eje2   =</span> <span class="fu">round</span>(vtest_niv_2[ord_niv], <span class="dv">2</span>),</span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names    =</span> <span class="cn">NULL</span></span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(</span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>  tabla_niveles_sup,</span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(</span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nivel PISA (Suplem.)"</span>, <span class="st">"Peso (%)"</span>, <span class="st">"d² Origen"</span>,</span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coord. Eje 1"</span>, <span class="st">"Coord. Eje 2"</span>,</span>
+<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cos² Eje 1 (%)"</span>, <span class="st">"cos² Eje 2 (%)"</span>, <span class="st">"Calidad Plano 1-2 (%)"</span>,</span>
+<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"v-test Eje 1"</span>, <span class="st">"v-test Eje 2"</span></span>
+<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">align   =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"r"</span>, <span class="dv">9</span>)),</span>
+<span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Tabla 18. Pesos relativos, distancias al origen, coordenadas factoriales, cosenos cuadrados (cos²) y valores test (v-test) de los cinco niveles de desempeño PISA proyectados como columnas suplementarias"</span></span>
+<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width        =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>)</span>
+<span id="cb51-54"><a href="#cb51-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb51-55"><a href="#cb51-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">10</span>), <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb51-56"><a href="#cb51-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"100%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover table-condensed caption-top table-sm small">
-<caption>Tabla 18. Pesos relativos, distancias al origen, coordenadas factoriales y cosenos cuadrados (cos²) de los cinco niveles de desempeño PISA proyectados como columnas suplementarias</caption>
+<caption>Tabla 18. Pesos relativos, distancias al origen, coordenadas factoriales, cosenos cuadrados (cos²) y valores test (v-test) de los cinco niveles de desempeño PISA proyectados como columnas suplementarias</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Nivel PISA (Suplem.)</th>
@@ -9667,58 +9839,70 @@ Perú
 <th style="text-align: right;" data-quarto-table-cell-role="th">cos² Eje 1 (%)</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">cos² Eje 2 (%)</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Calidad Plano 1-2 (%)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">v-test Eje 1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">v-test Eje 2</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Superior</td>
+<td style="text-align: left;">Inferior</td>
 <td style="text-align: right;">20</td>
-<td style="text-align: right;">0.251</td>
-<td style="text-align: right;">-0.476</td>
-<td style="text-align: right;">0.147</td>
-<td style="text-align: right;">90.4</td>
-<td style="text-align: right;">8.6</td>
-<td style="text-align: right;">99.0</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Alto</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">0.075</td>
-<td style="text-align: right;">-0.251</td>
-<td style="text-align: right;">-0.076</td>
-<td style="text-align: right;">83.9</td>
-<td style="text-align: right;">7.8</td>
-<td style="text-align: right;">91.7</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Medio</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">0.019</td>
-<td style="text-align: right;">-0.025</td>
-<td style="text-align: right;">-0.117</td>
-<td style="text-align: right;">3.4</td>
-<td style="text-align: right;">72.9</td>
-<td style="text-align: right;">76.3</td>
+<td style="text-align: right;">0.307</td>
+<td style="text-align: right;">-0.545</td>
+<td style="text-align: right;">0.089</td>
+<td style="text-align: right;">96.7</td>
+<td style="text-align: right;">2.6</td>
+<td style="text-align: right;">99.3</td>
+<td style="text-align: right; font-weight: bold;">-74.47</td>
+<td style="text-align: right; font-weight: bold;">32.2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Bajo</td>
 <td style="text-align: right;">20</td>
 <td style="text-align: right;">0.051</td>
-<td style="text-align: right;">0.208</td>
+<td style="text-align: right;">-0.208</td>
 <td style="text-align: right;">-0.042</td>
 <td style="text-align: right;">85.5</td>
 <td style="text-align: right;">3.6</td>
 <td style="text-align: right;">89.1</td>
+<td style="text-align: right; font-weight: bold;">-28.43</td>
+<td style="text-align: right; font-weight: bold;">-15.3</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Inferior</td>
+<td style="text-align: left;">Medio</td>
 <td style="text-align: right;">20</td>
-<td style="text-align: right;">0.307</td>
-<td style="text-align: right;">0.545</td>
-<td style="text-align: right;">0.089</td>
-<td style="text-align: right;">96.7</td>
-<td style="text-align: right;">2.6</td>
-<td style="text-align: right;">99.3</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">-0.117</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">72.9</td>
+<td style="text-align: right;">76.3</td>
+<td style="text-align: right; font-weight: bold;">3.46</td>
+<td style="text-align: right; font-weight: bold;">-42.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alto</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.075</td>
+<td style="text-align: right;">0.251</td>
+<td style="text-align: right;">-0.076</td>
+<td style="text-align: right;">83.9</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">91.7</td>
+<td style="text-align: right; font-weight: bold;">34.32</td>
+<td style="text-align: right; font-weight: bold;">-27.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Superior</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.251</td>
+<td style="text-align: right;">0.476</td>
+<td style="text-align: right;">0.147</td>
+<td style="text-align: right;">90.4</td>
+<td style="text-align: right;">8.6</td>
+<td style="text-align: right;">99.0</td>
+<td style="text-align: right; font-weight: bold;">65.12</td>
+<td style="text-align: right; font-weight: bold;">52.9</td>
 </tr>
 </tbody>
 </table>
@@ -9727,9 +9911,13 @@ Perú
 </div>
 </div>
 </div>
-<p><strong>1. El gradiente académico perfecto sobre el Eje 1</strong> La Figura 9 y la Tabla 18 revelan la potencia del Análisis de Correspondencias para reconstruir órdenes subyacentes. Al agrupar los veintiles en 5 quintiles y proyectarlos como niveles PISA suplementarios (cuadrados naranjas), el algoritmo los ordenó de manera secuencial y perfecta de izquierda a derecha sobre el Eje 1: desde el nivel <em>Inferior</em> en el extremo negativo (coordenada de magnitud alta opuesta a la excelencia), pasando por <em>Bajo</em>, <em>Medio</em> y <em>Alto</em>, hasta culminar en <em>Superior</em> en el extremo positivo. La Tabla 18 confirma que esta secuencia lógica tiene una calidad de representación (<span class="math inline">\(\cos^2\)</span>) en el primer eje brutalmente alta (superior al <span class="math inline">\(83\%\)</span> para casi todos los niveles), validando irrefutablemente que el Eje 1 actúa como el termómetro oficial del rendimiento en alfabetización financiera.</p>
-<p><strong>2. Atracción cuasibaricéntrica y polarización internacional</strong> Gracias a las relaciones cuasibaricéntricas del modelo, los niveles de desempeño fungen como centros de gravedad magnéticos que jalan a los países. El gráfico evidencia cómo el nivel <em>Inferior</em> atrae fuertemente hacia el extremo de rezago a naciones como Malasia, Brasil, Costa Rica y Perú, mientras que en el extremo opuesto, el nivel <em>Superior</em> jala hacia la zona de excelencia a potencias como Bélgica, Países Bajos y Canadá. Esto ratifica que la brecha global se define por la acumulación de estudiantes en las puntas de la escala y no en las calificaciones intermedias.</p>
-<p><strong>3. El “agujero negro” del Nivel Medio</strong> El comportamiento estadístico del nivel <em>Medio</em> es fascinante: en la Tabla 18 registra la distancia al origen más pequeña de todas (<span class="math inline">\(d^2 = 0.019\)</span>) y una coordenada en el Eje 1 casi nula (<span class="math inline">\(-0.025\)</span>), lo que significa que un desempeño “medio” equivale al perfil promedio mundial (cero diferencias). En la gráfica (Figura 9), este nivel se ubica cerca del origen <span class="math inline">\((0,0)\)</span> pero con coordenada negativa en el Eje 2, atrayendo justo hacia el fondo de la parábola a los países “promedio” (España, Italia, Portugal), explicando por qué estas naciones carecen de inercia para polarizar el Eje 1.</p>
+</div>
+<p><strong>1. El gradiente académico perfecto sobre el Eje 1</strong></p>
+<p>La <strong>Figura 9</strong> y la <strong>Tabla 18</strong> confirman la potencia del Análisis de Correspondencias para reconstruir jerarquías subyacentes. Al agrupar los veintiles en cinco niveles PISA suplementarios de igual peso (<span class="math inline">\(20\%\)</span> cada uno), el modelo los ordena de forma secuencial y estadísticamente significativa (<span class="math inline">\(|v\text{-test}| &gt; 1.96\)</span>) de izquierda a derecha sobre el <strong>Eje 1</strong>: desde <em>Inferior</em> (<span class="math inline">\(F_1 = -0.545\)</span>, <span class="math inline">\(v\text{-test} = -74.47\)</span>), pasando por <em>Bajo</em> (<span class="math inline">\(-0.208\)</span>, <span class="math inline">\(v\text{-test} = -28.43\)</span>), <em>Medio</em> (<span class="math inline">\(+0.025\)</span>, <span class="math inline">\(v\text{-test} = +3.46\)</span>) y <em>Alto</em> (<span class="math inline">\(+0.251\)</span>, <span class="math inline">\(v\text{-test} = +34.32\)</span>), hasta culminar en <em>Superior</em> (<span class="math inline">\(+0.476\)</span>, <span class="math inline">\(v\text{-test} = +65.12\)</span>). La <strong>Tabla 18</strong> ratifica que los niveles fuera del centro alcanzan calidades de representación (<span class="math inline">\(\cos^2\)</span>) superiores al <strong><span class="math inline">\(83.9\%\)</span></strong> en este primer eje —llegando a <strong><span class="math inline">\(96.7\%\)</span></strong> en <em>Inferior</em> y <strong><span class="math inline">\(90.4\%\)</span></strong> en <em>Superior</em>, con más del <strong><span class="math inline">\(99\%\)</span></strong> de calidad en el primer plano—, validando que el Eje 1 actúa como el termómetro oficial del rendimiento en alfabetización financiera.</p>
+<p><strong>2. Atracción cuasibaricéntrica y polarización internacional</strong></p>
+<p>Gracias a las relaciones cuasibaricéntricas del espacio factorial, los niveles extremos operan como polos de atracción significativos en ambos ejes, acompañando la apertura superior de la parábola junto a los veintiles de las puntas (<strong><code>V1</code>–<code>V2</code></strong> a la izquierda y <strong><code>V18</code>–<code>V20</code></strong> a la derecha). En el cuadrante superior izquierdo, el nivel <em>Inferior</em> (<span class="math inline">\(v\text{-test}_1 = -74.47\)</span>, <span class="math inline">\(v\text{-test}_2 = +32.2\)</span>) ejerce una fuerte tracción sobre países con alto rezago como Malasia, Brasil, Costa Rica y Perú; en el extremo opuesto, el nivel <em>Superior</em> (<span class="math inline">\(v\text{-test}_1 = +65.12\)</span>, <span class="math inline">\(v\text{-test}_2 = +52.9\)</span>) atrae hacia la zona de excelencia a Bélgica, Países Bajos y Canadá. Esto ratifica que la brecha global se define por la acumulación de estudiantes en los extremos de la escala y no en las calificaciones intermedias.</p>
+<p><strong>3. El “agujero negro” del Nivel Medio</strong></p>
+<p>El nivel <em>Medio</em> exhibe un comportamiento estructural particular: registra la menor distancia al origen (<span class="math inline">\(d^2 = 0.019\)</span>), una coordenada casi nula en el Eje 1 (<span class="math inline">\(+0.025\)</span>, <span class="math inline">\(\cos^2 = 3.4\%\)</span>) y la significancia horizontal más baja de todos los quintiles (<span class="math inline">\(v\text{-test} = +3.46\)</span>), lo que indica que su perfil equivale prácticamente al promedio mundial. Sin embargo, concentra el <strong><span class="math inline">\(72.9\%\)</span></strong> de su representación en el <strong>Eje 2</strong> (<span class="math inline">\(F_2 = -0.117\)</span>, <span class="math inline">\(v\text{-test} = -42.2\)</span>), ubicándose en el vértice inferior de la parábola de Guttman (junto a <strong><code>V10</code>–<code>V12</code></strong>) y atrayendo hacia el centro a los países de desempeño intermedio (España, Italia y Portugal), explicando por qué estas naciones carecen de inercia para polarizar el Eje 1.</p>
 
 
 </section>

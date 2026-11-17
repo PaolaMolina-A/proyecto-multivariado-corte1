@@ -1489,6 +1489,7 @@ plot(
 ### Coordenadas y Contribuciones Absolutas
 
 ```{r}
+
 #| label: tabla-coordenadas-contribuciones-filas
 #| echo: true
 #| message: false
@@ -1496,37 +1497,47 @@ plot(
 
 # Calculamos las contribuciones absolutas en porcentaje (0 a 100%) para los primeros 3 ejes:
 # Ca_s(i) = (f_i. * F_s(i)^2 / lambda_s) * 100
-ctr_fila_1 <- (acs$lw * (acs$li[, 1]^2) / acs$eig[1]) * 100;
-ctr_fila_2 <- (acs$lw * (acs$li[, 2]^2) / acs$eig[2]) * 100; ctr_fila_3 <- (acs$lw * (acs$li[, 3]^2) / acs$eig[3]) * 100;
+ctr_fila_1 <- (acs$lw * (acs$li[, 1]^2) / acs$eig[1]) * 100
+ctr_fila_2 <- (acs$lw * (acs$li[, 2]^2) / acs$eig[2]) * 100
+ctr_fila_3 <- (acs$lw * (acs$li[, 3]^2) / acs$eig[3]) * 100
+
+# Calculamos los valores test (v-test) para los 2 ejes retenidos:
+# v-test_s(i) = F_s(i) * sqrt(((N - 1) * f_i.) / ((1 - f_i.) * lambda_s))
+N_total <- sum(K)
+vtest_fila_1 <- acs$li[, 1] * sqrt(((N_total - 1) * acs$lw) / ((1 - acs$lw) * acs$eig[1]))
+vtest_fila_2 <- acs$li[, 2] * sqrt(((N_total - 1) * acs$lw) / ((1 - acs$lw) * acs$eig[2]))
 
 tabla_coord_ctr_filas <- data.frame(
-  Pais   = rownames(K),
-  Peso   = round(acs$lw * 100, 2),
-  F1     = round(acs$li[, 1], 3),
-  F2     = round(acs$li[, 2], 3),
-  F3     = round(acs$li[, 3], 3),
-  Ctr_E1 = round(ctr_fila_1, 2),
-  Ctr_E2 = round(ctr_fila_2, 2),
-  Ctr_E3 = round(ctr_fila_3, 2),
+  Pais     = rownames(K),
+  Peso     = round(acs$lw * 100, 2),
+  F1       = round(acs$li[, 1], 3),
+  F2       = round(acs$li[, 2], 3),
+  F3       = round(acs$li[, 3], 3),
+  Ctr_E1   = round(ctr_fila_1, 2),
+  Ctr_E2   = round(ctr_fila_2, 2),
+  Ctr_E3   = round(ctr_fila_3, 2),
+  Vtest_E1 = round(vtest_fila_1, 2),
+  Vtest_E2 = round(vtest_fila_2, 2),
   row.names = NULL
 ) %>%
-  arrange(F1);
+  arrange(F1)
 
 kable(
   tabla_coord_ctr_filas,
   digits = 3,
   col.names = c(
     "País", "Peso (%)", "Coord. Eje 1", "Coord. Eje 2", "Coord. Eje 3",
-    "Contribución Eje 1 (%)", "Contribución Eje 2 (%)", "Contribución Eje 3 (%)"
+    "Contribución Eje 1 (%)", "Contribución Eje 2 (%)", "Contribución Eje 3 (%)",
+    "v-test Eje 1", "v-test Eje 2"
   ),
-  align = c("l", "r", "r", "r", "r", "r", "r", "r"),
-  caption = "Tabla 12. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 países en los tres primeros ejes (ordenados por el Eje 1)"
+  align = c("l", rep("r", 9)),
+  caption = "Tabla 12. Pesos, coordenadas factoriales, contribuciones absolutas y valores test (v-test) de los 20 países en los primeros ejes (ordenados por el Eje 1)"
 ) %>%
   kable_styling(
     full_width = FALSE,
     bootstrap_options = c("striped", "hover", "condensed")
   ) %>%
-  column_spec(c(3, 6), bold = TRUE) %>%
+  column_spec(c(3, 6, 9), bold = TRUE) %>%
   scroll_box(width = "100%", height = "420px")
 ```
 
@@ -1610,17 +1621,18 @@ kable(
 :::
  
  
- 
   
-  
-  Al revisar primero las ayudas numéricas (**Tablas 12, 13 y 5B**) y contrastarlas luego con la ubicación de los países en el primer plano factorial (**Figura 3**), encontramos tres patrones exploratorios muy claros:
-  
-* **Lo que separa el Eje 1 ($73.23\%$ de la inercia — ordenamiento de menor a mayor puntaje):** Mirando en la **Tabla 12** los países que superan la contribución promedio ($100\% / 20 = 5.0\%$), vemos que el lado izquierdo del eje (coordenadas negativas) está jalado por siete países que concentran buena parte de sus estudiantes en los primeros veintiles (`V1` a `V6` en la **Tabla 5B**): **Malasia** ($F_1 = -0.615$, aportando el $12.29\%$ del eje), **Brasil** ($9.28\%$), **Emiratos Árabes** ($8.54\%$), **Arabia Saudita** ($7.58\%$), **Bulgaria** ($7.51\%$), **Costa Rica** ($7.34\%$) y **Perú** ($5.51\%$). En oposición, hacia el lado derecho (coordenadas positivas) se ubican los países cuyos perfiles crecen en los veintiles altos (`V16` a `V20`), liderados en contribución por **Bélgica** ($F_1 = +0.544$, contribución de $6.53\%$) y **República Checa** ($+0.373$, $5.28\%$), seguidos de cerca por **Austria** ($4.55\%$), **Polonia** ($4.13\%$), **Dinamarca** ($3.77\%$), **Canadá** ($3.68\%$) y **Países Bajos** ($3.13\%$).
+  Al revisar primero las ayudas numéricas (**Tablas 12, 13 y 5B**) —incorporando los **valores test ($v$-test)** para evaluar qué países difieren de forma estadísticamente significativa del centro de gravedad ($|v\text{-test}| > 1.96$ al $95\%$ de confianza)— y contrastarlas luego con la ubicación de los países en el primer plano factorial (**Figura 3**), encontramos tres patrones exploratorios muy claros:
 
-* **Lo que separa el Eje 2 ($10.50\%$ de la inercia — países en los extremos vs. países en puntajes medios, Efecto Guttman):** En la columna de contribuciones al segundo eje (**Tabla 12**), resaltan dos polos opuestos que le dan forma de parábola o "U" a la nube en la **Figura 3**. Hacia arriba (coordenadas positivas) jalan principalmente **Emiratos Árabes** (que por sí solo aporta el **$33.55\%$** del Eje 2, con $F_2 = +0.208$) y **Bélgica** ($6.07\%$, con $F_2 = +0.199$), acompañados por **Países Bajos** ($4.07\%$); como vimos en la **Tabla 5B**, estos países coinciden en acumular porcentajes altos en las puntas extremas de la escala (Bélgica y Países Bajos en `V19`–`V20`, y Emiratos Árabes repartido entre el extremo más bajo `V1`–`V2` y un repunte en `V20`). En cambio, hacia abajo (coordenadas negativas) jalan fuerte **Italia** ($15.00\%$ de contribución, $F_2 = -0.214$), **Portugal** ($12.89\%$, $F_2 = -0.241$) y **España** ($10.44\%$, $F_2 = -0.229$), que son justamente los países concentrados en los veintiles intermedios (`V10` a `V15`) y con poca presencia en ambos extremos.
+- **Lo que separa el Eje 1 ($73.23\%$ de la inercia — ordenamiento significativo de menor a mayor puntaje):** Mirando en la **Tabla 12** los países que superan la contribución promedio ($100\% / 20 = 5.0\%$), vemos que el lado izquierdo del eje (coordenadas negativas) está jalado por siete países que concentran buena parte de sus estudiantes en los primeros veintiles (`V1` a `V6` en la **Tabla 5B**): **Malasia** ($F_1 = -0.615$, aportando el $12.29\%$ del eje, $v\text{-test} = -35.84$), **Brasil** ($9.28\%$, $v\text{-test} = -31.49$), **Emiratos Árabes** ($8.54\%$, $v\text{-test} = -31.68$), **Arabia Saudita** ($7.58\%$, $v\text{-test} = -28.10$), **Bulgaria** ($7.51\%$, $v\text{-test} = -27.95$), **Costa Rica** ($7.34\%$, $v\text{-test} = -27.57$) y **Perú** ($5.51\%$, $v\text{-test} = -23.97$). En oposición, hacia el lado derecho (coordenadas positivas) se ubican los países cuyos perfiles crecen en los veintiles altos (`V16` a `V20`), liderados en contribución por **Bélgica** ($F_1 = +0.544$, contribución de $6.53\%$, $v\text{-test} = +25.94$) y **República Checa** ($+0.373$, $5.28\%$, $v\text{-test} = +23.59$), seguidos de cerca por **Austria** ($4.55\%$, $v\text{-test} = +21.84$), **Polonia** ($4.13\%$, $v\text{-test} = +20.69$), **Dinamarca** ($3.77\%$, $v\text{-test} = +19.80$), **Canadá** ($3.68\%$, $v\text{-test} = +20.14$) y **Países Bajos** ($3.13\%$, $v\text{-test} = +17.97$). Notablemente, los 20 países presentan valores $|v\text{-test}|$ muy superiores a $1.96$ en el Eje 1 (desde $+8.62$ en Italia hasta $-35.84$ en Malasia), confirmando estadísticamente que ningún país de la muestra se comporta como el promedio global en este primer gradiente.
 
-* **Calidad de representación en los cinco primeros ejes ($\cos^2$, Tabla 13):** La columna de calidad en el **Plano 1-2** muestra que los 20 países quedan bien representados en este primer mapa, con valores que van desde **$57.5\%$ en Noruega** hasta **$93.8\%$ en Malasia** (y 16 países por encima del $73\%$). Además, la tabla permite ver por qué era necesario incluir el segundo eje: mientras la mayoría de países tienen su representación casi completa en el Eje 1 (como Malasia con $93.6\%$, Brasil con $91.0\%$ o Polonia con $88.7\%$), países como **Italia**, **España** y **Portugal** tienen un $\cos^2$ bajo o moderado en el Eje 1 ($18.7\%$, $35.7\%$ y $43.2\%$), pero alcanzan buena representación gracias al **Eje 2** ($57.7\%$, $38.9\%$ y $35.3\%$). Los ejes siguientes (Ejes 3 a 5) solo recogen detalles menores, como un $8.4\%$ a $9.9\%$ en el Eje 3 para España, Arabia Saudita y Costa Rica (donde Arabia Saudita y Costa Rica se oponen a Bulgaria según la Tabla 12), un $16.4\%$ para Italia en el Eje 4, y un $19.4\%$ para Noruega en el Eje 5, lo que sugiere que no hace falta retener ejes adicionales para describir el panorama general.
 
+
+- **Lo que separa el Eje 2 ($10.50\%$ de la inercia — extremos significativos vs. neutralidad vertical en el Efecto Guttman):** En las columnas de contribución y $v$-test del segundo eje (**Tabla 12**), resaltan dos polos altamente significativos que le dan forma de parábola o "U" a la nube en la **Figura 3**. Hacia arriba (coordenadas positivas) jalan principalmente **Emiratos Árabes** (que por sí solo aporta el **$33.55\%$** del Eje 2, con $F_2 = +0.208$ y un contundente $v\text{-test} = +62.80$) y **Bélgica** ($6.07\%$, $F_2 = +0.199$, $v\text{-test} = +25.00$), acompañados por **Países Bajos** ($4.07\%$, $v\text{-test} = +20.47$) y **Austria** ($2.83\%$, $v\text{-test} = +17.22$); como vimos en la **Tabla 5B**, estos países coinciden en acumular porcentajes altos en las puntas extremas de la escala (Bélgica y Países Bajos en `V19`–`V20`, y Emiratos Árabes repartido entre el extremo más bajo `V1`–`V2` y un repunte en `V20`). En cambio, hacia abajo (coordenadas negativas) jalan con alta significancia **Italia** ($15.00\%$ de contribución, $F_2 = -0.214$, $v\text{-test} = -40.00$), **Portugal** ($12.89\%$, $F_2 = -0.241$, $v\text{-test} = -36.69$) y **España** ($10.44\%$, $F_2 = -0.229$, $v\text{-test} = -32.94$), que son justamente los países concentrados en los veintiles intermedios (`V10` a `V15`) y con poca presencia en ambos extremos. Por el contrario, **Dinamarca** ($F_2 = -0.014$, $v\text{-test} = -1.99$) se sitúa justo en el umbral de no significancia ($|v\text{-test}| \approx 1.96$), confirmando que su desviación vertical respecto al eje horizontal es prácticamente nula.
+
+
+
+- **Calidad de representación en los cinco primeros ejes ($\cos^2$, Tabla 13):** La columna de calidad en el **Plano 1-2** muestra que los 20 países quedan bien representados en este primer mapa, con valores que van desde **$57.5\%$ en Noruega** hasta **$93.8\%$ en Malasia** (y 16 países por encima del $73\%$). Además, la tabla permite ver por qué era necesario incluir el segundo eje: mientras la mayoría de países tienen su representación casi completa en el Eje 1 (como Malasia con $93.6\%$, Brasil con $91.0\%$ o Polonia con $88.7\%$), países como **Italia**, **España** y **Portugal** tienen un $\cos^2$ bajo o moderado en el Eje 1 ($18.7\%$, $35.7\%$ y $43.2\%$), pero alcanzan buena representación gracias al **Eje 2** ($57.7\%$, $38.9\%$ y $35.3\%$). Los ejes siguientes (Ejes 3 a 5) solo recogen detalles menores, como un $8.4\%$ a $9.9\%$ en el Eje 3 para España, Arabia Saudita y Costa Rica (donde Arabia Saudita y Costa Rica se oponen a Bulgaria según la Tabla 12), un $16.4\%$ para Italia en el Eje 4, y un $19.4\%$ para Noruega en el Eje 5, lo que sugiere que no hace falta retener ejes adicionales para describir el panorama general.
 
 
 ---
@@ -1665,19 +1677,25 @@ plot(
 #| warning: false
 
 # Calculamos las contribuciones absolutas de cada veintil en porcentaje (0 a 100%) para los primeros 3 ejes:
-# Ca_s(j) = (f_.j * G_s(j)^2 / lambda_s) * 100
 ctr_col_1 <- (acs$cw * (acs$co[, 1]^2) / acs$eig[1]) * 100;
 ctr_col_2 <- (acs$cw * (acs$co[, 2]^2) / acs$eig[2]) * 100; ctr_col_3 <- (acs$cw * (acs$co[, 3]^2) / acs$eig[3]) * 100;
 
+# Calculamos los valores test (v-test) para los 2 ejes retenidos:
+N_total <- sum(K);
+vtest_col_1 <- acs$co[, 1] * sqrt(((N_total - 1) * acs$cw) / ((1 - acs$cw) * acs$eig[1]));
+vtest_col_2 <- acs$co[, 2] * sqrt(((N_total - 1) * acs$cw) / ((1 - acs$cw) * acs$eig[2]));
+
 tabla_coord_ctr_cols <- data.frame(
-  Veintil = colnames(K),
-  Peso    = round(acs$cw * 100, 2),
-  G1      = round(acs$co[, 1], 3),
-  G2      = round(acs$co[, 2], 3),
-  G3      = round(acs$co[, 3], 3),
-  Ctr_E1  = round(ctr_col_1, 2),
-  Ctr_E2  = round(ctr_col_2, 2),
-  Ctr_E3  = round(ctr_col_3, 2),
+  Veintil  = colnames(K),
+  Peso     = round(acs$cw * 100, 2),
+  G1       = round(acs$co[, 1], 3),
+  G2       = round(acs$co[, 2], 3),
+  G3       = round(acs$co[, 3], 3),
+  Ctr_E1   = round(ctr_col_1, 2),
+  Ctr_E2   = round(ctr_col_2, 2),
+  Ctr_E3   = round(ctr_col_3, 2),
+  Vtest_E1 = round(vtest_col_1, 2),
+  Vtest_E2 = round(vtest_col_2, 2),
   row.names = NULL
 );
 
@@ -1686,21 +1704,26 @@ kable(
   digits = 3,
   col.names = c(
     "Veintil", "Peso (%)", "Coord. Eje 1", "Coord. Eje 2", "Coord. Eje 3",
-    "Contribución Eje 1 (%)", "Contribución Eje 2 (%)", "Contribución Eje 3 (%)"
+    "Contribución Eje 1 (%)", "Contribución Eje 2 (%)", "Contribución Eje 3 (%)",
+    "v-test Eje 1", "v-test Eje 2"
   ),
-  align = c("c", "r", "r", "r", "r", "r", "r", "r"),
-  caption = "Tabla 14. Pesos, coordenadas factoriales y contribuciones absolutas de los 20 veintiles en los tres primeros ejes (en orden de V1 a V20)"
+  align = c("c", rep("r", 9)),
+  caption = "Tabla 14. Pesos, coordenadas factoriales, contribuciones absolutas y valores test (v-test) de los 20 veintiles en los primeros ejes (en orden de V1 a V20)"
 ) %>%
   kable_styling(
     full_width = FALSE,
     bootstrap_options = c("striped", "hover", "condensed")
   ) %>%
-  column_spec(c(3, 6), bold = TRUE) %>%
+  column_spec(c(3, 6, 9), bold = TRUE) %>%
   scroll_box(width = "100%", height = "420px")
 ```
 
 
-Las coordenadas en el **Eje 1** muestran un ordenamiento progresivo desde valores negativos en los veintiles más bajos (`V1` con $-0.746$ y `V2` con $-0.574$) hasta valores positivos en los más altos (`V19` con $+0.509$ y `V20` con $+0.547$), cambiando de signo justo en la mitad de la escala, entre **`V9` ($-0.079$)** y **`V10` ($+0.027$)**. Se nota además que entre `V10` y `V13` las coordenadas cambian muy poco (llegando a $+0.072$ en `V13`), pero dan un salto grande al pasar a **`V14` ($+0.266$)**. Mirando las contribuciones que superan el promedio ($100\% / 20 = 5.0\%$), vemos que el **Eje 1** se forma en un **$81.32\%$** por la oposición entre los cuatro veintiles inferiores (**`V1` con $20.81\%$**, **`V2` con $12.33\%$**, **`V4` con $7.09\%$** y **`V3` con $6.68\%$**) y los cuatro superiores (**`V20` con $11.24\%$**, **`V19` con $9.73\%$**, **`V18` con $7.39\%$** y **`V17` con $6.05\%$**); mientras que en el **Eje 2** los mayores aportes hacia el lado positivo provienen de los extremos **`V20` ($37.22\%$)**, **`V1` ($21.45\%$)** y **`V19` ($5.98\%$)**, en contraste con veintiles intermedios como **`V10` ($6.67\%$)**, **`V14`**, **`V9`** y **`V6`** en el lado negativo.
+- **Ordenamiento progresivo y salto en el Eje 1:** Las coordenadas avanzan de forma continua desde los puntajes más bajos (**`V1`** con $-0.746$ y **`V2`** con $-0.574$) hasta los más altos (**`V19`** con $+0.510$ y **`V20`** con $+0.548$), cruzando el origen justo entre **`V9`** ($-0.079$, $v\text{-test} = -4.95$) y **`V10`** ($+0.027$, $v\text{-test} = +1.67$). De hecho, **`V10` es el único veintil no significativo en este eje** ($|v\text{-test}| < 1.96$), comportamiento que se mantiene casi estancado hasta **`V13`** ($+0.072$, $v\text{-test} = +4.53$) antes de dar un salto abrupto en **`V14`** ($+0.266$, $v\text{-test} = +16.69$).
+
+- **Polos que sostienen el Eje 1 ($81.32\%$ de la inercia del factor):** Considerando los tramos que superan la contribución promedio ($5.0\%$), el eje se construye por la oposición significativa entre los cuatro veintiles inferiores —**`V1`** ($20.81\%$, $v\text{-test} = -46.80$), **`V2`** ($12.33\%$, $v\text{-test} = -36.03$), **`V4`** ($7.09\%$, $v\text{-test} = -27.32$) y **`V3`** ($6.68\%$, $v\text{-test} = -26.52$)— frente a los cuatro superiores —**`V20`** ($11.24\%$, $v\text{-test} = +34.39$), **`V19`** ($9.73\%$, $v\text{-test} = +32.01$), **`V18`** ($7.39\%$, $v\text{-test} = +27.88$) y **`V17`** ($6.05\%$, $v\text{-test} = +25.24$).
+
+- **Curvatura en "U" en el Eje 2 (Efecto Guttman):** Hacia el polo positivo tiran con alta significancia los extremos **`V20`** ($37.22\%$, $v\text{-test} = +62.59$), **`V1`** ($21.45\%$, $v\text{-test} = +47.51$) y **`V19`** ($5.98\%$, $v\text{-test} = +25.09$), oponiéndose a los veintiles intermedios en el polo negativo, liderados por **`V14`** ($7.84\%$, $v\text{-test} = -28.73$), **`V10`** ($6.67\%$, $v\text{-test} = -26.50$), **`V6`** ($4.47\%$, $v\text{-test} = -21.68$) y **`V9`** ($4.37\%$, $v\text{-test} = -21.45$). Por su parte, **`V4`** ($v\text{-test} = -1.53$) y **`V16`** ($v\text{-test} = -0.64$) no resultan significativos en este eje, marcando los puntos exactos donde la parábola cruza la línea horizontal.
 
 
 ### 3. Cosenos Cuadrados ($\cos^2$) en 5 Ejes
@@ -1995,23 +2018,28 @@ print(graf_final)
 #| warning: false
 
 # 1. Extraemos las ayudas originales de Emiratos Árabes y Malasia cuando eran activos
-iner_orig <- inertia.dudi(acs, row.inertia = TRUE, col.inertia = TRUE)
-f1_act    <- acs$li[paises_atipicos, 1]
-f2_act    <- acs$li[paises_atipicos, 2]
-cos1_act  <- abs(iner_orig$row.rel[paises_atipicos, 1])
-cos2_act  <- abs(iner_orig$row.rel[paises_atipicos, 2])
-plano_act <- cos1_act + cos2_act
+iner_orig <- inertia.dudi(acs, row.inertia = TRUE, col.inertia = TRUE);
+f1_act    <- acs$li[paises_atipicos, 1];
+f2_act    <- acs$li[paises_atipicos, 2];
+cos1_act  <- abs(iner_orig$row.rel[paises_atipicos, 1]);
+cos2_act  <- abs(iner_orig$row.rel[paises_atipicos, 2]);
+plano_act <- cos1_act + cos2_act;
 
-# 2. Calculamos la distancia Chi-cuadrado al origen y los cos2 como filas suplementarias
-perf_sup <- sweep(K_sup, 1, rowSums(K_sup), "/")
-cent_est <- acs_estab$cw
-d2_sup   <- rowSums(sweep(sweep(perf_sup, 2, cent_est, "-")^2, 2, cent_est, "/"))
+# 2. Calculamos la distancia Chi-cuadrado al origen, los cos2 y los v-test como filas suplementarias
+perf_sup <- sweep(K_sup, 1, rowSums(K_sup), "/");
+cent_est <- acs_estab$cw;
+d2_sup   <- rowSums(sweep(sweep(perf_sup, 2, cent_est, "-")^2, 2, cent_est, "/"));
 
-f1_sup    <- coord_sup[paises_atipicos, "Axis1"]
-f2_sup    <- coord_sup[paises_atipicos, "Axis2"]
-cos1_sup  <- (f1_sup^2 / d2_sup) * 100
-cos2_sup  <- (f2_sup^2 / d2_sup) * 100
-plano_sup <- cos1_sup + cos2_sup
+f1_sup    <- coord_sup[paises_atipicos, "Axis1"];
+f2_sup    <- coord_sup[paises_atipicos, "Axis2"];
+cos1_sup  <- (f1_sup^2 / d2_sup) * 100;
+cos2_sup  <- (f2_sup^2 / d2_sup) * 100;
+plano_sup <- cos1_sup + cos2_sup;
+
+# Valores test (v-test) para las filas suplementarias en el espacio de 18 países activos
+N_total     <- sum(K);
+peso_sup    <- rowSums(K_sup) / N_total;
+vtest_sup_1 <- f1_sup * sqrt(((N_total - 1) * peso_sup) / ((1 - peso_sup) * acs_estab$eig[1])); vtest_sup_2 <- f2_sup * sqrt(((N_total - 1) * peso_sup) / ((1 - peso_sup) * acs_estab$eig[2]));
 
 # 3. Construimos la tabla comparativa Activo vs. Suplementario
 tabla_comp_estab <- data.frame(
@@ -2025,8 +2053,10 @@ tabla_comp_estab <- data.frame(
   Cos2_E2_Sup   = round(cos2_sup, 1),
   Plano_Act_Por = round(plano_act, 1),
   Plano_Sup_Por = round(plano_sup, 1),
+  Vtest_E1_Sup  = round(vtest_sup_1, 2),
+  Vtest_E2_Sup  = round(vtest_sup_2, 2),
   row.names     = NULL
-)
+);
 
 kable(
   tabla_comp_estab,
@@ -2036,16 +2066,18 @@ kable(
     "Eje 2 (Act.)", "Eje 2 (Sup.)",
     "d² (Sup.)",
     "cos² Eje 1 (%)", "cos² Eje 2 (%)",
-    "Plano 1-2 Act. (%)", "Plano 1-2 Sup. (%)"
+    "Plano 1-2 Act. (%)", "Plano 1-2 Sup. (%)",
+    "v-test Eje 1 (Sup.)", "v-test Eje 2 (Sup.)"
   ),
-  align   = c("l", rep("r", 9)),
-  caption = "Tabla 16. Comparación de coordenadas factoriales y calidad de representación (cos²) de Emiratos Árabes y Malasia como países activos frente a su proyección como filas suplementarias"
+  align   = c("l", rep("r", 11)),
+  caption = "Tabla 16. Comparación de coordenadas factoriales, calidad de representación (cos²) y valores test (v-test) de Emiratos Árabes y Malasia como activos frente a su proyección como filas suplementarias"
 ) %>%
   kable_styling(
     full_width        = FALSE,
     bootstrap_options = c("striped", "hover", "condensed")
-  )
-
+  ) %>%
+  column_spec(c(11, 12), bold = TRUE) %>%
+  scroll_box(width = "100%")
 
 ```
 
@@ -2053,8 +2085,8 @@ kable(
 
 Al recalcular el **Análisis de Correspondencias Simples (ACS)** dejando únicamente a los **18 países activos**, el primer eje factorial conserva intacta su capacidad explicativa, subiendo ligeramente del **$73.2\%$** en el modelo completo al **$73.9\%$** en la prueba de estabilidad ($\lambda_1 = 0.1336$). Visualmente, en la **Figura 7** se comprueba que ningún país activo altera su orden relativo:
 
-* **Extremo izquierdo (bajo desempeño):** Se anclan **Bulgaria**, **Costa Rica**, **Arabia Saudita**, **Brasil** y **Perú**, con coordenadas comprendidas entre **$-0.63$ y $-0.53$**.
-* **Extremo derecho (alto desempeño):** Se mantienen alineadas las naciones europeas y norteamericanas, lideradas por **Bélgica** ($+0.48$).
+- **Extremo izquierdo (bajo desempeño):** Se anclan **Bulgaria**, **Costa Rica**, **Arabia Saudita**, **Brasil** y **Perú**, con coordenadas comprendidas entre **$-0.63$ y $-0.53$**.
+- **Extremo derecho (alto desempeño):** Se mantienen alineadas las naciones europeas y norteamericanas, lideradas por **Bélgica** ($+0.48$).
 
 Esto demuestra que el *"termómetro de rendimiento global"* que proyecta el **Eje 1** es una estructura intrínseca de los datos, y no una falsa ilusión óptica provocada por el enorme tamaño muestral de **Emiratos Árabes ($14.94\%$)** o por el perfil extremo de **Malasia**.
 
@@ -2064,15 +2096,14 @@ En el eje vertical se evidencia el impacto directo, pero controlado, de retirar 
 
 Sin embargo, la geometría parabólica del **Efecto Guttman** permanece intacta, sostenida por los 18 países restantes: en el vértice inferior de la curva continúan anclados **Portugal ($-0.23$)**, **España ($-0.22$)** e **Italia ($-0.18$)** por concentrar a sus estudiantes en las calificaciones promedio, oponiéndose en los extremos superiores a los países europeos de desempeño sobresaliente (**Países Bajos** y **Bélgica**) en la derecha, y a **Bulgaria** en la izquierda.
 
-**Calidad de representación suplementaria ($\cos^2$) en la Tabla 16**
+**Calidad de representación ($\cos^2$) y significancia suplementaria en la Tabla 16**
 
-La confirmación definitiva se observa en la **Tabla 16**. Al reasignar a **Emiratos Árabes** y **Malasia** como elementos suplementarios (retirándoles su capacidad de tracción sobre los ejes al aportar **$0\%$** a la inercia), comprobamos que se proyectan exactamente en las mismas regiones que ocupaban originalmente, exhibiendo valores de **$\cos^2$** sobresalientes:
+La confirmación definitiva se observa en la **Tabla 16**. Al reasignar a **Emiratos Árabes** y **Malasia** como elementos suplementarios (retirándoles su capacidad de tracción sobre los ejes al aportar **$0\%$** a la inercia), comprobamos que se proyectan exactamente en las mismas regiones que ocupaban originalmente, exhibiendo valores de **$\cos^2$** sobresalientes y valores test que superan ampliamente el umbral crítico de significancia ($|v\text{-test}| > 1.96$):
 
-* **Malasia:** Mantiene su anclaje en el sector izquierdo, desplazándose levemente de **$-0.615$ a $-0.718$** en el Eje 1 y conservando una calidad de representación del **$93.1\%$** en el plano factorial (**$92.0\%$** explicado por el Eje 1).
-* **Emiratos Árabes:** Ajusta ligeramente su coordenada en el Eje 1 a **$-0.371$**, pero conserva su posición en el Eje 2 en **$+0.233$**, alcanzando una excelente representación del **$80.0\%$** en el plano (descompuesta en **$57.4\%$** en el Eje 1 y **$22.6\%$** en el Eje 2).
+- **Malasia:** Mantiene su anclaje en el sector izquierdo, desplazándose levemente de **$-0.615$ a $-0.718$** en el Eje 1 ($v\text{-test} = -41.9$ y $+13.6$ en los Ejes 1 y 2, respectivamente), conservando una calidad de representación del **$93.1\%$** en el plano factorial (**$92.0\%$** explicado por el Eje 1).
+- **Emiratos Árabes:** Ajusta ligeramente su coordenada en el Eje 1 a **$-0.371$** ($v\text{-test} = -42.5$) y conserva su posición en el Eje 2 en **$+0.233$** ($v\text{-test} = +80.2$), ratificando estadísticamente su doble polarización con una excelente representación del **$80.0\%$** en el plano (descompuesta en **$57.4\%$** en el Eje 1 y **$22.6\%$** en el Eje 2).
 
 Al verificarse estadísticamente que su inclusión original no distorsiona la estructura geométrica de los otros 18 países, queda **plenamente justificado y blindado mantener a los 20 países como activos** en nuestro análisis oficial.
-
 
 
 
@@ -2149,23 +2180,29 @@ print(graf_regiones_final)
 #| message: false
 #| warning: false
 
-# 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen y cos2 de cada región
-peso_reg <- (rowSums(K_regiones) / sum(K_regiones)) * 100
-perf_reg <- sweep(K_regiones, 1, rowSums(K_regiones), "/")
-cent_orig <- acs$cw
-d2_reg   <- rowSums(sweep(sweep(perf_reg, 2, cent_orig, "-")^2, 2, cent_orig, "/"))
+# 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen, cos2 y v-test de cada región
+N_total      <- sum(K);
+peso_rel_reg <- rowSums(K_regiones) / N_total;
+peso_reg     <- peso_rel_reg * 100;
 
-f1_reg <- sup_regiones$lisup[, 1]
-f2_reg <- sup_regiones$lisup[, 2]
-f3_reg <- sup_regiones$lisup[, 3]
+perf_reg  <- sweep(K_regiones, 1, rowSums(K_regiones), "/");
+cent_orig <- acs$cw;
+d2_reg    <- rowSums(sweep(sweep(perf_reg, 2, cent_orig, "-")^2, 2, cent_orig, "/"));
 
-cos1_reg  <- (f1_reg^2 / d2_reg) * 100
-cos2_reg  <- (f2_reg^2 / d2_reg) * 100
-cos3_reg  <- (f3_reg^2 / d2_reg) * 100
-plano_reg <- cos1_reg + cos2_reg
+f1_reg <- sup_regiones$lisup[, 1];
+f2_reg <- sup_regiones$lisup[, 2];
+f3_reg <- sup_regiones$lisup[, 3];
+
+cos1_reg  <- (f1_reg^2 / d2_reg) * 100;
+cos2_reg  <- (f2_reg^2 / d2_reg) * 100;
+cos3_reg  <- (f3_reg^2 / d2_reg) * 100;
+plano_reg <- cos1_reg + cos2_reg;
+
+# Valores test (v-test) para las filas suplementarias en los 2 ejes retenidos
+vtest_reg_1 <- f1_reg * sqrt(((N_total - 1) * peso_rel_reg) / ((1 - peso_rel_reg) * acs$eig[1])); vtest_reg_2 <- f2_reg * sqrt(((N_total - 1) * peso_rel_reg) / ((1 - peso_rel_reg) * acs$eig[2]));
 
 # 2. Ordenamos los bloques de menor a mayor coordenada en el Eje 1
-ord_reg <- order(f1_reg)
+ord_reg <- order(f1_reg);
 
 tabla_regiones_sup <- data.frame(
   Bloque_Regional = rownames(K_regiones)[ord_reg],
@@ -2177,36 +2214,44 @@ tabla_regiones_sup <- data.frame(
   Cos2_Eje1       = round(cos1_reg[ord_reg], 1),
   Cos2_Eje2       = round(cos2_reg[ord_reg], 1),
   Cos2_Plano12    = round(plano_reg[ord_reg], 1),
+  Vtest_Eje1      = round(vtest_reg_1[ord_reg], 2),
+  Vtest_Eje2      = round(vtest_reg_2[ord_reg], 2),
   row.names       = NULL
-)
+);
 
 kable(
   tabla_regiones_sup,
   col.names = c(
     "Bloque Regional (Suplem.)", "Peso (%)", "d² Origen",
     "Coord. Eje 1", "Coord. Eje 2", "Coord. Eje 3",
-    "cos² Eje 1 (%)", "cos² Eje 2 (%)", "Calidad Plano 1-2 (%)"
+    "cos² Eje 1 (%)", "cos² Eje 2 (%)", "Calidad Plano 1-2 (%)",
+    "v-test Eje 1", "v-test Eje 2"
   ),
-  align   = c("l", rep("r", 8)),
-  caption = "Tabla 17. Pesos relativos, distancias al origen, coordenadas factoriales y cosenos cuadrados (cos²) de los cinco bloques regionales proyectados como filas suplementarias"
+  align   = c("l", rep("r", 10)),
+  caption = "Tabla 17. Pesos relativos, distancias al origen, coordenadas factoriales, cosenos cuadrados (cos²) y valores test (v-test) de los cinco bloques regionales proyectados como filas suplementarias"
 ) %>%
   kable_styling(
     full_width        = FALSE,
     bootstrap_options = c("striped", "hover", "condensed")
-  )
+  ) %>%
+  column_spec(c(10, 11), bold = TRUE) %>%
+  scroll_box(width = "100%")
 
 ```
 
 :::
 
 **Confirmación macro-regional de la brecha académica (Eje 1)**
-Al proyectar los cinco bloques como filas ilustrativas (puntos azules en la Figura 8), el Eje 1 revela un ordenamiento horizontal nítido que comprueba que la polarización en alfabetización financiera es un fenómeno estructural por regiones. En el extremo negativo se consolidan los bloques asociados al rezago académico: **Latinoamérica** ($-0.456$) y **Medio Oriente / Asia** ($-0.379$); mientras que en el lado positivo, dominando los veintiles de excelencia, se alinean **Europa Oriental** ($+0.150$), **Norteamérica** ($+0.247$) y **Europa Occidental** ($+0.287$). La Tabla 17 respalda esta lectura, mostrando que la calidad de representación ($\cos^2$) en el primer plano supera el $80\%$ para todas las regiones, alcanzando niveles casi perfectos en Europa Occidental ($98.3\%$) y Medio Oriente/Asia ($97.8\%$).
+
+Al proyectar los cinco bloques como filas ilustrativas (**Figura 8** y **Tabla 17**), el **Eje 1** ordena las regiones en dos polos estadísticamente significativos ($|v\text{-test}| > 1.96$ en todos los casos). En el extremo negativo se consolidan **Latinoamérica** ($F_1 = -0.456$, $v\text{-test} = -50.5$) y **Medio Oriente / Asia** ($F_1 = -0.379$, $v\text{-test} = -57.0$), mientras que en el lado positivo lideran **Europa Oriental** ($+0.150$, $v\text{-test} = +18.1$), **Norteamérica** ($+0.247$, $v\text{-test} = +25.6$) y **Europa Occidental** ($+0.287$, $v\text{-test} = +56.1$). Todos los bloques superan el $80\%$ de calidad de representación ($\cos^2$) en el primer plano —alcanzando $98.3\%$ en Europa Occidental y $97.8\%$ en Medio Oriente / Asia—, lo que confirma que la brecha en alfabetización financiera responde a una estructura macro-regional bien definida.
 
 **Bloques compactos vs. jalonamiento por peso poblacional**
-Gracias a la propiedad de equivalencia distribucional, cada bloque suplementario se ubica en el centro de gravedad de sus países integrantes, ponderado por su tamaño muestral. Bloques como **Latinoamérica** y **Norteamérica** son sumamente compactos: el punto azul cae justo en el medio geométrico de sus países, revelando perfiles de puntaje muy homogéneos (Brasil, Perú y Costa Rica por un lado; Canadá y Estados Unidos por el otro). En contraste, el bloque **Medio Oriente / Asia** sufre un "jalonamiento gravitacional": aunque incluye a Malasia y Arabia Saudita (muy a la izquierda), el punto regional queda anclado casi encima de Emiratos Árabes, dado que este último país aporta una masa poblacional desproporcionadamente mayor dentro de la muestra global.
+
+Por equivalencia distribucional, cada bloque se ubica en el centro de gravedad ponderado de sus países integrantes. **Latinoamérica** y **Norteamérica** forman grupos altamente compactos cuyo punto regional cae justo en el centro geométrico de sus países (Brasil, Perú y Costa Rica por un lado; Canadá y Estados Unidos por el otro). En cambio, **Medio Oriente / Asia** ($23.3\%$ del peso muestral) sufre un fuerte jalonamiento gravitacional hacia **Emiratos Árabes**, anclándose casi encima de este país y heredando su marcada desviación positiva en el **Eje 2** ($F_2 = +0.103$, $v\text{-test} = +41.17$) debido a su mayor tamaño muestral relativo.
 
 **El espejismo del promedio: compensaciones internas en Europa**
-El cruce entre la gráfica y la Tabla 17 expone cómo los promedios regionales pueden enmascarar fuertes polarizaciones internas. **Europa Occidental**, el bloque más pesado ($33.8\%$), lidera el Eje 1 ($+0.287$) pero es jalado hacia abajo en el Eje 2 ($-0.059$) por los países mediterráneos (España, Italia, Portugal), que actúan como contrapeso de la excelencia de Bélgica y Países Bajos. El caso más extremo es el de **Europa Oriental**, que registra la distancia al origen ($d^2$) más pequeña de todos los bloques ($0.029$). Esta cercanía al centro $(0,0)$ no significa que sus estudiantes sean mediocres, sino que existe una cancelación interna perfecta: los altos puntajes de República Checa y Polonia a la derecha son neutralizados por el fuerte rezago de Bulgaria a la izquierda, dejando el promedio del bloque estancado en el perfil marginal global.
+
+Los agregados regionales también evidencian cómo los promedios pueden ocultar contrastes internos. **Europa Occidental** ($33.8\%$ de la muestra) encabeza el Eje 1 ($+0.287$), pero presenta una atracción negativa significativa en el **Eje 2** ($F_2 = -0.059$, $v\text{-test} = -30.30$) por el contrapeso de los países mediterráneos (España, Italia y Portugal) frente a Bélgica y Países Bajos. Más notorio aún es **Europa Oriental**, que registra la menor distancia al origen ($d^2 = 0.029$) y el menor $v$-test horizontal ($+18.1$ frente a $+56.1$ en Europa Occidental): aunque sigue siendo estadísticamente positivo, su cercanía al centro $(0,0)$ no indica uniformidad promedio, sino la neutralización interna entre los altos puntajes de República Checa y Polonia y el rezago de Bulgaria.
 
 
 #### Proyección de Niveles de Desempeño PISA como Columnas Suplementarias
@@ -2220,6 +2265,7 @@ Al igual que con las regiones, estas nuevas columnas no alterarán la inercia de
 ##### 1. Plano de Niveles PISA (Figura 9)
 
 ```{r}
+
 #| label: proyeccion-niveles-pisa-supcol
 #| echo: true
 #| message: false
@@ -2229,41 +2275,39 @@ Al igual que con las regiones, estas nuevas columnas no alterarán la inercia de
 #| fig-cap: "Figura 9. Proyección de los 5 niveles de desempeño PISA como columnas suplementarias (cuadrados naranjas) sobre el primer plano factorial de los 20 países activos"
 
 # 1. Agrupamos los 20 veintiles (columnas de K) en 5 Niveles PISA (Quintiles)
-K_t <- as.data.frame(t(K))
+K_t <- as.data.frame(t(K));
 K_t$Nivel_PISA <- factor(
   rep(c("Inferior", "Bajo", "Medio", "Alto", "Superior"), each = 4),
   levels = c("Inferior", "Bajo", "Medio", "Alto", "Superior")
-)
+);
 
 # Colapsamos sumando las frecuencias
-K_niveles_t <- aggregate(. ~ Nivel_PISA, data = K_t, sum)
-rownames(K_niveles_t) <- K_niveles_t$Nivel_PISA
-K_niveles_t$Nivel_PISA <- NULL
+K_niveles_t <- aggregate(. ~ Nivel_PISA, data = K_t, sum);
+rownames(K_niveles_t) <- K_niveles_t$Nivel_PISA;
+K_niveles_t$Nivel_PISA <- NULL;
 
 # Transponemos de nuevo para obtener la tabla (Países x Niveles PISA)
-K_niveles <- t(K_niveles_t)
+K_niveles <- t(K_niveles_t);
 
 # 2. Proyectamos los Niveles PISA como columnas suplementarias sobre el ACS original
-sup_niveles <- supcol(acs, K_niveles)
+sup_niveles <- supcol(acs, K_niveles);
 
-# 3. Ajustamos la orientación del Eje 1 de los suplementarios (Efecto espejo)
-coord_niv <- as.data.frame(sup_niveles$cosup[, 1:2])
-colnames(coord_niv) <- c("Axis1", "Axis2")
-
-# Conservamos el signo del Eje 1 que traíamos del análisis de estabilidad
-coord_niv$Axis1 <- coord_niv$Axis1 * signo1 
-coord_niv$Axis2 <- coord_niv$Axis2 * 1
+# 3. Conservamos la orientación natural de 'acs' (Inferior a la izquierda, Superior a la derecha)
+coord_niv <- as.data.frame(sup_niveles$cosup[, 1:2]);
+colnames(coord_niv) <- c("Axis1", "Axis2");
 
 # 4. Generamos el plano base con FactoClass y superponemos los Niveles PISA en naranja
-graf_base_niv <- plot(acs, ex = 1, ey = 2, Trow = FALSE, asp = 1, cframe = 1, gg = TRUE)
+graf_base_niv <- plot(acs, ex = 1, ey = 2, Trow = FALSE, asp = 1, cframe = 1, gg = TRUE);
 
 graf_niveles_final <- graf_base_niv +
   ggplot2::geom_point(data = coord_niv, ggplot2::aes(x = Axis1, y = Axis2), color = "darkorange", shape = 15, size = 3.5, inherit.aes = FALSE) +
   ggrepel::geom_text_repel(data = coord_niv, ggplot2::aes(x = Axis1, y = Axis2, label = rownames(coord_niv)), color = "darkorange", fontface = "bold", size = 4.0, box.padding = 0.5, inherit.aes = FALSE) +
-  ggplot2::coord_fixed(ratio = 1, xlim = c(-0.85, 0.60), ylim = c(-0.35, 0.45))
+  ggplot2::coord_fixed(ratio = 1, xlim = c(-0.85, 0.60), ylim = c(-0.35, 0.45));
 
-print(graf_niveles_final)
+print(graf_niveles_final);
+
 ```
+
 
 ```{r}
 #| label: tabla-ayudas-niveles-sup
@@ -2271,23 +2315,30 @@ print(graf_niveles_final)
 #| message: false
 #| warning: false
 
-# 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen y cos2 de cada nivel
-peso_niv <- (colSums(K_niveles) / sum(K_niveles)) * 100
-perf_niv <- sweep(K_niveles, 2, colSums(K_niveles), "/")
-cent_orig_row <- acs$lw
+# 1. Calculamos pesos marginales (%), distancias Chi-cuadrado al origen, cos2 y v-test de cada nivel
+N_total      <- sum(K_niveles);
+peso_rel_niv <- colSums(K_niveles) / N_total;
+peso_niv     <- peso_rel_niv * 100;
+
+perf_niv      <- sweep(K_niveles, 2, colSums(K_niveles), "/");
+cent_orig_row <- acs$lw;
 
 # d2 para columnas suplementarias
-d2_niv <- colSums(sweep(sweep(perf_niv, 1, cent_orig_row, "-")^2, 1, cent_orig_row, "/"))
+d2_niv <- colSums(sweep(sweep(perf_niv, 1, cent_orig_row, "-")^2, 1, cent_orig_row, "/"));
 
-f1_niv <- sup_niveles$cosup[, 1] * signo1
-f2_niv <- sup_niveles$cosup[, 2]
+# Conservamos el signo natural de 'acs' para alinear con Figura 9 y todas las tablas previas
+f1_niv <- sup_niveles$cosup[, 1];
+f2_niv <- sup_niveles$cosup[, 2];
 
-cos1_niv  <- (f1_niv^2 / d2_niv) * 100
-cos2_niv  <- (f2_niv^2 / d2_niv) * 100
-plano_niv <- cos1_niv + cos2_niv
+cos1_niv  <- (f1_niv^2 / d2_niv) * 100;
+cos2_niv  <- (f2_niv^2 / d2_niv) * 100;
+plano_niv <- cos1_niv + cos2_niv;
 
-# 2. Ordenamos los niveles de menor a mayor coordenada en el Eje 1
-ord_niv <- order(f1_niv)
+# Valores test (v-test) para las columnas suplementarias en los 2 ejes retenidos
+vtest_niv_1 <- f1_niv * sqrt(((N_total - 1) * peso_rel_niv) / ((1 - peso_rel_niv) * acs$eig[1])); vtest_niv_2 <- f2_niv * sqrt(((N_total - 1) * peso_rel_niv) / ((1 - peso_rel_niv) * acs$eig[2]));
+
+# 2. Ordenamos los niveles de menor a mayor coordenada en el Eje 1 (de Inferior a Superior)
+ord_niv <- order(f1_niv);
 
 tabla_niveles_sup <- data.frame(
   Nivel_PISA   = colnames(K_niveles)[ord_niv],
@@ -2298,34 +2349,45 @@ tabla_niveles_sup <- data.frame(
   Cos2_Eje1    = round(cos1_niv[ord_niv], 1),
   Cos2_Eje2    = round(cos2_niv[ord_niv], 1),
   Cos2_Plano12 = round(plano_niv[ord_niv], 1),
+  Vtest_Eje1   = round(vtest_niv_1[ord_niv], 2),
+  Vtest_Eje2   = round(vtest_niv_2[ord_niv], 2),
   row.names    = NULL
-)
+);
 
 kable(
   tabla_niveles_sup,
   col.names = c(
     "Nivel PISA (Suplem.)", "Peso (%)", "d² Origen",
     "Coord. Eje 1", "Coord. Eje 2",
-    "cos² Eje 1 (%)", "cos² Eje 2 (%)", "Calidad Plano 1-2 (%)"
+    "cos² Eje 1 (%)", "cos² Eje 2 (%)", "Calidad Plano 1-2 (%)",
+    "v-test Eje 1", "v-test Eje 2"
   ),
-  align   = c("l", rep("r", 7)),
-  caption = "Tabla 18. Pesos relativos, distancias al origen, coordenadas factoriales y cosenos cuadrados (cos²) de los cinco niveles de desempeño PISA proyectados como columnas suplementarias"
+  align   = c("l", rep("r", 9)),
+  caption = "Tabla 18. Pesos relativos, distancias al origen, coordenadas factoriales, cosenos cuadrados (cos²) y valores test (v-test) de los cinco niveles de desempeño PISA proyectados como columnas suplementarias"
 ) %>%
   kable_styling(
     full_width        = FALSE,
     bootstrap_options = c("striped", "hover", "condensed")
-  )
-
+  ) %>%
+  column_spec(c(9, 10), bold = TRUE) %>%
+  scroll_box(width = "100%")
+  
 ```
 
 :::
 
 
 **1. El gradiente académico perfecto sobre el Eje 1**
-La Figura 9 y la Tabla 18 revelan la potencia del Análisis de Correspondencias para reconstruir órdenes subyacentes. Al agrupar los veintiles en 5 quintiles y proyectarlos como niveles PISA suplementarios (cuadrados naranjas), el algoritmo los ordenó de manera secuencial y perfecta de izquierda a derecha sobre el Eje 1: desde el nivel *Inferior* en el extremo negativo (coordenada de magnitud alta opuesta a la excelencia), pasando por *Bajo*, *Medio* y *Alto*, hasta culminar en *Superior* en el extremo positivo. La Tabla 18 confirma que esta secuencia lógica tiene una calidad de representación ($\cos^2$) en el primer eje brutalmente alta (superior al $83\%$ para casi todos los niveles), validando irrefutablemente que el Eje 1 actúa como el termómetro oficial del rendimiento en alfabetización financiera.
+
+La **Figura 9** y la **Tabla 18** confirman la potencia del Análisis de Correspondencias para reconstruir jerarquías subyacentes. Al agrupar los veintiles en cinco niveles PISA suplementarios de igual peso ($20\%$ cada uno), el modelo los ordena de forma secuencial y estadísticamente significativa ($|v\text{-test}| > 1.96$) de izquierda a derecha sobre el **Eje 1**: desde *Inferior* ($F_1 = -0.545$, $v\text{-test} = -74.47$), pasando por *Bajo* ($-0.208$, $v\text{-test} = -28.43$), *Medio* ($+0.025$, $v\text{-test} = +3.46$) y *Alto* ($+0.251$, $v\text{-test} = +34.32$), hasta culminar en *Superior* ($+0.476$, $v\text{-test} = +65.12$). La **Tabla 18** ratifica que los niveles fuera del centro alcanzan calidades de representación ($\cos^2$) superiores al **$83.9\%$** en este primer eje —llegando a **$96.7\%$** en *Inferior* y **$90.4\%$** en *Superior*, con más del **$99\%$** de calidad en el primer plano—, validando que el Eje 1 actúa como el termómetro oficial del rendimiento en alfabetización financiera.
 
 **2. Atracción cuasibaricéntrica y polarización internacional**
-Gracias a las relaciones cuasibaricéntricas del modelo, los niveles de desempeño fungen como centros de gravedad magnéticos que jalan a los países. El gráfico evidencia cómo el nivel *Inferior* atrae fuertemente hacia el extremo de rezago a naciones como Malasia, Brasil, Costa Rica y Perú, mientras que en el extremo opuesto, el nivel *Superior* jala hacia la zona de excelencia a potencias como Bélgica, Países Bajos y Canadá. Esto ratifica que la brecha global se define por la acumulación de estudiantes en las puntas de la escala y no en las calificaciones intermedias.
+
+Gracias a las relaciones cuasibaricéntricas del espacio factorial, los niveles extremos operan como polos de atracción significativos en ambos ejes, acompañando la apertura superior de la parábola junto a los veintiles de las puntas (**`V1`–`V2`** a la izquierda y **`V18`–`V20`** a la derecha). En el cuadrante superior izquierdo, el nivel *Inferior* ($v\text{-test}_1 = -74.47$, $v\text{-test}_2 = +32.2$) ejerce una fuerte tracción sobre países con alto rezago como Malasia, Brasil, Costa Rica y Perú; en el extremo opuesto, el nivel *Superior* ($v\text{-test}_1 = +65.12$, $v\text{-test}_2 = +52.9$) atrae hacia la zona de excelencia a Bélgica, Países Bajos y Canadá. Esto ratifica que la brecha global se define por la acumulación de estudiantes en los extremos de la escala y no en las calificaciones intermedias.
 
 **3. El "agujero negro" del Nivel Medio**
-El comportamiento estadístico del nivel *Medio* es fascinante: en la Tabla 18 registra la distancia al origen más pequeña de todas ($d^2 = 0.019$) y una coordenada en el Eje 1 casi nula ($-0.025$), lo que significa que un desempeño "medio" equivale al perfil promedio mundial (cero diferencias). En la gráfica (Figura 9), este nivel se ubica cerca del origen $(0,0)$ pero con coordenada negativa en el Eje 2, atrayendo justo hacia el fondo de la parábola a los países "promedio" (España, Italia, Portugal), explicando por qué estas naciones carecen de inercia para polarizar el Eje 1.
+
+El nivel *Medio* exhibe un comportamiento estructural particular: registra la menor distancia al origen ($d^2 = 0.019$), una coordenada casi nula en el Eje 1 ($+0.025$, $\cos^2 = 3.4\%$) y la significancia horizontal más baja de todos los quintiles ($v\text{-test} = +3.46$), lo que indica que su perfil equivale prácticamente al promedio mundial. Sin embargo, concentra el **$72.9\%$** de su representación en el **Eje 2** ($F_2 = -0.117$, $v\text{-test} = -42.2$), ubicándose en el vértice inferior de la parábola de Guttman (junto a **`V10`–`V12`**) y atrayendo hacia el centro a los países de desempeño intermedio (España, Italia y Portugal), explicando por qué estas naciones carecen de inercia para polarizar el Eje 1.
+
+
+
